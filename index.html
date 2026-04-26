@@ -6,146 +6,142 @@
     <title>GlamBank | Лейбл переходник</title>
     <style>
         :root {
-            --bg-dark: #070B14;
-            --bg-panel: #111827;
+            --bg-dark: #050810;
+            --bg-panel: #0D111D;
             --text-main: #E5E7EB;
             --text-muted: #9CA3AF;
-            --accent: #2563EB;
-            --accent-hover: #1D4ED8;
+            --accent: #1E40AF;
+            --accent-bright: #3B82F6;
             --border: #1F2937;
-            --danger: #DC2626;
-            --success: #10B981;
-            --warning: #F59E0B;
+            --danger: #991B1B;
+            --success: #065F46;
+            --warning: #92400E;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-dark); color: var(--text-main); }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-main); overflow: hidden; }
         .hidden { display: none !important; }
         
-        /* Typography */
-        h1, h2, h3 { margin-bottom: 15px; }
-        .subtitle { font-size: 12px; color: var(--text-muted); opacity: 0.7; }
+        /* Auth Screen */
+        .auth-container { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
+        .auth-box { background: var(--bg-panel); padding: 40px; border-radius: 12px; width: 400px; border: 1px solid var(--border); }
         
-        /* Layouts */
-        .auth-container, .ban-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
-        .ban-screen { background-color: rgba(0,0,0,0.9); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; }
-        
+        /* Ban Screen */
+        .ban-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+
+        /* Layout */
         .dashboard { display: flex; height: 100vh; }
-        .sidebar { width: 250px; background-color: var(--bg-panel); border-right: 1px solid var(--border); padding: 20px; display: flex; flex-direction: column; }
-        .main-content { flex: 1; padding: 30px; overflow-y: auto; }
-        .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+        .sidebar { width: 280px; background-color: var(--bg-panel); border-right: 1px solid var(--border); padding: 25px; display: flex; flex-direction: column; }
+        .main-content { flex: 1; padding: 40px; overflow-y: auto; background: var(--bg-dark); }
         
-        /* UI Elements */
-        input, select, textarea { width: 100%; padding: 10px; margin-bottom: 15px; background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-main); border-radius: 5px; }
-        button { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.2s; }
-        .btn-primary { background-color: var(--accent); color: white; }
-        .btn-primary:hover { background-color: var(--accent-hover); }
-        .btn-danger { background-color: var(--danger); color: white; }
-        .btn-outline { background-color: transparent; border: 1px solid var(--accent); color: var(--accent); }
-        .btn-highlight { background-color: transparent; border: 2px solid var(--accent); color: white; box-shadow: 0 0 10px rgba(37, 99, 235, 0.3); margin-bottom: 10px; text-transform: uppercase;}
+        /* UI */
+        input, select, textarea { width: 100%; padding: 12px; margin-bottom: 15px; background: #000; border: 1px solid var(--border); color: white; border-radius: 6px; }
+        button { padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; transition: 0.3s; }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-primary:hover { background: var(--accent-bright); }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-muted); }
+        .btn-highlight { background: transparent; border: 2px solid var(--accent-bright); color: white; margin-bottom: 20px; }
         
-        /* Specific elements */
-        .release-card { background: var(--bg-panel); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .status-badge { padding: 5px 10px; border-radius: 15px; font-size: 12px; }
-        .status-mod { background: var(--warning); color: black; }
-        .status-app { background: var(--success); color: white; }
-        .status-rej { background: var(--danger); color: white; cursor: help; }
+        /* Menu */
+        .menu-item { background: transparent; text-align: left; padding: 10px; margin-bottom: 5px; color: var(--text-muted); font-size: 15px; border: none; width: 100%; }
+        .menu-item:hover { color: white; }
+
+        /* Release Cards */
+        .release-item { background: var(--bg-panel); padding: 20px; border-radius: 10px; border: 1px solid var(--border); margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .status-tag { padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+        .tag-mod { background: var(--warning); color: white; }
+        .tag-ok { background: var(--success); color: white; }
+        .tag-no { background: var(--danger); color: white; cursor: pointer; }
+
+        /* Forms */
+        .form-flex { display: flex; gap: 30px; }
+        .cover-box { width: 300px; height: 300px; border: 2px dashed var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; background: #000; position: relative; }
+        .cover-preview { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; }
         
-        .form-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
-        .cover-upload { width: 100%; aspect-ratio: 1/1; border: 2px dashed var(--border); display: flex; align-items: center; justify-content: center; text-align: center; padding: 20px; cursor: pointer; }
-        
-        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 500; }
-        .modal-content { background: var(--bg-panel); padding: 30px; border-radius: 8px; width: 400px; }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-content { background: var(--bg-panel); padding: 30px; border-radius: 12px; width: 450px; border: 1px solid var(--border); }
     </style>
 </head>
 <body>
 
-    <div id="banScreen" class="ban-screen hidden">
-        <h2>Ваш кабинет был закрыт.</h2>
-        <button class="btn-primary" onclick="showBanReason()" style="margin-top: 20px;">Узнать причину</button>
-        <p id="banReasonText" class="hidden" style="margin-top: 20px; color: var(--danger);"></p>
-        <button class="btn-outline" onclick="logout()" style="margin-top: 30px;">Выйти</button>
+    <div id="banView" class="ban-screen hidden">
+        <h1 style="font-size: 40px; margin-bottom: 20px;">Ваш кабинет был закрыт.</h1>
+        <button class="btn-primary" onclick="alert(currentUser.banReason)">Узнать причину</button>
+        <button class="btn-outline" onclick="logout()" style="margin-top: 20px;">Выход</button>
     </div>
 
     <div id="authView" class="auth-container">
-        <div style="text-align: center; margin-bottom: 30px;">
-            <h1>GlamBank</h1>
-            <span class="subtitle">Лейбл переходник</span>
-        </div>
-        <div style="background: var(--bg-panel); padding: 30px; border-radius: 8px; width: 350px;">
-            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                <button class="btn-primary" style="flex:1" onclick="setAuthMode('login')">Войти</button>
-                <button class="btn-outline" style="flex:1" onclick="setAuthMode('register')">Создать</button>
-            </div>
+        <div class="auth-box">
+            <h2 style="text-align: center; margin-bottom: 10px;">GlamBank</h2>
+            <p style="text-align: center; font-size: 12px; color: var(--text-muted); margin-bottom: 30px; opacity: 0.5;">Лейбл переходник</p>
             
-            <h3 id="authTitle">Вход в кабинет</h3>
-            <input type="text" id="authLogin" placeholder="Логин" class="hidden">
+            <div id="regFields" class="hidden">
+                <input type="text" id="regLogin" placeholder="Логин">
+            </div>
             <input type="email" id="authEmail" placeholder="Почта">
             <input type="password" id="authPassword" placeholder="Пароль">
-            <button class="btn-primary" style="width: 100%" onclick="handleAuth()">Подтвердить</button>
+            
+            <button class="btn-primary" id="mainAuthBtn" style="width: 100%;" onclick="processAuth()">Войти в кабинет</button>
+            <button class="btn-outline" id="switchAuthBtn" style="width: 100%; margin-top: 10px;" onclick="toggleAuthMode()">Создать кабинет</button>
         </div>
     </div>
 
-    <div id="dashboardView" class="dashboard hidden">
+    <div id="mainView" class="dashboard hidden">
         <div class="sidebar">
-            <div style="margin-bottom: 30px;">
-                <h2>GlamBank</h2>
-                <span class="subtitle">Лейбл переходник</span>
+            <div style="margin-bottom: 40px;">
+                <h2 style="letter-spacing: 1px;">GlamBank</h2>
+                <span style="font-size: 10px; opacity: 0.4;">Лейбл переходник</span>
             </div>
-            
-            <button class="btn-highlight" onclick="showView('newReleaseView')" id="btnNewRelease">Новый релиз</button>
-            <button class="btn-outline" style="margin-bottom: 10px; border:none; text-align: left;" onclick="showView('userReleasesView')" id="btnOverview">Обзор</button>
-            <button class="btn-outline" style="margin-bottom: 10px; border:none; text-align: left;" onclick="showView('userReleasesView')" id="btnYourMusic">Ваша музыка</button>
-            
-            <div id="adminMenu" class="hidden" style="margin-top: 30px; border-top: 1px solid var(--border); padding-top: 20px;">
-                <h3 style="color: var(--accent)">Админка</h3>
-                <button class="btn-outline" style="margin-bottom: 10px; width: 100%; border:none; text-align: left;" onclick="showView('adminUsersView')">Все кабинеты</button>
-                <button class="btn-outline" style="margin-bottom: 10px; width: 100%; border:none; text-align: left;" onclick="showView('adminReleasesView')">Все релизы</button>
+
+            <button class="btn-highlight" onclick="showSection('newRelease')">Новый релиз</button>
+            <button class="menu-item" onclick="showSection('overview')">Обзор</button>
+            <button class="menu-item" onclick="showSection('overview')">Ваша музыка</button>
+
+            <div id="adminPanel" class="hidden" style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border);">
+                <p style="color: var(--accent-bright); font-size: 11px; font-weight: bold; margin-bottom: 15px; text-transform: uppercase;">Админка</p>
+                <button class="menu-item" onclick="showSection('adminUsers')">Все кабинеты</button>
+                <button class="menu-item" onclick="showSection('adminReleases')">Все релизы</button>
             </div>
-            
+
             <div style="margin-top: auto;">
-                <button class="btn-danger" style="width: 100%;" onclick="logout()">Выход</button>
+                <button class="btn-outline" style="width: 100%; color: var(--danger); border-color: var(--danger);" onclick="logout()">Выход</button>
             </div>
         </div>
 
         <div class="main-content">
-            <div class="topbar">
-                <h2 id="pageTitle">Обзор</h2>
-                <div id="userProfileBtn" style="cursor: pointer;" onclick="openProfileModal()">
-                    <span id="topbarUsername">Профиль</span>
-                </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
+                <h1 id="sectionTitle">Обзор</h1>
+                <div onclick="openProfile()" style="cursor: pointer; color: var(--text-muted);" id="userDisplay"></div>
             </div>
 
-            <div id="userReleasesView" class="view-section">
-                <h3>Ваши релизы</h3>
-                <div id="userReleasesList"></div>
+            <div id="sec-overview" class="content-section">
+                <div id="myReleasesList"></div>
             </div>
 
-            <div id="newReleaseView" class="view-section hidden">
-                <select id="releaseTypeSelect" style="max-width: 200px;">
-                    <option value="">Выберите тип...</option>
+            <div id="sec-newRelease" class="content-section hidden">
+                <select id="relType" style="width: 200px;" onchange="toggleReleaseForm()">
+                    <option value="">Выберите формат</option>
                     <option value="Сингл">Сингл</option>
                     <option value="Альбом/EP">Альбом/EP</option>
                 </select>
-                
-                <div id="releaseFormArea" class="hidden" style="margin-top: 20px;">
-                    <div class="form-grid">
+
+                <div id="releaseForm" class="hidden" style="margin-top: 30px;">
+                    <div class="form-flex">
                         <div>
-                            <div class="cover-upload" id="coverDropZone">
-                                Нажмите или перетащите обложку<br>(1400x1400 или 3000x3000px)
-                                <input type="file" id="coverInput" accept="image/*" class="hidden">
+                            <div class="cover-box" onclick="document.getElementById('fileCover').click()">
+                                <p id="coverHint">Добавить обложку<br>1400x1400 / 3000x3000</p>
+                                <img id="coverPreview" class="cover-preview hidden">
+                                <input type="file" id="fileCover" accept="image/*" class="hidden" onchange="previewImg(this)">
                             </div>
-                            <p id="coverError" class="hidden" style="color: var(--danger); font-size: 12px; margin-top: 5px;"></p>
                         </div>
-                        <div>
-                            <input type="text" id="r_name" placeholder="Имя релиза">
-                            <input type="text" id="r_artist" placeholder="Имя артиста">
-                            <input type="text" id="r_version" placeholder="Версия (необязательно)">
-                            <input type="text" id="r_lyricist" placeholder="Автор слов">
-                            <input type="text" id="r_composer" placeholder="Композитор">
+                        <div style="flex: 1;">
+                            <input type="text" id="f_title" placeholder="Имя релиза">
+                            <input type="text" id="f_artist" placeholder="Имя артиста">
+                            <input type="text" id="f_version" placeholder="Версия (необязательно)">
+                            <input type="text" id="f_author" placeholder="Автор слов">
+                            <input type="text" id="f_comp" placeholder="Композитор">
                             
-                            <select id="r_trackType">
-                                <option value="">Тип трека...</option>
+                            <select id="f_type">
                                 <option value="Original">Original</option>
                                 <option value="Cover">Cover</option>
                                 <option value="Cover by cover band">Cover by cover band</option>
@@ -154,457 +150,277 @@
                                 <option value="Remix">Remix</option>
                             </select>
                             
-                            <input type="text" id="r_lang" placeholder="Язык названия трека">
+                            <input type="text" id="f_lang" placeholder="Язык названия трека">
                             
-                            <select id="r_genre">
-                                <option value="">Жанр...</option>
-                                <option value="Hip Hop/Rap">Hip Hop/Rap</option>
+                            <select id="f_genre">
+                                <option value="">Выберите жанр</option>
                                 <option value="Pop">Pop</option>
+                                <option value="Hip Hop/Rap">Hip Hop/Rap</option>
                                 <option value="Rock">Rock</option>
                                 <option value="Electronic">Electronic</option>
-                                <option value="R&B">R&B</option>
+                                <option value="Jazz">Jazz</option>
                             </select>
+
+                            <textarea id="f_lyrics" placeholder="Текст песни (необязательно)"></textarea>
                             
-                            <textarea id="r_lyrics" placeholder="Текст песни (необязательно)"></textarea>
-                            
-                            <select id="r_explicit">
-                                <option value="">Присутствие нецензурной лексики...</option>
-                                <option value="Да">Да</option>
-                                <option value="Нет">Нет</option>
+                            <select id="f_explicit">
+                                <option value="Нет">Присутствие нецензурной лексики: Нет</option>
+                                <option value="Да">Присутствие нецензурной лексики: Да</option>
                             </select>
-                            
-                            <input type="text" id="r_isrc" placeholder="ISRC (если есть) (необязательно)">
-                            <select id="r_year"></select>
-                            
-                            <div style="border: 1px solid var(--border); padding: 15px; border-radius: 5px; margin-bottom: 15px;">
-                                <label>Файл трека (только MP3, до 10мб):</label><br>
-                                <input type="file" id="r_audio" accept=".mp3" style="margin-top: 10px;">
+
+                            <input type="text" id="f_isrc" placeholder="ISRC (если есть)">
+                            <select id="f_year"></select>
+
+                            <div style="border: 1px solid var(--border); padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+                                <p style="font-size: 12px; margin-bottom: 10px;">Файл трека (MP3, до 10мб)</p>
+                                <input type="file" id="fileAudio" accept=".mp3">
                             </div>
+
+                            <textarea id="f_mod_comm" placeholder="Комментарий модераторам"></textarea>
                             
-                            <textarea id="r_comment" placeholder="Комментарий модераторам"></textarea>
-                            
-                            <button class="btn-primary" onclick="submitRelease()">Отправить на модерацию</button>
+                            <button class="btn-primary" style="width: 100%;" onclick="sendToModeration()">Отправить на модерацию</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div id="adminUsersView" class="view-section hidden">
-                <h3>Все кабинеты</h3>
+            <div id="sec-adminUsers" class="content-section hidden">
                 <div id="adminUsersList"></div>
             </div>
 
-            <div id="adminReleasesView" class="view-section hidden">
-                <h3>Все релизы на модерации</h3>
-                <div id="adminReleasesList"></div>
+            <div id="sec-adminReleases" class="content-section hidden">
+                <div id="adminQueue"></div>
             </div>
         </div>
     </div>
 
-    <div id="profileModal" class="modal hidden">
-        <div class="modal-content">
-            <h3>Профиль кабинета</h3>
-            <label class="subtitle">Логин</label>
-            <input type="text" id="profLogin">
-            <label class="subtitle">Почта (Смена требует модерации)</label>
-            <input type="email" id="profEmail">
-            <label class="subtitle">Пароль</label>
-            <input type="password" id="profPassword">
-            <div style="display: flex; gap: 10px; margin-top: 10px;">
-                <button class="btn-primary" onclick="saveProfile()">Сохранить</button>
-                <button class="btn-outline" onclick="document.getElementById('profileModal').classList.add('hidden')">Закрыть</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="actionModal" class="modal hidden">
-        <div class="modal-content">
-            <h3 id="actionModalTitle">Действие</h3>
-            <div id="actionModalInputs"></div>
-            <div style="display: flex; gap: 10px; margin-top: 20px;">
-                <button id="actionModalBtn" class="btn-primary">Подтвердить</button>
-                <button class="btn-outline" onclick="closeActionModal()">Отмена</button>
-            </div>
-        </div>
+    <div id="modalBase" class="modal hidden">
+        <div class="modal-content" id="modalInner"></div>
     </div>
 
 <script>
-    // --- ИНИЦИАЛИЗАЦИЯ ДАННЫХ ---
     const ADMIN_EMAIL = 'denisbiletskiy0@gmail.com';
-    const ADMIN_PASS = 'Retro!22848.lol';
-    const FORMSPREE_URL = 'https://formspree.io/f/mzdywnyq';
+    const FORMSPREE = 'https://formspree.io/f/mzdywnyq';
 
-    // Загрузка "Базы данных" из LocalStorage
-    let db = JSON.parse(localStorage.getItem('glambank_db')) || {
-        users: [],
-        releases: []
-    };
+    let db = JSON.parse(localStorage.getItem('gb_data')) || { users: [], releases: [] };
     let currentUser = null;
-    let authMode = 'login';
+    let mode = 'login';
 
-    function saveDB() {
-        localStorage.setItem('glambank_db', JSON.stringify(db));
+    // Года для формы
+    const yearBox = document.getElementById('f_year');
+    for(let y=2026; y>=2000; y--) yearBox.innerHTML += `<option value="${y}">${y}</option>`;
+
+    function save() { localStorage.setItem('gb_data', JSON.stringify(db)); }
+
+    function toggleAuthMode() {
+        mode = (mode === 'login') ? 'reg' : 'login';
+        document.getElementById('regFields').classList.toggle('hidden', mode === 'login');
+        document.getElementById('mainAuthBtn').innerText = (mode === 'login') ? 'Войти в кабинет' : 'Создать кабинет';
+        document.getElementById('switchAuthBtn').innerText = (mode === 'login') ? 'Создать кабинет' : 'Уже есть аккаунт';
     }
 
-    // --- АВТОРИЗАЦИЯ И РЕГИСТРАЦИЯ ---
-    function setAuthMode(mode) {
-        authMode = mode;
-        document.getElementById('authTitle').innerText = mode === 'login' ? 'Вход в кабинет' : 'Создать кабинет';
-        document.getElementById('authLogin').classList.toggle('hidden', mode === 'login');
-    }
+    function processAuth() {
+        const email = document.getElementById('authEmail').value.toLowerCase().trim();
+        const pass = document.getElementById('authPassword').value;
+        const login = document.getElementById('regLogin').value;
 
-    function handleAuth() {
-        const email = document.getElementById('authEmail').value.trim();
-        const pass = document.getElementById('authPassword').value.trim();
-        const login = document.getElementById('authLogin').value.trim();
+        if(!email.includes('@')) return alert("Введите реальную почту");
 
-        if(!email || !pass) return alert("Заполните почту и пароль");
-
-        // Проверка формата почты
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) return alert("Такой почты не существует. Введите корректный адрес.");
-
-        if (authMode === 'login') {
-            if (email === ADMIN_EMAIL && pass === ADMIN_PASS) {
-                currentUser = { id: 'admin', role: 'admin', email: ADMIN_EMAIL, login: 'Admin' };
-                loginSuccess();
+        if(mode === 'login') {
+            const user = db.users.find(u => u.email === email && u.pass === pass);
+            if(email === ADMIN_EMAIL && pass === 'Retro!22848.lol') {
+                currentUser = { email: ADMIN_EMAIL, login: 'Администратор', role: 'admin' };
+                startSession();
+            } else if(user) {
+                currentUser = user;
+                startSession();
             } else {
-                const user = db.users.find(u => u.email === email && u.password === pass);
-                if (user) {
-                    currentUser = user;
-                    loginSuccess();
-                } else {
-                    alert("Неверная почта или пароль");
-                }
+                alert("Ошибка входа");
             }
         } else {
-            if(!login) return alert("Введите логин");
-            if (db.users.find(u => u.email === email)) return alert("Почта уже зарегистрирована");
-            
-            const newUser = { id: Date.now().toString(), role: 'user', login, email, password: pass, isBanned: false, banReason: '' };
+            if(db.users.find(u => u.email === email)) return alert("Почта занята");
+            const newUser = { email, pass, login, isBanned: false, banReason: '', id: Date.now() };
             db.users.push(newUser);
-            saveDB();
+            save();
             currentUser = newUser;
-            loginSuccess();
+            startSession();
         }
     }
 
-    function loginSuccess() {
-        document.getElementById('authView').classList.add('hidden');
-        
-        if (currentUser.isBanned) {
-            document.getElementById('banScreen').classList.remove('hidden');
-            return;
-        }
-
-        document.getElementById('dashboardView').classList.remove('hidden');
-        document.getElementById('topbarUsername').innerText = currentUser.login;
-
-        if (currentUser.role === 'admin') {
-            document.getElementById('adminMenu').classList.remove('hidden');
-            document.getElementById('btnNewRelease').classList.add('hidden');
-            document.getElementById('btnOverview').classList.add('hidden');
-            document.getElementById('btnYourMusic').classList.add('hidden');
-            showView('adminReleasesView');
-        } else {
-            showView('userReleasesView');
-        }
-    }
-
-    function logout() {
-        currentUser = null;
-        document.getElementById('dashboardView').classList.add('hidden');
-        document.getElementById('banScreen').classList.add('hidden');
-        document.getElementById('authView').classList.remove('hidden');
-        document.getElementById('authEmail').value = '';
-        document.getElementById('authPassword').value = '';
-    }
-
-    function showBanReason() {
-        const p = document.getElementById('banReasonText');
-        p.innerText = currentUser.banReason;
-        p.classList.remove('hidden');
-    }
-
-    // --- НАВИГАЦИЯ ---
-    function showView(viewId) {
+    function startSession() {
         if(currentUser.isBanned) {
-            alert("Упс! Кажется ваш кабинет заблокирован. Приносим наши извинения за данные неудобства. Но вы не имеете право ничего изменять на данном кабинете. Спасибо за сотрудничество!");
+            document.getElementById('banView').classList.remove('hidden');
             return;
         }
-
-        document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
-        document.getElementById(viewId).classList.remove('hidden');
-
-        if(viewId === 'userReleasesView') renderUserReleases();
-        if(viewId === 'adminUsersView') renderAdminUsers();
-        if(viewId === 'adminReleasesView') renderAdminReleases();
-    }
-
-    // --- ПРОФИЛЬ ---
-    function openProfileModal() {
-        if(currentUser.isBanned) return alert("Упс! Кажется ваш кабинет заблокирован...");
-        if(currentUser.role === 'admin') return alert("Профиль админа не редактируется");
+        document.getElementById('authView').classList.add('hidden');
+        document.getElementById('mainView').classList.remove('hidden');
+        document.getElementById('userDisplay').innerText = currentUser.login;
         
-        document.getElementById('profLogin').value = currentUser.login;
-        document.getElementById('profEmail').value = currentUser.email;
-        document.getElementById('profPassword').value = currentUser.password;
-        document.getElementById('profileModal').classList.remove('hidden');
-    }
-
-    function saveProfile() {
-        currentUser.login = document.getElementById('profLogin').value;
-        currentUser.password = document.getElementById('profPassword').value;
-        
-        const newEmail = document.getElementById('profEmail').value;
-        if(newEmail !== currentUser.email) {
-            alert("Заявка на смену почты отправлена модератору. Пока используется старая.");
-            // В реальном приложении тут был бы статус pending
-        }
-        
-        const userIndex = db.users.findIndex(u => u.id === currentUser.id);
-        db.users[userIndex] = currentUser;
-        saveDB();
-        document.getElementById('topbarUsername').innerText = currentUser.login;
-        document.getElementById('profileModal').classList.add('hidden');
-    }
-
-    // --- ЛОГИКА ПОЛЬЗОВАТЕЛЯ: РЕЛИЗЫ ---
-    function renderUserReleases() {
-        const container = document.getElementById('userReleasesList');
-        const userReleases = db.releases.filter(r => r.userId === currentUser.id);
-
-        if (userReleases.length === 0) {
-            container.innerHTML = '<p style="color: var(--text-muted); margin-top: 20px;">пока нет релизов</p>';
-            return;
-        }
-
-        container.innerHTML = userReleases.map(r => `
-            <div class="release-card">
-                <div>
-                    <h4>${r.name} - ${r.artist}</h4>
-                    <p class="subtitle">Дата релиза: ${r.date} | Жанр: ${r.genre}</p>
-                    ${r.status === 'Одобрен' ? `<p class="subtitle" style="color:var(--success); margin-top:5px;">UPC: ${r.upc} | ISRC: ${r.isrc_admin}</p>` : ''}
-                </div>
-                <div>
-                    ${getStatusBadge(r)}
-                </div>
-            </div>
-        `).join('');
-    }
-
-    function getStatusBadge(release) {
-        if(release.status === 'Модерация') return `<span class="status-badge status-mod">Модерация</span>`;
-        if(release.status === 'Одобрен') return `<span class="status-badge status-app">Одобрен</span>`;
-        if(release.status === 'Отклонён') return `<span class="status-badge status-rej" title="${release.rejectReason}">! Отклонён</span>`;
-        return '';
-    }
-
-    // Заполнение годов
-    const yearSelect = document.getElementById('r_year');
-    for(let y = 2026; y >= 2000; y--) {
-        yearSelect.innerHTML += `<option value="${y}">${y}</option>`;
-    }
-
-    document.getElementById('releaseTypeSelect').addEventListener('change', (e) => {
-        if(e.target.value) {
-            document.getElementById('releaseFormArea').classList.remove('hidden');
+        // КРИТИЧЕСКОЕ ПРАВИЛО: Кнопки админа только для одного Email
+        if(currentUser.email === ADMIN_EMAIL) {
+            document.getElementById('adminPanel').classList.remove('hidden');
         } else {
-            document.getElementById('releaseFormArea').classList.add('hidden');
+            document.getElementById('adminPanel').classList.add('hidden');
         }
-    });
+        showSection('overview');
+    }
 
-    // Валидация обложки
-    const coverInput = document.getElementById('coverInput');
-    const coverDropZone = document.getElementById('coverDropZone');
-    let validImage = false;
+    function logout() { location.reload(); }
 
-    coverDropZone.addEventListener('click', () => coverInput.click());
-    coverInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
+    function showSection(name) {
+        if(currentUser.isBanned) return alert("Кабинет заблокирован");
+        document.querySelectorAll('.content-section').forEach(s => s.classList.add('hidden'));
+        document.getElementById('sec-' + name).classList.remove('hidden');
+        document.getElementById('sectionTitle').innerText = (name === 'overview') ? 'Обзор' : 
+                                                            (name === 'newRelease') ? 'Новый релиз' : 
+                                                            (name === 'adminUsers') ? 'Все кабинеты' : 'Все релизы';
+        if(name === 'overview') renderUserReleases();
+        if(name === 'adminUsers') renderAdminUsers();
+        if(name === 'adminReleases') renderAdminQueue();
+    }
+
+    // Обработка обложки
+    let coverOk = false;
+    function previewImg(input) {
+        const file = input.files[0];
         if(!file) return;
-        
         const img = new Image();
         img.src = URL.createObjectURL(file);
         img.onload = function() {
-            if ((this.width === 1400 && this.height === 1400) || (this.width === 3000 && this.height === 3000)) {
-                validImage = true;
-                coverDropZone.innerHTML = `<img src="${this.src}" style="max-width:100%; max-height:100%; object-fit:cover;">`;
-                document.getElementById('coverError').classList.add('hidden');
+            if((this.width === 1400 || this.width === 3000) && (this.width === this.height)) {
+                coverOk = true;
+                document.getElementById('coverPreview').src = img.src;
+                document.getElementById('coverPreview').classList.remove('hidden');
+                document.getElementById('coverHint').classList.add('hidden');
             } else {
-                validImage = false;
-                document.getElementById('coverError').innerText = "Ошибка: Размер должен быть ровно 1400x1400 или 3000x3000 пикселей.";
-                document.getElementById('coverError').classList.remove('hidden');
-                coverDropZone.innerHTML = "Нажмите или перетащите обложку<br>(1400x1400 или 3000x3000px)";
+                coverOk = false;
+                alert("Размер должен быть 1400x1400 или 3000x3000px");
             }
-        }
-    });
+        };
+    }
 
-    // Отправка релиза
-    function submitRelease() {
-        if(currentUser.isBanned) return;
+    function toggleReleaseForm() {
+        document.getElementById('releaseForm').classList.toggle('hidden', !document.getElementById('relType').value);
+    }
 
-        const name = document.getElementById('r_name').value;
-        const artist = document.getElementById('r_artist').value;
-        const genre = document.getElementById('r_genre').value;
-        const audioFile = document.getElementById('r_audio').files[0];
+    function sendToModeration() {
+        const audio = document.getElementById('fileAudio').files[0];
+        if(!coverOk) return alert("Загрузите правильную обложку");
+        if(!audio || audio.size > 10 * 1024 * 1024) return alert("Нужен MP3 до 10мб");
 
-        if(!name || !artist || !genre) return alert("Заполните обязательные поля (Имя, Артист, Жанр)");
-        if(!validImage) return alert("Загрузите корректную обложку");
-        if(!audioFile) return alert("Загрузите MP3 файл");
-        if(audioFile.size > 10 * 1024 * 1024) return alert("Размер MP3 файла превышает 10мб");
-
-        const releaseData = {
-            id: Date.now().toString(),
-            userId: currentUser.id,
+        const data = {
+            id: Date.now(),
+            userId: currentUser.id || 'admin',
             userEmail: currentUser.email,
-            type: document.getElementById('releaseTypeSelect').value,
-            name, artist, genre,
-            version: document.getElementById('r_version').value,
-            lyricist: document.getElementById('r_lyricist').value,
-            composer: document.getElementById('r_composer').value,
-            trackType: document.getElementById('r_trackType').value,
-            lang: document.getElementById('r_lang').value,
-            lyrics: document.getElementById('r_lyrics').value,
-            explicit: document.getElementById('r_explicit').value,
-            isrc_user: document.getElementById('r_isrc').value,
-            year: document.getElementById('r_year').value,
-            comment: document.getElementById('r_comment').value,
-            date: new Date().toISOString().split('T')[0],
-            status: 'Модерация'
+            name: document.getElementById('f_title').value,
+            artist: document.getElementById('f_artist').value,
+            genre: document.getElementById('f_genre').value,
+            status: 'Модерация',
+            date: new Date().toLocaleDateString(),
+            upc: '', isrc_assigned: ''
         };
 
-        // Сохраняем в локальную БД
-        db.releases.push(releaseData);
-        saveDB();
-
-        // Отправка на Formspree
-        const formData = new FormData();
-        Object.keys(releaseData).forEach(key => formData.append(key, releaseData[key]));
+        db.releases.push(data);
+        save();
         
-        fetch(FORMSPREE_URL, {
+        // Отправка на почту
+        fetch(FORMSPREE, {
             method: 'POST',
-            body: formData,
-            headers: { 'Accept': 'application/json' }
-        }).then(response => {
-            alert("Релиз успешно отправлен на модерацию!");
-            showView('userReleasesView');
-            // Очистка формы
-            document.getElementById('r_name').value = '';
-            document.getElementById('r_artist').value = '';
-            coverDropZone.innerHTML = "Нажмите или перетащите обложку<br>(1400x1400 или 3000x3000px)";
-            validImage = false;
-        }).catch(error => {
-            alert("Релиз сохранен локально, но произошла ошибка при отправке на почту.");
+            body: JSON.stringify(data),
+            headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
         });
+
+        alert("Отправлено!");
+        showSection('overview');
     }
 
-    // --- ЛОГИКА АДМИНА ---
-    function renderAdminUsers() {
-        const container = document.getElementById('adminUsersList');
-        container.innerHTML = db.users.map(u => {
-            const releaseCount = db.releases.filter(r => r.userId === u.id).length;
-            return `
-                <div class="release-card">
-                    <div>
-                        <h4>${u.login} (${u.email})</h4>
-                        <p class="subtitle">Релизов: ${releaseCount}</p>
-                        ${u.isBanned ? '<span class="status-badge status-rej" style="margin-top:5px; display:inline-block;">Заблокирован</span>' : ''}
-                    </div>
-                    <div>
-                        ${!u.isBanned ? `<button class="btn-danger" onclick="openBanModal('${u.id}')">Закрыть кабинет</button>` : ''}
-                    </div>
-                </div>
-            `;
-        }).join('');
-    }
-
-    function renderAdminReleases() {
-        const container = document.getElementById('adminReleasesList');
-        const pending = db.releases.filter(r => r.status === 'Модерация');
+    function renderUserReleases() {
+        const box = document.getElementById('myReleasesList');
+        const my = db.releases.filter(r => r.userEmail === currentUser.email);
+        if(!my.length) { box.innerHTML = "пока нет релизов"; return; }
         
-        if (pending.length === 0) {
-            container.innerHTML = '<p class="subtitle">Нет релизов на модерации.</p>';
-            return;
-        }
-
-        container.innerHTML = pending.map(r => `
-            <div class="release-card" style="flex-direction: column; align-items: flex-start; gap: 15px;">
-                <div style="width: 100%;">
-                    <h4>${r.name} - ${r.artist} (от ${r.userEmail})</h4>
-                    <p class="subtitle">Жанр: ${r.genre} | Год: ${r.year} | Тип: ${r.type}</p>
-                    <p class="subtitle" style="margin-top: 5px;">Комментарий: ${r.comment || 'Нет'}</p>
+        box.innerHTML = my.map(r => `
+            <div class="release-item">
+                <div>
+                    <p style="font-weight:bold">${r.name}</p>
+                    <p style="font-size:12px; opacity:0.6">${r.artist}</p>
+                    <p style="font-size:11px; margin-top:5px">Дата релиза: ${r.date} | Жанр: ${r.genre}</p>
+                    ${r.upc ? `<p style="font-size:10px; color:var(--accent-bright)">UPC: ${r.upc} | ISRC: ${r.isrc_assigned}</p>` : ''}
                 </div>
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn-primary" onclick="openApproveModal('${r.id}')">Принять релиз</button>
-                    <button class="btn-danger" onclick="openRejectModal('${r.id}')">Отклонить релиз</button>
+                <div class="status-tag ${r.status==='Модерация'?'tag-mod':r.status==='Одобрен'?'tag-ok':'tag-no'}" 
+                     onclick="${r.status==='Отклонён'?`alert('Причина: '+r.rejectReason)` : ''}">
+                    ${r.status} ${r.status==='Отклонён'?'ⓘ':''}
                 </div>
             </div>
         `).join('');
     }
 
-    // Управление модалкой действий (бан/одобрение/отклонение)
-    function closeActionModal() {
-        document.getElementById('actionModal').classList.add('hidden');
+    // --- АДМИН-ЛОГИКА ---
+    function renderAdminUsers() {
+        const box = document.getElementById('adminUsersList');
+        box.innerHTML = db.users.map(u => `
+            <div class="release-item">
+                <div>
+                    <p>${u.login} (${u.email})</p>
+                    <p style="font-size:11px; opacity:0.5">Релизов: ${db.releases.filter(r=>r.userEmail===u.email).length}</p>
+                </div>
+                <button class="btn-outline" style="color:red" onclick="blockUser('${u.email}')">${u.isBanned?'Разбанить':'Закрыть кабинет'}</button>
+            </div>
+        `).join('');
     }
 
-    function openBanModal(userId) {
-        document.getElementById('actionModalTitle').innerText = "Почему закрывают кабинет:";
-        document.getElementById('actionModalInputs').innerHTML = `<input type="text" id="actionReason" placeholder="Причина">`;
-        const btn = document.getElementById('actionModalBtn');
-        btn.innerText = "Закрыть кабинет";
-        btn.className = "btn-danger";
-        btn.onclick = () => {
-            const reason = document.getElementById('actionReason').value;
-            const user = db.users.find(u => u.id === userId);
-            user.isBanned = true;
-            user.banReason = reason;
-            saveDB();
-            closeActionModal();
-            renderAdminUsers();
-        };
-        document.getElementById('actionModal').classList.remove('hidden');
+    function blockUser(email) {
+        const reason = prompt("Почему закрывают кабинет?");
+        if(!reason) return;
+        const u = db.users.find(x => x.email === email);
+        u.isBanned = true;
+        u.banReason = reason;
+        save();
+        renderAdminUsers();
     }
 
-    function openApproveModal(releaseId) {
-        document.getElementById('actionModalTitle').innerText = "Принять релиз";
-        document.getElementById('actionModalInputs').innerHTML = `
-            <input type="text" id="actionUPC" placeholder="Вставьте UPC">
-            <input type="text" id="actionISRC" placeholder="Вставьте ISRC">
-        `;
-        const btn = document.getElementById('actionModalBtn');
-        btn.innerText = "Принять релиз";
-        btn.className = "btn-primary";
-        btn.onclick = () => {
-            const upc = document.getElementById('actionUPC').value;
-            const isrc = document.getElementById('actionISRC').value;
-            const release = db.releases.find(r => r.id === releaseId);
-            release.status = 'Одобрен';
-            release.upc = upc;
-            release.isrc_admin = isrc;
-            saveDB();
-            closeActionModal();
-            renderAdminReleases();
-        };
-        document.getElementById('actionModal').classList.remove('hidden');
+    function renderAdminQueue() {
+        const box = document.getElementById('adminQueue');
+        const queue = db.releases.filter(r => r.status === 'Модерация');
+        box.innerHTML = queue.map(r => `
+            <div class="release-item">
+                <div><p>${r.name} - ${r.artist}</p><p style="font-size:11px">${r.userEmail}</p></div>
+                <div style="display:flex; gap:10px">
+                    <button class="btn-primary" onclick="approveRelease(${r.id})">Принять</button>
+                    <button class="btn-outline" style="color:red" onclick="rejectRelease(${r.id})">Отклонить</button>
+                </div>
+            </div>
+        `).join('');
     }
 
-    function openRejectModal(releaseId) {
-        document.getElementById('actionModalTitle').innerText = "Причина отклонения релиза";
-        document.getElementById('actionModalInputs').innerHTML = `<input type="text" id="actionReason" placeholder="Причина">`;
-        const btn = document.getElementById('actionModalBtn');
-        btn.innerText = "Отклонить релиз";
-        btn.className = "btn-danger";
-        btn.onclick = () => {
-            const reason = document.getElementById('actionReason').value;
-            const release = db.releases.find(r => r.id === releaseId);
-            release.status = 'Отклонён';
-            release.rejectReason = reason;
-            saveDB();
-            closeActionModal();
-            renderAdminReleases();
-        };
-        document.getElementById('actionModal').classList.remove('hidden');
+    function approveRelease(id) {
+        const upc = prompt("Вставьте UPC");
+        const isrc = prompt("Вставьте ISRC");
+        const r = db.releases.find(x => x.id === id);
+        r.status = 'Одобрен';
+        r.upc = upc;
+        r.isrc_assigned = isrc;
+        save();
+        renderAdminQueue();
+    }
+
+    function rejectRelease(id) {
+        const reason = prompt("Причина отклонения релиза");
+        const r = db.releases.find(x => x.id === id);
+        r.status = 'Отклонён';
+        r.rejectReason = reason;
+        save();
+        renderAdminQueue();
+    }
+
+    function openProfile() {
+        if(currentUser.email === ADMIN_EMAIL) return;
+        const newLogin = prompt("Изменить логин?", currentUser.login);
+        const newPass = prompt("Изменить пароль?", currentUser.pass);
+        if(newLogin) currentUser.login = newLogin;
+        if(newPass) currentUser.pass = newPass;
+        save();
+        startSession();
     }
 </script>
 </body>
