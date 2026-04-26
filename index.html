@@ -39,6 +39,7 @@
 
         /* UI Elements */
         input, select, textarea { width: 100%; padding: 14px 16px; margin-bottom: 16px; background: #000; border: 1px solid var(--border); color: #fff; border-radius: 8px; font-size: 14px; transition: 0.2s; }
+        input[type="date"] { color-scheme: dark; } /* Календарь в темной теме */
         input:focus, select:focus, textarea:focus { border-color: #555; outline: none; }
         button { padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 500; transition: 0.2s; font-size: 14px; }
         
@@ -64,6 +65,7 @@
         .badge-mod { background: rgba(255, 149, 0, 0.15); color: var(--warning); }
         .badge-ok { background: rgba(52, 199, 89, 0.15); color: var(--success); }
         .badge-err { background: rgba(255, 59, 48, 0.15); color: var(--danger); }
+        .badge-draft { background: rgba(255, 255, 255, 0.1); color: #ccc; }
 
         /* Custom Modals */
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; z-index: 9999; }
@@ -71,11 +73,14 @@
         .dialog h3 { margin-bottom: 12px; font-size: 18px; }
         .dialog-actions { display: flex; gap: 12px; margin-top: 24px; justify-content: flex-end; }
         
+        /* Empty State */
+        .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60vh; text-align: center; }
+        .empty-state h2 { font-size: 28px; margin-bottom: 16px; color: var(--text-muted); font-weight: 500; }
+
         /* Specific elements */
         .upload-box { width: 100%; max-width: 300px; aspect-ratio: 1; border: 1px dashed var(--border); border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; text-align: center; padding: 20px; background: var(--bg-glass); position: relative; overflow: hidden; }
         .upload-box:hover { border-color: var(--text-muted); }
         .upload-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-        
         .track-list-item { background: #000; border: 1px solid var(--border); padding: 12px 16px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         
         audio { height: 36px; border-radius: 4px; outline: none; width: 200px; }
@@ -110,6 +115,18 @@
             <div class="dialog-actions">
                 <button class="btn-outline" onclick="UI.closeConfirm()">Отмена</button>
                 <button class="btn-danger" id="uiConfirmBtn">Удалить</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="uiDraftConfirm" class="overlay hidden">
+        <div class="dialog" style="max-width: 450px;">
+            <h3>У вас есть несохраненные изменения</h3>
+            <p class="text-sm" style="color: #ccc; margin-bottom: 24px;">Вы хотите сохранить этот релиз как черновик, чтобы продолжить позже, или удалить его?</p>
+            <div style="display: flex; gap: 12px; flex-direction: column;">
+                <button class="btn-primary" id="draftSaveBtn">Сохранить черновик</button>
+                <button class="btn-danger" id="draftDeleteBtn">Удалить черновик</button>
+                <button class="btn-outline" onclick="document.getElementById('uiDraftConfirm').classList.add('hidden')">Отмена (Остаться здесь)</button>
             </div>
         </div>
     </div>
@@ -189,6 +206,8 @@
             <h1 id="pageTitle">Обзор</h1>
 
             <div id="sec-overview" class="view-section">
+                <input type="text" id="searchReleases" placeholder="Поиск по названию, UPC, артисту..." oninput="renderUserReleases()" style="max-width: 500px; margin-bottom: 24px; border-radius: 30px; padding-left: 20px;">
+                
                 <div id="userReleasesList"></div>
             </div>
 
@@ -206,7 +225,7 @@
                         <input type="text" id="r_title" placeholder="Название релиза">
                         <input type="text" id="r_artist" placeholder="Основной артист">
                         
-                        <div style="display: flex; gap: 16px; margin-bottom: 16px;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
                             <select id="r_genre" style="margin-bottom: 0;">
                                 <option value="">Жанр</option>
                                 <option value="Pop">Pop</option><option value="Hip Hop/Rap">Hip Hop/Rap</option>
@@ -214,8 +233,19 @@
                                 <option value="R&B">R&B</option><option value="Alternative">Alternative</option>
                             </select>
                             <select id="r_year" style="margin-bottom: 0;"></select>
-                            <input type="text" id="r_upc" placeholder="UPC (если есть)" style="margin-bottom: 0;">
                         </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                            <div>
+                                <label style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px; display: block;">Дата релиза</label>
+                                <input type="date" id="r_releaseDate" style="margin-bottom: 0;">
+                            </div>
+                            <div>
+                                <label style="font-size: 11px; color: var(--text-muted); margin-bottom: 4px; display: block;">Штрихкод</label>
+                                <input type="text" id="r_upc" placeholder="UPC (если есть)" style="margin-bottom: 0;">
+                            </div>
+                        </div>
+
                         <textarea id="r_comment" placeholder="Комментарий для модераторов (необязательно)" rows="2"></textarea>
                     </div>
 
@@ -266,32 +296,7 @@
                         <option value="Немецкий"><option value="Итальянский"><option value="Русский">
                         <option value="Украинский"><option value="Белорусский"><option value="Китайский">
                         <option value="Японский"><option value="Корейский"><option value="Португальский">
-                        <option value="Арабский"><option value="Хинди"><option value="Бенгальский">
-                        <option value="Турецкий"><option value="Нидерландский"><option value="Польский">
-                        <option value="Шведский"><option value="Норвежский"><option value="Датский">
-                        <option value="Финский"><option value="Греческий"><option value="Чешский">
-                        <option value="Румынский"><option value="Венгерский"><option value="Иврит">
-                        <option value="Индонезийский"><option value="Малайский"><option value="Вьетнамский">
-                        <option value="Тайский"><option value="Персидский"><option value="Казахский">
-                        <option value="Узбекский"><option value="Таджикский"><option value="Туркменский">
-                        <option value="Кыргызский"><option value="Грузинский"><option value="Армянский">
-                        <option value="Азербайджанский"><option value="Литовский"><option value="Латышский">
-                        <option value="Эстонский"><option value="Болгарский"><option value="Сербский">
-                        <option value="Хорватский"><option value="Словацкий"><option value="Словенский">
-                        <option value="Албанский"><option value="Македонский"><option value="Ирландский">
-                        <option value="Исландский"><option value="Каталанский"><option value="Галисийский">
-                        <option value="Баскский"><option value="Валлийский"><option value="Бретонский">
-                        <option value="Тамильский"><option value="Телугу"><option value="Маратхи">
-                        <option value="Гуджарати"><option value="Урду"><option value="Панджаби">
-                        <option value="Непальский"><option value="Сингальский"><option value="Кхмерский">
-                        <option value="Лаосский"><option value="Бирманский"><option value="Тибетский">
-                        <option value="Монгольский"><option value="Филиппинский"><option value="Суахили">
-                        <option value="Зулу"><option value="Йоруба"><option value="Игбо">
-                        <option value="Африкаанс"><option value="Хауса"><option value="Сомалийский">
-                        <option value="Амхарский"><option value="Малагасийский"><option value="Татарский">
-                        <option value="Башкирский"><option value="Чеченский"><option value="Осетинский">
-                        <option value="Латинский"><option value="Эсперанто">
-                    </datalist>
+                        </datalist>
                 </div>
 
                 <textarea id="t_lyrics" placeholder="Текст песни (необязательно)" rows="3"></textarea>
@@ -317,7 +322,6 @@
     const ADMIN_EMAIL = 'denisbiletskiy0@gmail.com';
     const FORMSPREE = 'https://formspree.io/f/mzdywnyq';
 
-    // --- СИСТЕМА КАСТОМНЫХ ОКОН (UI) ---
     class UI {
         static alert(title, text) {
             document.getElementById('uiAlertTitle').innerText = title;
@@ -337,7 +341,6 @@
             };
         }
         static closePrompt() { document.getElementById('uiPrompt').classList.add('hidden'); }
-        
         static confirm(title, onConfirm) {
             document.getElementById('uiConfirmTitle').innerText = title;
             document.getElementById('uiConfirm').classList.remove('hidden');
@@ -346,7 +349,6 @@
         static closeConfirm() { document.getElementById('uiConfirm').classList.add('hidden'); }
     }
 
-    // --- INDEXED DB (Для поддержки файлов > 5МБ) ---
     const dbName = "GlamBank_DB";
     let idb;
 
@@ -379,24 +381,25 @@
         });
     }
 
-    // --- ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ---
     let appState = { users: [], releases: [] };
     let currentUser = null;
     let authMode = 'login';
     
+    let currentSection = 'overview';
+    let isDraftDirty = false;
+    let currentDraftId = null;
     let draftRelease = { cover: null, tracks: [] };
     let editTrackId = null;
 
     const yBox = document.getElementById('r_year');
     for(let y=2026; y>=2000; y--) yBox.innerHTML += `<option value="${y}">${y}</option>`;
 
-    // --- ЗАПУСК ---
     window.onload = async () => {
         try {
             await initDB();
             appState = await getDB();
         } catch(e) {
-            UI.alert("Ошибка", "Браузер не поддерживает локальную базу. Приложение может работать нестабильно.");
+            UI.alert("Ошибка", "Браузер не поддерживает локальную базу.");
         }
     };
 
@@ -443,9 +446,8 @@
         document.getElementById('authView').classList.add('hidden');
         document.getElementById('appView').classList.remove('hidden');
         document.getElementById('userNameDisplay').innerText = currentUser.login;
-        
         if(currentUser.email === ADMIN_EMAIL) document.getElementById('adminPanel').classList.remove('hidden');
-        nav('overview');
+        nav('overview', true);
     }
 
     function logout() { location.reload(); }
@@ -464,13 +466,39 @@
         });
     }
 
-    function nav(section) {
+    // --- НАВИГАЦИЯ С ПРОВЕРКОЙ ЧЕРНОВИКА ---
+    function nav(section, force = false) {
         if(currentUser.isBanned) return;
+
+        // Если мы уходим со страницы релиза и есть изменения
+        if(currentSection === 'newRelease' && isDraftDirty && !force && section !== 'newRelease') {
+            document.getElementById('uiDraftConfirm').classList.remove('hidden');
+            
+            document.getElementById('draftSaveBtn').onclick = async () => {
+                await saveDraftAsIs();
+                document.getElementById('uiDraftConfirm').classList.add('hidden');
+                isDraftDirty = false;
+                nav(section, true);
+            };
+            
+            document.getElementById('draftDeleteBtn').onclick = async () => {
+                if(currentDraftId) {
+                    appState.releases = appState.releases.filter(r => r.id !== currentDraftId);
+                    await saveDB(appState);
+                }
+                document.getElementById('uiDraftConfirm').classList.add('hidden');
+                isDraftDirty = false;
+                nav(section, true);
+            };
+            return; // Останавливаем переход
+        }
+
+        currentSection = section;
         document.querySelectorAll('.view-section').forEach(s => s.classList.add('hidden'));
         document.getElementById('sec-' + section).classList.remove('hidden');
         
         document.querySelectorAll('.sidebar .menu-btn').forEach(b => b.classList.remove('active'));
-        event.target.classList?.add('active');
+        if(event && event.target && event.target.classList) event.target.classList.add('active');
 
         const titles = { 'overview': 'Ваши релизы', 'newRelease': 'Новый релиз', 'adminUsers': 'Кабинеты', 'adminReleases': 'Релизы на модерации', 'adminDeleted': 'Удаленные релизы' };
         document.getElementById('pageTitle').innerText = titles[section] || 'Раздел';
@@ -481,18 +509,94 @@
         if(section === 'adminDeleted') renderAdminReleases(true);
     }
 
+    async function saveDraftAsIs() {
+        const releaseData = {
+            id: currentDraftId || Date.now().toString(),
+            userId: currentUser.id,
+            userEmail: currentUser.email,
+            type: document.getElementById('r_type').value,
+            title: document.getElementById('r_title').value || 'Без названия',
+            artist: document.getElementById('r_artist').value || currentUser.login,
+            genre: document.getElementById('r_genre').value,
+            year: document.getElementById('r_year').value,
+            releaseDate: document.getElementById('r_releaseDate').value,
+            upc: document.getElementById('r_upc').value,
+            comment: document.getElementById('r_comment').value,
+            status: 'Черновик',
+            date: new Date().toLocaleDateString(),
+            coverFile: draftRelease.cover,
+            tracks: draftRelease.tracks,
+            isDeleted: false,
+            adminIsrc: ''
+        };
+
+        const existingIdx = appState.releases.findIndex(r => r.id === releaseData.id);
+        if(existingIdx >= 0) appState.releases[existingIdx] = releaseData;
+        else appState.releases.push(releaseData);
+        
+        await saveDB(appState);
+    }
+
     // --- ЛОГИКА СОЗДАНИЯ РЕЛИЗА ---
     function startNewRelease() {
         draftRelease = { cover: null, tracks: [] };
+        currentDraftId = null;
+        isDraftDirty = true; // Сразу помечаем как измененный
+
         document.getElementById('r_type').value = '';
         document.getElementById('r_title').value = '';
         document.getElementById('r_artist').value = currentUser.login;
         document.getElementById('r_genre').value = '';
-        document.getElementById('r_upc').value = ''; // Очистка UPC
+        document.getElementById('r_upc').value = ''; 
+        document.getElementById('r_releaseDate').value = ''; 
+        document.getElementById('r_comment').value = ''; 
+        
+        document.getElementById('coverPreview').src = '';
         document.getElementById('coverPreview').classList.add('hidden');
         document.getElementById('coverHint').classList.remove('hidden');
+        
+        renderDraftTracks();
         toggleReleaseType();
-        nav('newRelease');
+        nav('newRelease', true); // true игнорирует проверку черновика
+    }
+
+    function editDraft(id) {
+        const r = appState.releases.find(x => x.id === id);
+        currentDraftId = id;
+        isDraftDirty = true;
+        
+        draftRelease.cover = r.coverFile;
+        draftRelease.tracks = r.tracks || [];
+
+        document.getElementById('r_type').value = r.type || '';
+        document.getElementById('r_title').value = r.title === 'Без названия' ? '' : r.title;
+        document.getElementById('r_artist').value = r.artist || '';
+        document.getElementById('r_genre').value = r.genre || '';
+        document.getElementById('r_year').value = r.year || '';
+        document.getElementById('r_upc').value = r.upc || '';
+        document.getElementById('r_releaseDate').value = r.releaseDate || '';
+        document.getElementById('r_comment').value = r.comment || '';
+
+        if(r.coverFile) {
+            document.getElementById('coverPreview').src = URL.createObjectURL(r.coverFile);
+            document.getElementById('coverPreview').classList.remove('hidden');
+            document.getElementById('coverHint').classList.add('hidden');
+        } else {
+            document.getElementById('coverPreview').classList.add('hidden');
+            document.getElementById('coverHint').classList.remove('hidden');
+        }
+
+        renderDraftTracks();
+        toggleReleaseType();
+        nav('newRelease', true);
+    }
+
+    async function deleteDraft(id) {
+        UI.confirm("Удалить этот черновик навсегда?", async () => {
+            appState.releases = appState.releases.filter(r => r.id !== id);
+            await saveDB(appState);
+            renderUserReleases();
+        });
     }
 
     function handleCoverUpload(input) {
@@ -515,11 +619,8 @@
 
     function toggleReleaseType() {
         const type = document.getElementById('r_type').value;
-        if(type) {
-            document.getElementById('tracklistArea').classList.remove('hidden');
-        } else {
-            document.getElementById('tracklistArea').classList.add('hidden');
-        }
+        if(type) document.getElementById('tracklistArea').classList.remove('hidden');
+        else document.getElementById('tracklistArea').classList.add('hidden');
     }
 
     function addTracks(input) {
@@ -613,20 +714,21 @@
         const artist = document.getElementById('r_artist').value;
         const genre = document.getElementById('r_genre').value;
         const year = document.getElementById('r_year').value;
+        const releaseDate = document.getElementById('r_releaseDate').value;
         const upc = document.getElementById('r_upc').value; 
         const comment = document.getElementById('r_comment').value;
 
-        if(!title || !artist || !genre || !type) return UI.alert("Ошибка", "Заполните все основные поля релиза");
+        if(!title || !artist || !genre || !type || !releaseDate) return UI.alert("Ошибка", "Заполните все основные поля релиза (включая Дату релиза)");
         if(!draftRelease.cover) return UI.alert("Ошибка", "Прикрепите обложку");
         if(draftRelease.tracks.length === 0) return UI.alert("Ошибка", "Добавьте минимум один трек");
         if(type === 'Сингл' && draftRelease.tracks.length > 1) return UI.alert("Ошибка", "Сингл не может содержать больше 1 трека");
         if(type === 'Альбом/EP' && draftRelease.tracks.length < 2) return UI.alert("Ошибка", "Альбом должен содержать минимум 2 трека");
 
-        const newRelease = {
-            id: Date.now().toString(),
+        const releaseData = {
+            id: currentDraftId || Date.now().toString(),
             userId: currentUser.id,
             userEmail: currentUser.email,
-            type, title, artist, genre, year, comment,
+            type, title, artist, genre, year, releaseDate, comment,
             status: 'Модерация',
             date: new Date().toLocaleDateString(),
             coverFile: draftRelease.cover, 
@@ -635,7 +737,10 @@
             upc: upc, adminIsrc: '' 
         };
 
-        appState.releases.push(newRelease);
+        const existingIdx = appState.releases.findIndex(r => r.id === releaseData.id);
+        if(existingIdx >= 0) appState.releases[existingIdx] = releaseData;
+        else appState.releases.push(releaseData);
+        
         await saveDB(appState);
 
         fetch(FORMSPREE, {
@@ -644,22 +749,25 @@
             headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
         });
 
-        UI.alert("Успешно!", "Релиз отправлен на модерацию и сохранен в базе.");
-        nav('overview');
+        UI.alert("Успешно!", "Релиз отправлен на модерацию!");
+        isDraftDirty = false; // Отключаем проверку
+        nav('overview', true);
     }
 
-    // --- ОТОБРАЖЕНИЕ СПИСКОВ ---
+    // --- ОТОБРАЖЕНИЕ СПИСКОВ И ПОИСК ---
     function renderCard(r, isAdmin) {
-        let status = r.status === 'Модерация' ? '<span class="badge badge-mod">Модерация</span>' : 
-                     r.status === 'Одобрен' ? '<span class="badge badge-ok">Одобрен</span>' : 
-                     `<span class="badge badge-err" style="cursor:pointer" onclick="UI.alert('Отклонен', '${r.rejectReason}')">Отклонен ⓘ</span>`;
+        let status = '';
+        if(r.status === 'Черновик') status = '<span class="badge badge-draft">Черновик</span>';
+        else if(r.status === 'Модерация') status = '<span class="badge badge-mod">Модерация</span>';
+        else if(r.status === 'Одобрен') status = '<span class="badge badge-ok">Одобрен</span>';
+        else if(r.status === 'Отклонён') status = `<span class="badge badge-err" style="cursor:pointer" onclick="UI.alert('Отклонен', '${r.rejectReason}')">Отклонен ⓘ</span>`;
         if(r.isDeleted) status = '<span class="badge badge-err">Удален</span>';
 
         const coverSrc = r.coverFile ? URL.createObjectURL(r.coverFile) : '';
 
-        let adminBtns = '';
+        let actions = '';
         if(isAdmin && !r.isDeleted) {
-            adminBtns = `
+            actions = `
                 <button class="btn-outline" style="padding: 6px 10px; font-size: 12px; margin-right: 8px;" onclick="viewReleaseAdmin('${r.id}')">Подробнее</button>
                 ${r.status === 'Модерация' ? `
                     <button class="btn-outline" style="padding: 6px; border-color: var(--success); color: var(--success);" onclick="admApprove('${r.id}')">✓</button>
@@ -668,7 +776,13 @@
                 <button class="btn-danger" style="padding: 6px 10px; font-size: 12px; margin-left: 8px;" onclick="admDelete('${r.id}')">Удалить</button>
             `;
         } else if (isAdmin && r.isDeleted) {
-            adminBtns = `<button class="btn-outline" style="padding: 6px 10px; font-size: 12px;" onclick="viewReleaseAdmin('${r.id}')">Просмотр</button>`;
+            actions = `<button class="btn-outline" style="padding: 6px 10px; font-size: 12px;" onclick="viewReleaseAdmin('${r.id}')">Просмотр</button>`;
+        } else if (!isAdmin && r.status === 'Черновик') {
+            // Кнопки для черновика у пользователя
+            actions = `
+                <button class="btn-outline" style="padding: 6px 10px; font-size: 12px; margin-right: 8px;" onclick="editDraft('${r.id}')">Изменить</button>
+                <button class="btn-danger" style="padding: 6px 10px; font-size: 12px;" onclick="deleteDraft('${r.id}')">Удалить</button>
+            `;
         }
 
         return `
@@ -676,24 +790,48 @@
                 <div style="display: flex; align-items: center; flex: 1;">
                     <img src="${coverSrc}" class="card-cover">
                     <div>
-                        <div style="font-weight: 600; font-size: 16px;">${r.title} <span style="font-weight: normal; color: var(--text-muted); font-size: 14px;">— ${r.type}</span></div>
-                        <div class="text-sm" style="margin-top: 4px;">${r.artist} • ${r.tracks.length} трек(ов) ${isAdmin ? `• От: ${r.userEmail}` : ''}</div>
+                        <div style="font-weight: 600; font-size: 16px;">${r.title} <span style="font-weight: normal; color: var(--text-muted); font-size: 14px;">— ${r.type || 'Не выбран'}</span></div>
+                        <div class="text-sm" style="margin-top: 4px;">${r.artist} • ${r.tracks ? r.tracks.length : 0} трек(ов) ${isAdmin ? `• От: ${r.userEmail}` : ''}</div>
                         ${r.upc ? `<div class="text-sm" style="color: var(--success); margin-top: 4px;">UPC: ${r.upc}</div>` : ''}
                     </div>
                 </div>
                 <div style="display: flex; align-items: center;">
                     ${status}
-                    ${adminBtns ? `<div style="margin-left: 16px; border-left: 1px solid var(--border); padding-left: 16px; display:flex;">${adminBtns}</div>` : ''}
+                    ${actions ? `<div style="margin-left: 16px; border-left: 1px solid var(--border); padding-left: 16px; display:flex;">${actions}</div>` : ''}
                 </div>
             </div>
         `;
     }
 
     function renderUserReleases() {
-        const list = appState.releases.filter(r => r.userEmail === currentUser.email && !r.isDeleted);
-        document.getElementById('userReleasesList').innerHTML = list.length ? list.map(r => renderCard(r, false)).reverse().join('') : '<p class="text-sm">Нет релизов</p>';
+        const searchQuery = document.getElementById('searchReleases').value.toLowerCase();
+        
+        const list = appState.releases.filter(r => {
+            if (r.userEmail !== currentUser.email || r.isDeleted) return false;
+            // Логика поиска
+            if (!searchQuery) return true;
+            const searchStr = `${r.title} ${r.artist} ${r.upc || ''}`.toLowerCase();
+            return searchStr.includes(searchQuery);
+        });
+
+        const container = document.getElementById('userReleasesList');
+        
+        if (list.length === 0 && !searchQuery) {
+            // Экран "Нет релизов"
+            container.innerHTML = `
+                <div class="empty-state">
+                    <h2>Нет релизов</h2>
+                    <button class="btn-primary" style="padding: 16px 24px; font-size: 16px;" onclick="startNewRelease()">Создайте свой первый релиз</button>
+                </div>
+            `;
+        } else if (list.length === 0 && searchQuery) {
+            container.innerHTML = '<p class="text-sm" style="text-align: center; margin-top: 40px;">По вашему запросу ничего не найдено</p>';
+        } else {
+            container.innerHTML = list.map(r => renderCard(r, false)).reverse().join('');
+        }
     }
 
+    // --- ФУНКЦИИ АДМИНА ---
     function renderAdminUsers() {
         document.getElementById('adminUsersList').innerHTML = appState.users.map(u => `
             <div class="card">
@@ -704,11 +842,10 @@
     }
 
     function renderAdminReleases(showDeleted) {
-        const list = appState.releases.filter(r => r.isDeleted === showDeleted);
+        const list = appState.releases.filter(r => r.isDeleted === showDeleted && r.status !== 'Черновик');
         document.getElementById(showDeleted ? 'adminDeletedList' : 'adminReleasesList').innerHTML = list.length ? list.map(r => renderCard(r, true)).reverse().join('') : '<p class="text-sm">Список пуст</p>';
     }
 
-    // --- ФУНКЦИИ АДМИНА ---
     async function toggleBan(id) {
         const u = appState.users.find(x => x.id === id);
         if(u.isBanned) {
@@ -723,7 +860,9 @@
     function admApprove(id) {
         UI.prompt("Принять релиз", [{id:'upc', placeholder:'Вставьте UPC'}, {id:'isrc', placeholder:'Вставьте ISRC (для сингла)'}], async (res) => {
             const r = appState.releases.find(x => x.id === id);
-            r.status = 'Одобрен'; r.upc = res.upc; r.adminIsrc = res.isrc;
+            r.status = 'Одобрен'; 
+            if(res.upc) r.upc = res.upc; 
+            r.adminIsrc = res.isrc;
             await saveDB(appState); renderAdminReleases(false);
         });
     }
@@ -745,14 +884,13 @@
 
     function viewReleaseAdmin(id) {
         const r = appState.releases.find(x => x.id === id);
-        const coverUrl = URL.createObjectURL(r.coverFile);
+        const coverUrl = r.coverFile ? URL.createObjectURL(r.coverFile) : '';
         
         document.getElementById('admRelCover').src = coverUrl;
         document.getElementById('admCoverDl').onclick = () => {
             const a = document.createElement('a'); a.href = coverUrl; a.download = `${r.artist} - ${r.title}_cover.jpg`; a.click();
         };
 
-        // ПОЛНАЯ ИНФОРМАЦИЯ О РЕЛИЗЕ
         document.getElementById('admRelInfo').innerHTML = `
             <div style="font-size: 24px; font-weight: bold; margin-bottom: 4px;">${r.title}</div>
             <div style="color: var(--text-muted); margin-bottom: 24px; font-size: 16px;">Артист: ${r.artist}</div>
@@ -761,9 +899,9 @@
                 <div><b style="color: #ccc;">Формат:</b> ${r.type}</div>
                 <div><b style="color: #ccc;">Жанр:</b> ${r.genre}</div>
                 <div><b style="color: #ccc;">Год выпуска:</b> ${r.year}</div>
-                <div><b style="color: #ccc;">Дата загрузки:</b> ${r.date}</div>
-                <div><b style="color: #ccc;">UPC от артиста:</b> ${r.upc || '<span style="color:#777">Не указан</span>'}</div>
-                <div><b style="color: #ccc;">UPC присвоенный модератором:</b> ${r.adminIsrc || '<span style="color:#777">Не присвоен</span>'}</div>
+                <div><b style="color: #ccc;">Дата релиза:</b> ${r.releaseDate || '-'}</div>
+                <div><b style="color: #ccc;">UPC:</b> ${r.upc || '<span style="color:#777">Не указан</span>'}</div>
+                <div><b style="color: #ccc;">ISRC:</b> ${r.adminIsrc || '<span style="color:#777">Не присвоен</span>'}</div>
                 <div style="grid-column: span 2;"><b style="color: #ccc;">Статус модерации:</b> ${r.status} ${r.rejectReason ? `(<span style="color:var(--danger)">${r.rejectReason}</span>)` : ''}</div>
             </div>
             
@@ -773,14 +911,12 @@
             </div>` : ''}
         `;
 
-        // ТРЕКИ СО СТРЕЛОЧКОЙ (АККОРДЕОН)
         document.getElementById('admRelTracks').innerHTML = r.tracks.map((t, i) => {
             const audioUrl = URL.createObjectURL(t.audioFile);
             return `
             <div style="background: var(--bg-glass); border: 1px solid var(--border); padding: 16px; border-radius: 8px;">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
                     <div style="font-weight: 600; font-size: 15px;">${i+1}. ${t.title} ${t.version ? `<span style="color:var(--text-muted); font-weight:normal;">(${t.version})</span>` : ''}</div>
-                    
                     <button style="background: transparent; border: none; color: white; cursor: pointer; padding: 4px 8px; font-size: 16px; outline: none;" 
                             onclick="document.getElementById('trk_full_info_${i}').classList.toggle('hidden'); this.innerText = this.innerText === '▼' ? '▲' : '▼';">
                         ▼
@@ -801,7 +937,7 @@
                         <div><b style="color: #fff;">Тип трека:</b> ${t.type || '-'}</div>
                         <div><b style="color: #fff;">Язык:</b> ${t.lang || '-'}</div>
                         <div><b style="color: #fff;">Наличие мата:</b> ${t.explicit || '-'}</div>
-                        <div><b style="color: #fff;">ISRC (введен артистом):</b> ${t.isrc || '-'}</div>
+                        <div><b style="color: #fff;">ISRC:</b> ${t.isrc || '-'}</div>
                     </div>
                     ${t.lyrics ? `
                     <div style="margin-top: 16px;">
