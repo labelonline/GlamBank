@@ -78,7 +78,6 @@
         
         .track-list-item { background: #000; border: 1px solid var(--border); padding: 12px 16px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         
-        /* Audio Player admin */
         audio { height: 36px; border-radius: 4px; outline: none; width: 200px; }
         audio::-webkit-media-controls-panel { background-color: var(--bg-glass); }
         audio::-webkit-media-controls-current-time-display, audio::-webkit-media-controls-time-remaining-display { color: white; }
@@ -116,21 +115,21 @@
     </div>
 
     <div id="adminReleaseModal" class="overlay hidden" style="align-items: flex-start; padding: 40px; overflow-y: auto;">
-        <div class="dialog" style="max-width: 700px; width: 100%;">
+        <div class="dialog" style="max-width: 750px; width: 100%;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px;">
                 <h2>Детали релиза</h2>
                 <button class="btn-outline" style="padding: 6px 12px;" onclick="document.getElementById('adminReleaseModal').classList.add('hidden')">Закрыть</button>
             </div>
             
-            <div style="display: flex; gap: 24px; margin-bottom: 24px;">
-                <div style="width: 200px;">
-                    <img id="admRelCover" style="width: 200px; height: 200px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 12px;">
-                    <button class="btn-outline" style="width: 100%; font-size: 12px;" id="admCoverDl">Скачать обложку</button>
+            <div style="display: flex; gap: 24px; margin-bottom: 32px;">
+                <div style="width: 220px;">
+                    <img id="admRelCover" style="width: 220px; height: 220px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 12px;">
+                    <button class="btn-outline" style="width: 100%; font-size: 12px;" id="admCoverDl">Скачать обложку (Оригинал)</button>
                 </div>
                 <div style="flex: 1;" id="admRelInfo"></div>
             </div>
 
-            <h3 style="font-size: 16px; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 16px;">Треклист</h3>
+            <h3 style="font-size: 18px; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 16px;">Медиафайлы и информация</h3>
             <div id="admRelTracks" style="display: flex; flex-direction: column; gap: 12px;"></div>
         </div>
     </div>
@@ -207,14 +206,15 @@
                         <input type="text" id="r_title" placeholder="Название релиза">
                         <input type="text" id="r_artist" placeholder="Основной артист">
                         
-                        <div style="display: flex; gap: 16px;">
-                            <select id="r_genre">
+                        <div style="display: flex; gap: 16px; margin-bottom: 16px;">
+                            <select id="r_genre" style="margin-bottom: 0;">
                                 <option value="">Жанр</option>
                                 <option value="Pop">Pop</option><option value="Hip Hop/Rap">Hip Hop/Rap</option>
                                 <option value="Rock">Rock</option><option value="Electronic">Electronic</option>
                                 <option value="R&B">R&B</option><option value="Alternative">Alternative</option>
                             </select>
-                            <select id="r_year"></select>
+                            <select id="r_year" style="margin-bottom: 0;"></select>
+                            <input type="text" id="r_upc" placeholder="UPC (если есть)" style="margin-bottom: 0;">
                         </div>
                         <textarea id="r_comment" placeholder="Комментарий для модераторов (необязательно)" rows="2"></textarea>
                     </div>
@@ -259,7 +259,39 @@
                         <option value="Original">Original</option><option value="Cover">Cover</option>
                         <option value="Remix">Remix</option><option value="Karaoke">Karaoke</option>
                     </select>
-                    <input type="text" id="t_lang" placeholder="Язык">
+                    
+                    <input type="text" id="t_lang" list="langList" placeholder="Поиск языка...">
+                    <datalist id="langList">
+                        <option value="Английский"><option value="Испанский"><option value="Французский">
+                        <option value="Немецкий"><option value="Итальянский"><option value="Русский">
+                        <option value="Украинский"><option value="Белорусский"><option value="Китайский">
+                        <option value="Японский"><option value="Корейский"><option value="Португальский">
+                        <option value="Арабский"><option value="Хинди"><option value="Бенгальский">
+                        <option value="Турецкий"><option value="Нидерландский"><option value="Польский">
+                        <option value="Шведский"><option value="Норвежский"><option value="Датский">
+                        <option value="Финский"><option value="Греческий"><option value="Чешский">
+                        <option value="Румынский"><option value="Венгерский"><option value="Иврит">
+                        <option value="Индонезийский"><option value="Малайский"><option value="Вьетнамский">
+                        <option value="Тайский"><option value="Персидский"><option value="Казахский">
+                        <option value="Узбекский"><option value="Таджикский"><option value="Туркменский">
+                        <option value="Кыргызский"><option value="Грузинский"><option value="Армянский">
+                        <option value="Азербайджанский"><option value="Литовский"><option value="Латышский">
+                        <option value="Эстонский"><option value="Болгарский"><option value="Сербский">
+                        <option value="Хорватский"><option value="Словацкий"><option value="Словенский">
+                        <option value="Албанский"><option value="Македонский"><option value="Ирландский">
+                        <option value="Исландский"><option value="Каталанский"><option value="Галисийский">
+                        <option value="Баскский"><option value="Валлийский"><option value="Бретонский">
+                        <option value="Тамильский"><option value="Телугу"><option value="Маратхи">
+                        <option value="Гуджарати"><option value="Урду"><option value="Панджаби">
+                        <option value="Непальский"><option value="Сингальский"><option value="Кхмерский">
+                        <option value="Лаосский"><option value="Бирманский"><option value="Тибетский">
+                        <option value="Монгольский"><option value="Филиппинский"><option value="Суахили">
+                        <option value="Зулу"><option value="Йоруба"><option value="Игбо">
+                        <option value="Африкаанс"><option value="Хауса"><option value="Сомалийский">
+                        <option value="Амхарский"><option value="Малагасийский"><option value="Татарский">
+                        <option value="Башкирский"><option value="Чеченский"><option value="Осетинский">
+                        <option value="Латинский"><option value="Эсперанто">
+                    </datalist>
                 </div>
 
                 <textarea id="t_lyrics" placeholder="Текст песни (необязательно)" rows="3"></textarea>
@@ -293,7 +325,6 @@
             document.getElementById('uiAlert').classList.remove('hidden');
         }
         static prompt(title, fields, onConfirm) {
-            // fields: [{id: 'f1', placeholder: 'UPC'}, ...]
             document.getElementById('uiPromptTitle').innerText = title;
             const container = document.getElementById('uiPromptInputs');
             container.innerHTML = fields.map(f => `<input type="text" id="prompt_${f.id}" placeholder="${f.placeholder}">`).join('');
@@ -353,11 +384,9 @@
     let currentUser = null;
     let authMode = 'login';
     
-    // Черновик текущего создаваемого релиза
     let draftRelease = { cover: null, tracks: [] };
     let editTrackId = null;
 
-    // Заполнение годов
     const yBox = document.getElementById('r_year');
     for(let y=2026; y>=2000; y--) yBox.innerHTML += `<option value="${y}">${y}</option>`;
 
@@ -459,6 +488,7 @@
         document.getElementById('r_title').value = '';
         document.getElementById('r_artist').value = currentUser.login;
         document.getElementById('r_genre').value = '';
+        document.getElementById('r_upc').value = ''; // Очистка UPC
         document.getElementById('coverPreview').classList.add('hidden');
         document.getElementById('coverHint').classList.remove('hidden');
         toggleReleaseType();
@@ -472,7 +502,7 @@
         img.src = URL.createObjectURL(file);
         img.onload = () => {
             if((img.width === 1400 || img.width === 3000) && img.width === img.height) {
-                draftRelease.cover = file; // Сохраняем сам файл (Blob)
+                draftRelease.cover = file; 
                 document.getElementById('coverPreview').src = img.src;
                 document.getElementById('coverPreview').classList.remove('hidden');
                 document.getElementById('coverHint').classList.add('hidden');
@@ -504,7 +534,7 @@
             draftRelease.tracks.push({
                 id: Date.now() + Math.random(),
                 filename: file.name,
-                audioFile: file, // Сохраняем File/Blob объект
+                audioFile: file, 
                 title: file.name.replace('.mp3', ''),
                 artist: document.getElementById('r_artist').value || '',
                 version: '', author: '', comp: '', type: 'Original', lang: '', lyrics: '', explicit: 'Нет', isrc: ''
@@ -583,6 +613,7 @@
         const artist = document.getElementById('r_artist').value;
         const genre = document.getElementById('r_genre').value;
         const year = document.getElementById('r_year').value;
+        const upc = document.getElementById('r_upc').value; 
         const comment = document.getElementById('r_comment').value;
 
         if(!title || !artist || !genre || !type) return UI.alert("Ошибка", "Заполните все основные поля релиза");
@@ -598,16 +629,15 @@
             type, title, artist, genre, year, comment,
             status: 'Модерация',
             date: new Date().toLocaleDateString(),
-            coverFile: draftRelease.cover, // BLOB
-            tracks: draftRelease.tracks, // Массив с BLOB внутри
+            coverFile: draftRelease.cover, 
+            tracks: draftRelease.tracks, 
             isDeleted: false,
-            upc: '', adminIsrc: ''
+            upc: upc, adminIsrc: '' 
         };
 
         appState.releases.push(newRelease);
         await saveDB(appState);
 
-        // Отправка уведомления на Formspree (отправляем только текст, файлы нельзя без formData)
         fetch(FORMSPREE, {
             method: 'POST',
             body: JSON.stringify({ event: 'Новый релиз загружен', artist, title, tracksCount: draftRelease.tracks.length, userEmail: currentUser.email }),
@@ -722,23 +752,62 @@
             const a = document.createElement('a'); a.href = coverUrl; a.download = `${r.artist} - ${r.title}_cover.jpg`; a.click();
         };
 
+        // ПОЛНАЯ ИНФОРМАЦИЯ О РЕЛИЗЕ
         document.getElementById('admRelInfo').innerHTML = `
-            <div style="font-size: 20px; font-weight: bold;">${r.title}</div>
-            <div style="color: var(--text-muted); margin-bottom: 12px;">${r.artist}</div>
-            <div class="text-sm">Жанр: ${r.genre} | Год: ${r.year}</div>
-            <div class="text-sm">Формат: ${r.type} | Дата загрузки: ${r.date}</div>
-            ${r.comment ? `<div style="margin-top:12px; padding:8px; background:var(--bg-glass); border-radius:6px; font-size:12px;">Комментарий: ${r.comment}</div>` : ''}
+            <div style="font-size: 24px; font-weight: bold; margin-bottom: 4px;">${r.title}</div>
+            <div style="color: var(--text-muted); margin-bottom: 24px; font-size: 16px;">Артист: ${r.artist}</div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 14px; background: rgba(255,255,255,0.02); padding: 16px; border-radius: 8px; border: 1px solid var(--border);">
+                <div><b style="color: #ccc;">Формат:</b> ${r.type}</div>
+                <div><b style="color: #ccc;">Жанр:</b> ${r.genre}</div>
+                <div><b style="color: #ccc;">Год выпуска:</b> ${r.year}</div>
+                <div><b style="color: #ccc;">Дата загрузки:</b> ${r.date}</div>
+                <div><b style="color: #ccc;">UPC от артиста:</b> ${r.upc || '<span style="color:#777">Не указан</span>'}</div>
+                <div><b style="color: #ccc;">UPC присвоенный модератором:</b> ${r.adminIsrc || '<span style="color:#777">Не присвоен</span>'}</div>
+                <div style="grid-column: span 2;"><b style="color: #ccc;">Статус модерации:</b> ${r.status} ${r.rejectReason ? `(<span style="color:var(--danger)">${r.rejectReason}</span>)` : ''}</div>
+            </div>
+            
+            ${r.comment ? `
+            <div style="margin-top:16px; padding:16px; background: rgba(255,255,255,0.05); border-left: 3px solid var(--accent); border-radius:4px; font-size:14px; line-height: 1.5;">
+                <b style="color: #ccc;">Комментарий модераторам:</b><br>${r.comment}
+            </div>` : ''}
         `;
 
+        // ТРЕКИ СО СТРЕЛОЧКОЙ (АККОРДЕОН)
         document.getElementById('admRelTracks').innerHTML = r.tracks.map((t, i) => {
             const audioUrl = URL.createObjectURL(t.audioFile);
             return `
-            <div style="background: var(--bg-glass); border: 1px solid var(--border); padding: 12px; border-radius: 8px;">
-                <div style="font-weight: 500; margin-bottom: 8px;">${i+1}. ${t.title} ${t.version ? `(${t.version})` : ''}</div>
-                <div class="text-sm" style="margin-bottom: 12px;">Артисты: ${t.artist} | Автор: ${t.author} | ISRC: ${t.isrc}</div>
+            <div style="background: var(--bg-glass); border: 1px solid var(--border); padding: 16px; border-radius: 8px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                    <div style="font-weight: 600; font-size: 15px;">${i+1}. ${t.title} ${t.version ? `<span style="color:var(--text-muted); font-weight:normal;">(${t.version})</span>` : ''}</div>
+                    
+                    <button style="background: transparent; border: none; color: white; cursor: pointer; padding: 4px 8px; font-size: 16px; outline: none;" 
+                            onclick="document.getElementById('trk_full_info_${i}').classList.toggle('hidden'); this.innerText = this.innerText === '▼' ? '▲' : '▼';">
+                        ▼
+                    </button>
+                </div>
+                
                 <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <audio controls src="${audioUrl}"></audio>
-                    <a href="${audioUrl}" download="${t.title}.mp3" style="color: var(--accent); font-size: 12px; text-decoration: none;">Скачать MP3</a>
+                    <audio controls src="${audioUrl}" style="height: 36px; width: 65%;"></audio>
+                    <a href="${audioUrl}" download="${t.title}.mp3" style="color: var(--accent); font-size: 13px; text-decoration: none; border: 1px solid var(--border); padding: 8px 16px; border-radius: 6px; transition: 0.2s;" onmouseover="this.style.background='var(--bg-glass)'" onmouseout="this.style.background='transparent'">Скачать MP3</a>
+                </div>
+
+                <div id="trk_full_info_${i}" class="hidden" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 13px; color: #bbb; line-height: 1.6;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div><b style="color: #fff;">Артисты:</b> ${t.artist || '-'}</div>
+                        <div><b style="color: #fff;">Версия:</b> ${t.version || '-'}</div>
+                        <div><b style="color: #fff;">Автор слов:</b> ${t.author || '-'}</div>
+                        <div><b style="color: #fff;">Композитор:</b> ${t.comp || '-'}</div>
+                        <div><b style="color: #fff;">Тип трека:</b> ${t.type || '-'}</div>
+                        <div><b style="color: #fff;">Язык:</b> ${t.lang || '-'}</div>
+                        <div><b style="color: #fff;">Наличие мата:</b> ${t.explicit || '-'}</div>
+                        <div><b style="color: #fff;">ISRC (введен артистом):</b> ${t.isrc || '-'}</div>
+                    </div>
+                    ${t.lyrics ? `
+                    <div style="margin-top: 16px;">
+                        <b style="color: #fff;">Текст песни:</b><br>
+                        <pre style="white-space: pre-wrap; font-family: inherit; margin-top: 8px; background: rgba(0,0,0,0.3); border: 1px solid var(--border); padding: 12px; border-radius: 6px; font-size: 13px; color: #ddd;">${t.lyrics}</pre>
+                    </div>` : ''}
                 </div>
             </div>`;
         }).join('');
