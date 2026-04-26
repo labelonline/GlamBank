@@ -4,118 +4,234 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GlamBank | Лейбл переходник</title>
+    
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
         :root { --bg-body: #0A0A0A; --bg-panel: #111111; --bg-glass: rgba(255, 255, 255, 0.03); --border: #222222; --text-main: #FFFFFF; --text-muted: #888888; --accent: #FFFFFF; --accent-bg: #E5E5E5; --danger: #FF3B30; --success: #34C759; --warning: #FF9500; --radius: 12px; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
         body { background-color: var(--bg-body); color: var(--text-main); overflow: hidden; font-size: 14px; }
         .hidden { display: none !important; }
+
+        h1 { font-size: 28px; font-weight: 600; margin-bottom: 24px; letter-spacing: -0.5px; }
+        h2 { font-size: 20px; font-weight: 500; margin-bottom: 16px; }
+        .text-sm { font-size: 13px; color: var(--text-muted); }
+        .req-star { color: var(--danger); margin-left: 4px; font-weight: bold; }
+
         .app { display: flex; height: 100vh; }
         .sidebar { width: 250px; background-color: var(--bg-panel); border-right: 1px solid var(--border); padding: 32px 24px; display: flex; flex-direction: column; }
         .content { flex: 1; padding: 40px; overflow-y: auto; background: var(--bg-body); position: relative; }
-        .fade-in { animation: fadeIn 0.2s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-        h1 { font-size: 28px; font-weight: 600; margin-bottom: 24px; }
+
+        /* АНИМАЦИИ ПЕРЕХОДОВ */
+        .fade-in { animation: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
         .form-group { margin-bottom: 16px; width: 100%; }
         .form-group label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
-        input, select, textarea { width: 100%; padding: 14px 16px; background: #000; border: 1px solid var(--border); color: #fff; border-radius: 8px; font-size: 14px; }
-        input:focus { border-color: #555; outline: none; }
-        button { padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 500; transition: 0.1s; font-size: 14px; }
-        button:active { transform: scale(0.98); }
-        .btn-primary { background: var(--accent); color: #000; width: 100%; }
+        input, select, textarea { width: 100%; padding: 14px 16px; background: #000; border: 1px solid var(--border); color: #fff; border-radius: 8px; font-size: 14px; transition: 0.2s; }
+        input[type="date"] { color-scheme: dark; }
+        input:focus, select:focus, textarea:focus { border-color: #555; outline: none; }
+        .error-field { border-color: var(--danger) !important; box-shadow: 0 0 0 1px var(--danger); }
+
+        button { padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: 500; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); font-size: 14px; }
+        button:active { transform: scale(0.96); } 
+        
+        .btn-primary { background: var(--accent); color: #000; }
+        .btn-primary:hover { background: var(--accent-bg); box-shadow: 0 4px 12px rgba(255,255,255,0.1); }
         .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
-        .menu-btn { display: block; width: 100%; text-align: left; background: transparent; border: none; padding: 12px 16px; color: var(--text-muted); border-radius: 8px; margin-bottom: 4px; }
-        .menu-btn.active { background: var(--bg-glass); color: var(--text-main); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; }
-        .card { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; transition: 0.2s; }
-        .card-cover { width: 84px; height: 84px; border-radius: 8px; object-fit: cover; margin-right: 20px; border: 1px solid var(--border); }
+        .btn-outline:hover { background: var(--bg-glass); border-color: var(--text-muted); }
+        .btn-danger { background: rgba(255, 59, 48, 0.1); color: var(--danger); border: 1px solid rgba(255, 59, 48, 0.2); }
+        .btn-success { background: rgba(52, 199, 89, 0.1); color: var(--success); border: 1px solid rgba(52, 199, 89, 0.2); }
+        
+        .menu-btn { display: block; width: 100%; text-align: left; background: transparent; border: none; padding: 12px 16px; color: var(--text-muted); border-radius: 8px; margin-bottom: 4px; transition: 0.2s; font-weight: 500; }
+        .menu-btn:hover, .menu-btn.active { background: var(--bg-glass); color: var(--text-main); }
+        .menu-btn.active { border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; }
+        .admin-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; font-weight: 600; padding-left: 16px; margin: 24px 0 8px 0; }
+
         .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 24px; }
         .stat-card { background: var(--bg-panel); border: 1px solid var(--border); padding: 32px 24px; border-radius: var(--radius); text-align: center; }
         .stat-num { font-size: 40px; font-weight: 700; margin-bottom: 8px; }
-        .badge { padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; }
+        .stat-label { font-size: 13px; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
+
+        .card { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; transition: 0.2s; }
+        .card:hover { border-color: #333; background: #141414; }
+        .card-cover { width: 84px; height: 84px; border-radius: 8px; object-fit: cover; background: #222; margin-right: 20px; border: 1px solid var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .card-title { font-weight: 700; font-size: 18px; margin-bottom: 6px; }
+        .card-artist { font-size: 14px; color: var(--text-muted); margin-bottom: 4px; }
+        
+        .badge { padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; }
         .badge-mod { background: rgba(255, 149, 0, 0.15); color: var(--warning); }
-        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; z-index: 9999; }
-        .dialog { background: var(--bg-panel); border: 1px solid var(--border); padding: 32px; border-radius: var(--radius); width: 100%; max-width: 400px; }
-        .upload-box { width: 100%; max-width: 300px; aspect-ratio: 1; border: 1px dashed var(--border); border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; position: relative; overflow: hidden; background: var(--bg-glass); }
-        .track-list-item { background: #000; border: 1px solid var(--border); padding: 16px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .badge-ok { background: rgba(52, 199, 89, 0.15); color: var(--success); }
+        .badge-err { background: rgba(255, 59, 48, 0.15); color: var(--danger); }
+        .badge-draft { background: var(--bg-glass); color: var(--text-muted); border: 1px solid var(--border); }
+
+        .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; z-index: 9999; animation: fadeIn 0.2s ease-out; }
+        .dialog { background: var(--bg-panel); border: 1px solid var(--border); padding: 32px; border-radius: var(--radius); width: 100%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
+        .dialog-actions { display: flex; gap: 12px; margin-top: 24px; justify-content: flex-end; }
+        
+        .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60vh; text-align: center; }
+        .upload-box { width: 100%; max-width: 300px; aspect-ratio: 1; border: 1px dashed var(--border); border-radius: var(--radius); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; text-align: center; padding: 20px; background: var(--bg-glass); position: relative; overflow: hidden; transition: 0.2s; }
+        .upload-box:hover { background: rgba(255,255,255,0.05); }
+        .upload-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+        .track-list-item { background: #000; border: 1px solid var(--border); padding: 16px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; transition: 0.2s; }
+        
+        .chat-wrap { display: flex; flex-direction: column; height: calc(100vh - 160px); max-width: 800px; background: #000; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; position: relative; }
+        .chat-msgs { flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 16px; scroll-behavior: smooth; }
+        .chat-input-area { display: flex; padding: 16px; border-top: 1px solid var(--border); background: var(--bg-panel); gap: 12px; align-items: center; }
+        .chat-input-area input { margin-bottom: 0; flex: 1; }
+        .msg { max-width: 75%; padding: 12px 16px; border-radius: 12px; font-size: 14px; line-height: 1.5; word-wrap: break-word; animation: fadeIn 0.2s ease-out; }
+        .msg-me { background: var(--accent); color: #000; align-self: flex-end; border-bottom-right-radius: 4px; }
+        .msg-them { background: var(--bg-glass); color: #fff; align-self: flex-start; border: 1px solid var(--border); border-bottom-left-radius: 4px; }
+        .msg-time { font-size: 10px; opacity: 0.5; margin-top: 6px; text-align: right; }
+        .admin-chat-layout { display: flex; height: calc(100vh - 160px); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+        .admin-chat-users { width: 300px; background: var(--bg-panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; }
+        .admin-chat-user { padding: 16px; border-bottom: 1px solid var(--border); cursor: pointer; transition: 0.2s; }
+        .admin-chat-user:hover, .admin-chat-user.active { background: var(--bg-glass); }
+        .admin-chat-user.active { border-left: 3px solid var(--accent); }
+        .typing-indicator { font-size: 12px; color: var(--text-muted); padding: 0 24px 8px 24px; font-style: italic; }
     </style>
 </head>
 <body>
 
-    <div id="uiAlert" class="overlay hidden"><div class="dialog"><h3 id="uiAlertTitle"></h3><p id="uiAlertText" style="margin: 15px 0 25px; color: #ccc;"></p><button class="btn-primary" onclick="document.getElementById('uiAlert').classList.add('hidden')">Понятно</button></div></div>
+    <div id="uiAlert" class="overlay hidden"><div class="dialog"><h3 id="uiAlertTitle">Сообщение</h3><p id="uiAlertText" class="text-sm" style="color: #ccc; margin-bottom: 24px;"></p><button class="btn-primary" style="width: 100%;" onclick="document.getElementById('uiAlert').classList.add('hidden')">Понятно</button></div></div>
+    <div id="uiPrompt" class="overlay hidden"><div class="dialog"><h3 id="uiPromptTitle">Ввод данных</h3><div id="uiPromptInputs"></div><div class="dialog-actions"><button class="btn-outline" onclick="UI.closePrompt()">Отмена</button><button class="btn-primary" id="uiPromptConfirm">Подтвердить</button></div></div></div>
+    <div id="uiConfirm" class="overlay hidden"><div class="dialog"><h3 id="uiConfirmTitle">Подтверждение</h3><div class="dialog-actions"><button class="btn-outline" onclick="UI.closeConfirm()">Отмена</button><button class="btn-danger" id="uiConfirmBtn">Продолжить</button></div></div></div>
 
     <div id="uiDraftConfirm" class="overlay hidden">
-        <div class="dialog">
-            <h3>Есть изменения</h3><p style="margin: 15px 0 25px; color: #ccc;">Сохранить черновик или удалить его?</p>
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-                <button class="btn-primary" id="draftSaveBtn">Сохранить черновик</button>
-                <button class="btn-outline" style="color:var(--danger)" id="draftDeleteBtn">Удалить изменения</button>
-                <button class="btn-outline" onclick="document.getElementById('uiDraftConfirm').classList.add('hidden')">Вернуться</button>
-            </div>
+        <div class="dialog" style="max-width: 450px;">
+            <h3>У вас есть несохраненные изменения</h3><p class="text-sm" style="color: #ccc; margin-bottom: 24px;">Вы хотите сохранить этот релиз как черновик, чтобы продолжить позже, или удалить его?</p>
+            <div style="display: flex; gap: 12px; flex-direction: column;"><button class="btn-primary" id="draftSaveBtn">Сохранить черновик</button><button class="btn-danger" id="draftDeleteBtn">Удалить черновик</button><button class="btn-outline" onclick="document.getElementById('uiDraftConfirm').classList.add('hidden')">Отмена (Остаться здесь)</button></div>
         </div>
     </div>
 
-    <div id="appView" class="app">
+    <div id="adminReleaseModal" class="overlay hidden" style="align-items: flex-start; padding: 40px; overflow-y: auto;">
+        <div class="dialog" style="max-width: 750px; width: 100%;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px;"><h2>Детали релиза</h2><button class="btn-outline" style="padding: 6px 12px;" onclick="document.getElementById('adminReleaseModal').classList.add('hidden')">Закрыть</button></div>
+            <div style="display: flex; gap: 24px; margin-bottom: 32px;"><div style="width: 250px;"><img id="admRelCover" style="width: 250px; height: 250px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); margin-bottom: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);"><button class="btn-outline" style="width: 100%; font-size: 12px;" id="admCoverDl">Скачать обложку</button></div><div style="flex: 1;" id="admRelInfo"></div></div>
+            <h3 style="font-size: 18px; border-bottom: 1px solid var(--border); padding-bottom: 12px; margin-bottom: 16px;">Медиафайлы и информация</h3><div id="admRelTracks" style="display: flex; flex-direction: column; gap: 12px;"></div>
+        </div>
+    </div>
+
+    <div id="banView" class="overlay hidden" style="background: var(--bg-body);"><div style="text-align: center;"><h1 style="font-size: 32px; color: var(--danger);">Ваш кабинет был закрыт</h1><button class="btn-outline" onclick="UI.alert('Причина блокировки', currentUser.banReason)" style="margin: 20px 10px;">Узнать причину</button><button class="btn-primary" onclick="logout()" style="margin: 20px 10px;">Выйти</button></div></div>
+
+    <div id="authView" class="overlay" style="background: var(--bg-body);">
+        <div class="dialog" style="border: none; background: transparent; max-width: 360px;">
+            <div style="text-align: center; margin-bottom: 40px;"><h2 style="font-size: 24px; letter-spacing: 1px;">GlamBank</h2><p class="text-sm">Лейбл переходник</p></div>
+            <div id="regFields" class="hidden"><div class="form-group"><input type="text" id="regLogin" placeholder="Логин"></div></div>
+            <div class="form-group"><input type="email" id="authEmail" placeholder="Почта"></div>
+            <div class="form-group"><input type="password" id="authPassword" placeholder="Пароль"></div>
+            <button class="btn-primary" id="mainAuthBtn" style="width: 100%; margin-top: 8px;" onclick="processAuth()">Войти в кабинет</button>
+            <button class="btn-outline" style="width: 100%; margin-top: 12px; border: none;" onclick="toggleAuthMode()" id="switchAuthBtn">Создать кабинет</button>
+        </div>
+    </div>
+
+    <div id="appView" class="app hidden">
         <div class="sidebar">
-            <h2 style="margin-bottom: 30px;">GlamBank</h2>
-            <button class="btn-primary" style="margin-bottom: 20px;" onclick="startNewRelease()">+ Новый релиз</button>
-            <button class="menu-btn active" id="m-overview" onclick="nav('overview')">Обзор</button>
-            <button class="menu-btn" id="m-yourMusic" onclick="nav('yourMusic')">Ваша музыка</button>
-            <div style="margin-top: 15px; padding-left: 16px; font-size: 11px; color: var(--text-muted);">ПОДДЕРЖКА</div>
-            <button class="menu-btn" id="m-userChat" onclick="nav('userChat')">Связь с модератором</button>
+            <div style="margin-bottom: 40px; padding-left: 16px;"><h2 style="font-size: 18px; font-weight: 600;">GlamBank</h2></div>
+            <button class="menu-btn" style="background: #fff; color: #000; margin-bottom: 24px; text-align: center;" onclick="startNewRelease()">+ Новый релиз</button>
+            <button class="menu-btn active" id="btn-overview" onclick="nav('overview')">Обзор</button>
+            <button class="menu-btn" id="btn-yourMusic" onclick="nav('yourMusic')">Ваша музыка</button>
+            
+            <div id="userSupportBtn" class="hidden">
+                <div class="admin-label" style="margin-top: 16px;">Поддержка</div>
+                <button class="menu-btn" id="btn-userChat" onclick="nav('userChat')">Связь с модератором</button>
+            </div>
+
+            <div id="adminPanel" class="hidden">
+                <div class="admin-label">Управление</div>
+                <button class="menu-btn" onclick="nav('adminChats')">Сообщения артистов</button>
+                <button class="menu-btn" onclick="nav('adminUsers')">Кабинеты</button>
+                <button class="menu-btn" onclick="nav('adminReleases')">Все релизы</button>
+                <button class="menu-btn" onclick="nav('adminDeleted')">Удалённые</button>
+            </div>
+
             <div style="margin-top: auto;">
-                <p id="userNameDisplay" style="font-weight: 600; margin-bottom: 5px;">Артист</p>
-                <p style="color: var(--danger); cursor: pointer; font-size: 12px;" onclick="location.reload()">Выйти</p>
+                <div style="padding: 16px; margin-bottom: 12px; background: #000; border-radius: 8px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;">
+                    <span id="userNameDisplay" style="font-weight: 500; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 110px;">Профиль</span>
+                    <button class="btn-outline" style="padding: 4px 8px; font-size: 11px; border: none;" onclick="openSettings()">Настройки</button>
+                </div>
+                <button class="menu-btn" style="color: var(--danger);" onclick="logout()">Выйти</button>
             </div>
         </div>
 
         <div class="content">
+            <h1 id="pageTitle">Обзор</h1>
+
             <div id="sec-overview" class="view-section">
-                <h1>Обзор</h1>
-                <div class="stat-grid" id="statsContainer"></div>
+                <p class="text-sm" id="overviewDesc">Статистика по вашим релизам</p>
+                <div class="stat-grid" id="dashboardStats"></div>
             </div>
 
             <div id="sec-yourMusic" class="view-section hidden">
-                <h1>Ваша музыка</h1>
+                <div class="form-group" style="max-width: 500px; margin-bottom: 24px;"><input type="text" id="searchReleases" placeholder="Поиск по названию, UPC, артисту..." oninput="renderYourMusic()" style="border-radius: 30px; padding-left: 20px;"></div>
                 <div id="userReleasesList"></div>
             </div>
 
             <div id="sec-userChat" class="view-section hidden">
-                <h1>Поддержка</h1>
-                <div id="chatContainer" style="height: 400px; border: 1px solid var(--border); border-radius: 8px; margin-top: 20px;"></div>
+                <p class="text-sm" style="margin-bottom: 16px;">Здесь вы можете задать вопросы администрации или обсудить ваш релиз.</p>
+                <div class="chat-wrap">
+                    <div id="userChatBox" class="chat-msgs"></div>
+                    <div id="userTypingInd" class="typing-indicator hidden">Модератор печатает...</div>
+                    <div class="chat-input-area"><input type="text" id="userChatInput" placeholder="Напишите сообщение..." autocomplete="off"><button class="btn-primary" onclick="sendMessageAsUser()">Отправить</button></div>
+                </div>
+            </div>
+
+            <div id="sec-adminChats" class="view-section hidden">
+                <div class="admin-chat-layout">
+                    <div class="admin-chat-users">
+                        <div style="padding: 16px; border-bottom: 1px solid var(--border);"><input type="text" id="adminChatSearch" placeholder="Поиск артиста..." oninput="renderAdminChatList()" style="margin-bottom: 0; padding: 10px; font-size: 13px;"></div>
+                        <div id="adminChatUserList" style="flex: 1; overflow-y: auto;"></div>
+                    </div>
+                    <div style="flex: 1; display: flex; flex-direction: column; background: #000;">
+                        <div id="adminChatBox" class="chat-msgs" style="flex: 1;"><div class="empty-state"><h2>Выберите диалог</h2><p class="text-sm">Выберите артиста слева, чтобы начать общение</p></div></div>
+                        <div id="adminTypingInd" class="typing-indicator hidden">Артист печатает...</div>
+                        <div class="chat-input-area hidden" id="adminChatInputArea"><input type="text" id="adminChatInput" placeholder="Ответить артисту..." autocomplete="off"><button class="btn-primary" onclick="sendMessageAsAdmin()">Отправить</button></div>
+                    </div>
+                </div>
             </div>
 
             <div id="sec-newRelease" class="view-section hidden">
-                <div style="display: flex; gap: 40px;">
+                <div style="display: flex; gap: 40px; max-width: 900px;">
                     <div style="flex: 1;">
-                        <h2>Основная информация</h2>
-                        <div class="form-group"><label>Формат *</label><select id="r_type" onchange="toggleTracks(); isChanged=true;"><option value="">Выберите...</option><option value="Сингл">Сингл</option><option value="Альбом/EP">Альбом/EP</option></select></div>
-                        <div class="form-group"><label>Название *</label><input type="text" id="r_title" oninput="isChanged=true;"></div>
-                        <div class="form-group"><label>Артист *</label><input type="text" id="r_artist" oninput="isChanged=true;"></div>
-                        <div style="display: flex; gap: 15px;">
-                            <div class="form-group" style="flex:1;"><label>Жанр *</label><select id="r_genre"><option>Pop</option><option>Hip Hop</option></select></div>
-                            <div class="form-group" style="flex:1;"><label>Год *</label><select id="r_year"></select></div>
-                        </div>
-                        <div class="form-group"><label>Дата выхода *</label><input type="date" id="r_date"></div>
+                        <h3>Основная информация</h3><p class="text-sm" style="margin-bottom: 20px;">Поля со звездочкой (<span class="req-star">*</span>) обязательны к заполнению.</p>
+                        <div class="form-group"><label>Формат релиза <span class="req-star">*</span></label><select id="r_type" onchange="toggleReleaseType(); isDraftDirty=true;"><option value="">Выберите формат</option><option value="Сингл">Сингл (1 трек)</option><option value="Альбом/EP">Альбом/EP (от 2 треков)</option></select></div>
+                        <div class="form-group"><label>Название релиза <span class="req-star">*</span></label><input type="text" id="r_title" placeholder="Название" oninput="isDraftDirty=true;"></div>
+                        <div class="form-group"><label>Основной артист <span class="req-star">*</span></label><input type="text" id="r_artist" placeholder="Артист" oninput="isDraftDirty=true;"></div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;"><div class="form-group"><label>Жанр <span class="req-star">*</span></label><select id="r_genre" onchange="isDraftDirty=true;"><option value="">Выберите жанр</option><option value="Pop">Pop</option><option value="Hip Hop/Rap">Hip Hop/Rap</option><option value="Rock">Rock</option><option value="Electronic">Electronic</option><option value="R&B">R&B</option><option value="Alternative">Alternative</option></select></div><div class="form-group"><label>Год <span class="req-star">*</span></label><select id="r_year" onchange="isDraftDirty=true;"></select></div></div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;"><div class="form-group"><label>Дата релиза <span class="req-star">*</span></label><input type="date" id="r_releaseDate" onchange="isDraftDirty=true;"></div><div class="form-group"><label>Штрихкод (UPC)</label><input type="text" id="r_upc" placeholder="UPC (если есть)" oninput="isDraftDirty=true;"></div></div>
+                        <div class="form-group"><label>Комментарий модератору</label><textarea id="r_comment" placeholder="Ваши пожелания или комментарии..." rows="2" oninput="isDraftDirty=true;"></textarea></div>
                     </div>
-                    <div style="width: 250px;">
-                        <label style="font-size: 12px; color: var(--text-muted);">Обложка *</label>
-                        <div class="upload-box" onclick="document.getElementById('f_cover').click()">
-                            <img id="coverPrev" class="hidden" style="width:100%; height:100%; object-fit:cover; position:absolute;">
-                            <span id="coverHint">1400x1400+</span>
-                            <input type="file" id="f_cover" class="hidden" accept="image/*" onchange="previewImg(this)">
-                        </div>
+                    <div style="width: 300px;">
+                        <label style="display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 6px;">Обложка <span class="req-star">*</span></label>
+                        <div class="upload-box" id="r_cover_box" onclick="document.getElementById('r_cover').click()"><span id="coverHint" class="text-sm">Нажмите для загрузки<br>1400x1400 / 3000x3000</span><img id="coverPreview" class="upload-img hidden"><input type="file" id="r_cover" accept="image/*" class="hidden" onchange="handleCoverUpload(this)"></div>
                     </div>
                 </div>
-                <div id="tracksArea" class="hidden" style="margin-top: 30px; border-top: 1px solid var(--border); padding-top: 20px;">
-                    <h3>Треклист</h3>
-                    <div id="trackList" style="margin: 15px 0;"></div>
-                    <button class="btn-outline" onclick="document.getElementById('f_audio').click()">+ Добавить трек</button>
-                    <input type="file" id="f_audio" class="hidden" accept="audio/*" onchange="addTrackItem(this)">
-                    <button class="btn-primary" style="margin-top: 30px; padding: 15px;" onclick="submitFinal()">Отправить релиз</button>
+                <div id="tracklistArea" class="hidden" style="margin-top: 40px; max-width: 900px; border-top: 1px solid var(--border); padding-top: 32px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;"><div><h3>Треклист <span class="req-star">*</span></h3><p class="text-sm">Поддерживаемые форматы: MP3, WAV (до 5МБ)</p></div><button class="btn-outline" style="font-size: 12px; padding: 6px 12px;" onclick="document.getElementById('addAudioFile').click()">+ Добавить аудиофайл</button><input type="file" id="addAudioFile" accept=".mp3,.wav" class="hidden" multiple onchange="addTracks(this)"></div>
+                    <div id="draftTracksList"></div><button class="btn-primary" id="submitReleaseBtn" style="width: 100%; margin-top: 24px; padding: 16px; font-size: 15px;" onclick="submitFinalRelease()">Отправить релиз на модерацию</button>
                 </div>
             </div>
+
+            <div id="sec-trackEdit" class="view-section hidden" style="max-width: 600px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;"><h2>Информация о треке</h2><span id="te_filename" class="text-sm" style="color: var(--accent);"></span></div>
+                <div class="form-group"><label>Название трека <span class="req-star">*</span></label><input type="text" id="t_title" placeholder="Название трека"></div>
+                <div class="form-group"><label>Артисты трека <span class="req-star">*</span></label><input type="text" id="t_artist" placeholder="Артисты трека"></div>
+                <div class="form-group"><label>Версия (необязательно)</label><input type="text" id="t_version" placeholder="Acoustic, Remix и т.д."></div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;"><div class="form-group"><label>Автор слов</label><input type="text" id="t_author" placeholder="Имя Фамилия"></div><div class="form-group"><label>Композитор</label><input type="text" id="t_comp" placeholder="Имя Фамилия"></div></div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;"><div class="form-group"><label>Тип трека <span class="req-star">*</span></label><select id="t_type"><option value="Original">Original</option><option value="Cover">Cover</option><option value="Remix">Remix</option><option value="Karaoke">Karaoke</option></select></div><div class="form-group"><label>Язык исполнения</label><input type="text" id="t_lang" list="langList" placeholder="Поиск языка..."><datalist id="langList">
+                    <option value="Русский"><option value="Английский"><option value="Украинский"><option value="Белорусский"><option value="Казахский"><option value="Испанский"><option value="Французский"><option value="Немецкий"><option value="Итальянский"><option value="Китайский"><option value="Японский"><option value="Корейский"><option value="Арабский"><option value="Хинди"><option value="Португальский"><option value="Турецкий"><option value="Польский">
+                </datalist></div></div>
+                <div class="form-group"><label>Текст песни</label><textarea id="t_lyrics" placeholder="Текст песни..." rows="3"></textarea></div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;"><div class="form-group"><label>Нецензурная лексика <span class="req-star">*</span></label><select id="t_explicit"><option value="Нет">Нет</option><option value="Да">Да</option></select></div><div class="form-group"><label>ISRC (Штрихкод трека)</label><input type="text" id="t_isrc" placeholder="Если есть"></div></div>
+                <div style="display: flex; gap: 12px; margin-top: 24px;"><button class="btn-primary" style="flex: 1;" onclick="saveTrackEdit()">Сохранить и вернуться</button><button class="btn-outline" onclick="cancelTrackEdit()">Отмена</button></div>
+            </div>
+
+            <div id="sec-adminUsers" class="view-section hidden"><div id="adminUsersList"></div></div>
+            <div id="sec-adminReleases" class="view-section hidden"><div id="adminReleasesList"></div></div>
+            <div id="sec-adminDeleted" class="view-section hidden"><div id="adminDeletedList"></div></div>
         </div>
     </div>
 
@@ -132,124 +248,312 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    let currentUser = { email: "user@test.com", login: "Артист" }; // Тест
-    let currentSection = 'overview';
-    let isChanged = false;
-    let releases = [];
-    let draft = { cover: null, tracks: [] };
-
-    // Настройка лет 2000-2026
-    const ySel = document.getElementById('r_year');
-    for(let y=2026; y>=2000; y--) ySel.innerHTML += `<option value="${y}">${y}</option>`;
-
-    function nav(id, force = false) {
-        if(currentSection === 'newRelease' && isChanged && !force) {
-            document.getElementById('uiDraftConfirm').classList.remove('hidden');
-            document.getElementById('draftSaveBtn').onclick = () => { saveDraft(); document.getElementById('uiDraftConfirm').classList.add('hidden'); nav(id, true); };
-            document.getElementById('draftDeleteBtn').onclick = () => { isChanged = false; document.getElementById('uiDraftConfirm').classList.add('hidden'); nav(id, true); };
-            return;
-        }
-        currentSection = id;
-        document.querySelectorAll('.view-section').forEach(s => s.classList.add('hidden'));
-        document.getElementById('sec-'+id).classList.remove('hidden');
-        document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
-        const activeBtn = document.getElementById('m-'+id);
-        if(activeBtn) activeBtn.classList.add('active');
-        
-        if(id === 'overview') renderStats();
-        if(id === 'yourMusic') renderMusic();
-    }
-
-    function previewImg(input) {
-        const file = input.files[0];
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            draft.cover = e.target.result;
-            document.getElementById('coverPrev').src = e.target.result;
-            document.getElementById('coverPrev').classList.remove('hidden');
-            document.getElementById('coverHint').classList.add('hidden');
-            isChanged = true;
-        };
-        reader.readAsDataURL(file);
-    }
-
-    function addTrackItem(input) {
-        const file = input.files[0];
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            draft.tracks.push({ title: file.name, data: e.target.result });
-            renderTracks();
-            isChanged = true;
-        };
-        reader.readAsDataURL(file);
-    }
-
-    function renderTracks() {
-        const list = document.getElementById('trackList');
-        list.innerHTML = draft.tracks.map((t, i) => `<div class="track-list-item"><span>${i+1}. ${t.title}</span><button class="btn-outline" style="color:var(--danger)" onclick="draft.tracks.splice(${i},1); renderTracks();">Удалить</button></div>`).join('');
-    }
-
-    function toggleTracks() { document.getElementById('tracksArea').classList.toggle('hidden', !document.getElementById('r_type').value); }
-
-    function startNewRelease() { 
-        draft = { cover: null, tracks: [] }; 
-        isChanged = false;
-        document.getElementById('coverPrev').classList.add('hidden');
-        document.getElementById('coverHint').classList.remove('hidden');
-        document.getElementById('trackList').innerHTML = '';
-        nav('newRelease', true); 
-    }
-
-    function renderMusic() {
-        const list = document.getElementById('userReleasesList');
-        const my = releases.filter(r => r.user === currentUser.email);
-        list.innerHTML = my.length ? my.map(r => `
-            <div class="card fade-in">
-                <div style="display:flex; align-items:center;">
-                    <img src="${r.cover}" class="card-cover">
-                    <div>
-                        <div style="font-weight:700; font-size:18px;">${r.title}</div>
-                        <div style="color:var(--text-muted);">${r.artist}</div>
-                    </div>
-                </div>
-                <div style="display:flex; flex-direction:column; align-items:flex-end; gap:10px;">
-                    <span class="badge badge-mod">${r.status}</span>
-                    <button class="btn-outline" style="font-size:11px; padding:5px 10px;" onclick="revoke('${r.id}')">Отозвать</button>
-                </div>
-            </div>
-        `).reverse().join('') : '<div style="text-align:center; padding:50px; color:#555;">Нет релизов</div>';
-    }
-
-    function renderStats() {
-        const my = releases.filter(r => r.user === currentUser.email);
-        const mod = my.filter(r => r.status === 'Модерация').length;
-        document.getElementById('statsContainer').innerHTML = `<div class="stat-card"><div class="stat-num" style="color:var(--warning)">${mod}</div><div>МОДЕРАЦИЯ</div></div><div class="stat-card"><div class="stat-num">0</div><div>ОДОБРЕНО</div></div><div class="stat-card"><div class="stat-num">0</div><div>ОТКЛОНЕНО</div></div>`;
-    }
-
-    function saveDraft() { db.ref('releases').push({ ...draft, title: document.getElementById('r_title').value || 'Черновик', user: currentUser.email, status: 'Черновик' }); isChanged = false; }
+    const ADMIN_EMAIL = 'denisbiletskiy0@gmail.com'; 
     
-    function submitFinal() {
-        const r = {
-            id: Date.now(),
-            title: document.getElementById('r_title').value,
-            artist: document.getElementById('r_artist').value,
-            cover: draft.cover,
-            tracks: draft.tracks,
-            status: 'Модерация',
-            user: currentUser.email
-        };
-        db.ref('releases').push(r);
-        isChanged = false;
-        nav('yourMusic', true);
+    class UI {
+        static alert(title, text) { document.getElementById('uiAlertTitle').innerText = title; document.getElementById('uiAlertText').innerText = text; document.getElementById('uiAlert').classList.remove('hidden'); }
+        static prompt(title, fields, onConfirm) { document.getElementById('uiPromptTitle').innerText = title; document.getElementById('uiPromptInputs').innerHTML = fields.map(f => `<div class="form-group"><label>${f.label || ''}</label><input type="text" id="prompt_${f.id}" placeholder="${f.placeholder}"></div>`).join(''); document.getElementById('uiPrompt').classList.remove('hidden'); document.getElementById('uiPromptConfirm').onclick = () => { const results = {}; fields.forEach(f => results[f.id] = document.getElementById(`prompt_${f.id}`).value); this.closePrompt(); onConfirm(results); }; }
+        static closePrompt() { document.getElementById('uiPrompt').classList.add('hidden'); }
+        static confirm(title, onConfirm) { document.getElementById('uiConfirmTitle').innerText = title; document.getElementById('uiConfirm').classList.remove('hidden'); document.getElementById('uiConfirmBtn').onclick = () => { this.closeConfirm(); onConfirm(); }; }
+        static closeConfirm() { document.getElementById('uiConfirm').classList.add('hidden'); }
     }
 
-    db.ref('releases').on('value', snap => {
-        const val = snap.val();
-        releases = val ? Object.entries(val).map(([id, data]) => ({ id, ...data })) : [];
-        if(currentSection === 'yourMusic') renderMusic();
-        if(currentSection === 'overview') renderStats();
+    function saveDB(state) { 
+        const updates = { users: {}, releases: {}, chats: {} };
+        state.users.forEach(u => updates.users[u.id] = u);
+        state.releases.forEach(r => updates.releases[r.id] = r);
+        Object.keys(state.chats).forEach(k => { updates.chats[k.replace(/\./g, '_')] = state.chats[k]; });
+        db.ref('/').set(updates).catch(e => console.error("Ошибка сохранения:", e)); 
+    }
+
+    let appState = { users: [], releases: [], chats: {} }; let currentUser = null; let authMode = 'login'; let currentSection = 'overview'; let isDraftDirty = false; let currentDraftId = null; let draftRelease = { coverFile: null, tracks: [] }; let editTrackId = null; let activeAdminChatUser = null; 
+    
+    const yBox = document.getElementById('r_year'); yBox.innerHTML = ''; for(let y=2026; y>=2000; y--) yBox.innerHTML += `<option value="${y}">${y}</option>`;
+
+    db.ref('/').on('value', (snapshot) => {
+        if (!snapshot.exists()) return;
+        const data = snapshot.val();
+        appState.users = data.users ? Object.values(data.users) : [];
+        appState.releases = data.releases ? Object.values(data.releases) : [];
+        appState.chats = {};
+        if (data.chats) Object.keys(data.chats).forEach(k => { appState.chats[k] = data.chats[k]; });
+
+        if(currentUser) { 
+            const updatedUser = appState.users.find(u => u.id === currentUser.id);
+            if(updatedUser) currentUser = updatedUser;
+            if(currentUser.isBanned) { document.getElementById('banView').classList.remove('hidden'); document.getElementById('appView').classList.add('hidden'); return; }
+            refreshUI();
+        }
     });
 
+    let typingTimeout;
+    function notifyTyping(isTyping, targetEmail) { 
+        if(!currentUser) return;
+        const safeMyEmail = currentUser.id === 'admin' ? 'admin' : currentUser.email.replace(/\./g, '_');
+        db.ref('typing/' + safeMyEmail).set({ target: targetEmail, isTyping, ts: Date.now() }); 
+    }
+    db.ref('typing').on('value', (snap) => {
+        if(!currentUser) return;
+        const data = snap.val() || {};
+        if(currentUser.id !== 'admin' && data.admin && data.admin.target === currentUser.email) { document.getElementById('userTypingInd').classList.toggle('hidden', !data.admin.isTyping); }
+        if(currentUser.id === 'admin' && activeAdminChatUser) {
+            const safeUser = activeAdminChatUser.replace(/\./g, '_');
+            if(data[safeUser] && data[safeUser].target === 'admin') document.getElementById('adminTypingInd').classList.toggle('hidden', !data[safeUser].isTyping);
+            else document.getElementById('adminTypingInd').classList.add('hidden');
+        }
+    });
+    document.getElementById('userChatInput').addEventListener('input', () => { notifyTyping(true, 'admin'); clearTimeout(typingTimeout); typingTimeout = setTimeout(() => notifyTyping(false, 'admin'), 1500); });
+    document.getElementById('adminChatInput').addEventListener('input', () => { if(activeAdminChatUser) { notifyTyping(true, activeAdminChatUser); clearTimeout(typingTimeout); typingTimeout = setTimeout(() => notifyTyping(false, activeAdminChatUser), 1500); } });
+
+    function getDeviceInfo() {
+        const ua = navigator.userAgent; let b = "Неизвестный браузер";
+        if(ua.includes("Firefox")) b = "Firefox"; else if(ua.includes("Edg")) b = "Edge"; else if(ua.includes("Chrome")) b = "Chrome"; else if(ua.includes("Safari")) b = "Safari";
+        const isMobile = /Mobi|Android/i.test(ua) ? "(Телефон)" : "(ПК)"; return `${b} ${isMobile}`;
+    }
+
+    function recordDevice(user) {
+        if(!user.devices) user.devices = [];
+        const d = getDeviceInfo();
+        if(!user.devices.includes(d)) { user.devices.push(d); saveDB(appState); }
+    }
+
+    function toggleAuthMode() { authMode = authMode === 'login' ? 'reg' : 'login'; document.getElementById('regFields').classList.toggle('hidden', authMode === 'login'); document.getElementById('mainAuthBtn').innerText = authMode === 'login' ? 'Войти в кабинет' : 'Создать кабинет'; document.getElementById('switchAuthBtn').innerText = authMode === 'login' ? 'Создать кабинет' : 'Уже есть аккаунт'; }
+    
+    function processAuth() {
+        const email = document.getElementById('authEmail').value.toLowerCase().trim(); const pass = document.getElementById('authPassword').value; const login = document.getElementById('regLogin').value;
+        if(!email.includes('@') || !pass) return UI.alert("Ошибка", "Заполните почту и пароль");
+        if(authMode === 'login') { 
+            if(email === ADMIN_EMAIL && pass === 'Retro!22848.lol') { currentUser = { email: ADMIN_EMAIL, login: 'Администратор', id: 'admin' }; startApp(); } 
+            else { const u = appState.users.find(x => x.email === email && x.pass === pass); if(u) { currentUser = u; recordDevice(currentUser); startApp(); } else UI.alert("Ошибка", "Неверная почта или пароль"); } 
+        } else { 
+            if(!login) return UI.alert("Ошибка", "Укажите логин"); if(appState.users.find(x => x.email === email)) return UI.alert("Ошибка", "Почта занята"); 
+            const newUser = { id: Date.now().toString(), email, pass, login, isBanned: false, banReason: '', devices: [getDeviceInfo()] }; 
+            appState.users.push(newUser); saveDB(appState); currentUser = newUser; startApp();
+        }
+    }
+
+    function startApp() {
+        if(currentUser.isBanned) { document.getElementById('banView').classList.remove('hidden'); document.getElementById('authView').classList.add('hidden'); return; }
+        document.getElementById('authView').classList.add('hidden'); document.getElementById('appView').classList.remove('hidden'); document.getElementById('userNameDisplay').innerText = currentUser.login;
+        if(currentUser.id === 'admin') { document.getElementById('adminPanel').classList.remove('hidden'); document.getElementById('userSupportBtn').classList.add('hidden'); } 
+        else { document.getElementById('userSupportBtn').classList.remove('hidden'); }
+        nav('overview', true);
+    }
+    function logout() { location.reload(); }
+
+    function openSettings() {
+        if(currentUser.id === 'admin') return;
+        UI.prompt("Настройки профиля", [{id: 'l', label: 'Изменить логин', placeholder: currentUser.login}, {id: 'p', label: 'Изменить пароль', placeholder: 'Новый пароль (пусто = без изменений)'}], (data) => {
+            if(data.l && data.l !== currentUser.login) currentUser.login = data.l; if(data.p) currentUser.pass = data.p; saveDB(appState); document.getElementById('userNameDisplay').innerText = currentUser.login; UI.alert("Успешно", "Данные обновлены");
+        });
+    }
+
+    function nav(section, force = false) {
+        if(currentUser.isBanned) return;
+        if(currentSection === 'newRelease' && isDraftDirty && !force && section !== 'newRelease') {
+            document.getElementById('uiDraftConfirm').classList.remove('hidden');
+            document.getElementById('draftSaveBtn').onclick = () => { saveDraftAsIs(); document.getElementById('uiDraftConfirm').classList.add('hidden'); isDraftDirty = false; nav(section, true); };
+            document.getElementById('draftDeleteBtn').onclick = () => { if(currentDraftId) { appState.releases = appState.releases.filter(r => r.id !== currentDraftId); saveDB(appState); } document.getElementById('uiDraftConfirm').classList.add('hidden'); isDraftDirty = false; nav(section, true); };
+            return;
+        }
+        currentSection = section; 
+        document.querySelectorAll('.view-section').forEach(s => { s.classList.add('hidden'); s.classList.remove('fade-in'); }); 
+        const activeSec = document.getElementById('sec-' + section);
+        activeSec.classList.remove('hidden');
+        void activeSec.offsetWidth; 
+        activeSec.classList.add('fade-in');
+
+        document.querySelectorAll('.sidebar .menu-btn').forEach(b => b.classList.remove('active')); if(event && event.target && event.target.classList) event.target.classList.add('active');
+        const titles = { 'overview': 'Обзор', 'yourMusic': 'Ваша музыка', 'newRelease': 'Новый релиз', 'adminUsers': 'Кабинеты', 'adminReleases': 'Релизы', 'adminDeleted': 'Удаленные', 'userChat': 'Связь с модератором', 'adminChats': 'Сообщения артистов' };
+        document.getElementById('pageTitle').innerText = titles[section] || 'Раздел';
+        refreshUI();
+    }
+
+    function refreshUI() {
+        if(currentSection === 'overview') renderOverview(); 
+        if(currentSection === 'yourMusic') renderYourMusic(); 
+        if(currentSection === 'adminUsers') renderAdminUsers(); 
+        if(currentSection === 'adminReleases') renderAdminReleases(false); 
+        if(currentSection === 'adminDeleted') renderAdminReleases(true); 
+        if(currentSection === 'userChat') renderUserChat(); 
+        if(currentSection === 'adminChats') renderAdminChatList();
+    }
+
+    function renderOverview() {
+        let list = appState.releases; if (currentUser.id !== 'admin') { list = list.filter(r => r.userEmail === currentUser.email); document.getElementById('overviewDesc').innerText = "Статистика по вашим релизам"; } else { document.getElementById('overviewDesc').innerText = "Глобальная статистика"; }
+        list = list.filter(r => !r.isDeleted && r.status !== 'Черновик'); const mod = list.filter(r => r.status === 'Модерация').length; const ok = list.filter(r => r.status === 'Одобрен').length; const rej = list.filter(r => r.status === 'Отклонён').length;
+        document.getElementById('dashboardStats').innerHTML = `<div class="stat-card"><div class="stat-num" style="color: var(--warning);">${mod}</div><div class="stat-label">На модерации</div></div><div class="stat-card"><div class="stat-num" style="color: var(--success);">${ok}</div><div class="stat-label">Принятых</div></div><div class="stat-card"><div class="stat-num" style="color: var(--danger);">${rej}</div><div class="stat-label">Отклонённых</div></div>`;
+    }
+
+    function getChat(email) { return appState.chats[email.replace(/\./g, '_')] || []; }
+    function setChat(email, msgs) { appState.chats[email.replace(/\./g, '_')] = msgs; }
+
+    function renderUserChat() {
+        const box = document.getElementById('userChatBox'); const msgs = getChat(currentUser.email);
+        box.innerHTML = msgs.length ? msgs.map(m => `<div class="msg ${m.from === 'admin' ? 'msg-them' : 'msg-me'}">${m.text}<div class="msg-time">${m.time}</div></div>`).join('') : `<p class="text-sm" style="text-align:center; margin-top:20px;">У вас пока нет сообщений.</p>`;
+        if(box.scrollHeight > 0) box.scrollTop = box.scrollHeight;
+    }
+
+    function sendMessageAsUser() {
+        const input = document.getElementById('userChatInput'); if(!input.value.trim()) return; const msgText = input.value.trim(); const msg = { from: 'user', text: msgText, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) };
+        const msgs = getChat(currentUser.email); msgs.push(msg); setChat(currentUser.email, msgs); input.value = ''; notifyTyping(false, 'admin'); 
+        renderUserChat(); saveDB(appState);
+    }
+
+    function renderAdminChatList() {
+        const list = document.getElementById('adminChatUserList'); const searchVal = document.getElementById('adminChatSearch').value.toLowerCase();
+        let artists = appState.users.filter(u => u.id !== 'admin');
+        if (searchVal) artists = artists.filter(u => u.login.toLowerCase().includes(searchVal) || u.email.toLowerCase().includes(searchVal));
+        list.innerHTML = artists.map(u => { const msgs = getChat(u.email); const lastMsg = msgs.length ? msgs[msgs.length-1].text : 'Нет сообщений'; return `<div class="admin-chat-user ${activeAdminChatUser === u.email ? 'active' : ''}" onclick="selectAdminChat('${u.email}')"><div style="font-weight: 600; margin-bottom:4px;">${u.login}</div><div class="text-sm" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: ${msgs.length ? '#fff' : 'var(--text-muted)'};">${lastMsg}</div></div>`; }).join('');
+        if (activeAdminChatUser) {
+            const box = document.getElementById('adminChatBox'); const msgs = getChat(activeAdminChatUser);
+            box.innerHTML = msgs.length ? msgs.map(m => `<div class="msg ${m.from === 'admin' ? 'msg-me' : 'msg-them'}">${m.text}<div class="msg-time">${m.time}</div></div>`).join('') : `<p class="text-sm" style="text-align:center; margin-top:20px;">Диалог пуст</p>`; 
+            box.scrollTop = box.scrollHeight;
+        }
+    }
+
+    function selectAdminChat(email) { activeAdminChatUser = email; document.getElementById('adminChatInputArea').classList.remove('hidden'); renderAdminChatList(); }
+
+    function sendMessageAsAdmin() {
+        if(!activeAdminChatUser) return; const input = document.getElementById('adminChatInput'); if(!input.value.trim()) return; const msg = { from: 'admin', text: input.value.trim(), time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) };
+        const msgs = getChat(activeAdminChatUser); msgs.push(msg); setChat(activeAdminChatUser, msgs); input.value = ''; notifyTyping(false, activeAdminChatUser); 
+        renderAdminChatList(); saveDB(appState);
+    }
+
+    function renderAdminUsers() {
+        document.getElementById('adminUsersList').innerHTML = appState.users.filter(u => u.id !== 'admin').map(u => `<div class="card"><div><div style="font-weight: 600; font-size: 16px;">${u.login} <span style="font-weight: normal; color: var(--text-muted); font-size: 14px;">(${u.email})</span></div><div class="text-sm" style="margin-top:4px;">Браузеры входа: <span style="color:var(--success)">${u.devices ? u.devices.join(', ') : 'Нет данных'}</span></div></div><div style="display:flex; gap:8px;"><button class="btn-outline" style="padding: 6px 10px; font-size: 12px; color: ${u.isBanned?'var(--success)':'var(--danger)'}" onclick="toggleBan('${u.id}')">${u.isBanned?'Разбанить':'Бан'}</button></div></div>`).join('');
+    }
+
+    function toggleBan(id) {
+        const u = appState.users.find(x => x.id === id);
+        if(u.isBanned) { u.isBanned = false; u.banReason = ''; saveDB(appState); renderAdminUsers(); } 
+        else { UI.prompt("Блокировка", [{id: 'r', placeholder: 'Причина закрытия'}], (res) => { u.isBanned = true; u.banReason = res.r || 'Нарушение правил'; saveDB(appState); renderAdminUsers(); }); }
+    }
+
+    function saveDraftAsIs() {
+        const releaseData = { id: currentDraftId || Date.now().toString(), userId: currentUser.id, userEmail: currentUser.email, type: document.getElementById('r_type').value, title: document.getElementById('r_title').value || 'Без названия', artist: document.getElementById('r_artist').value || currentUser.login, genre: document.getElementById('r_genre').value, year: document.getElementById('r_year').value, releaseDate: document.getElementById('r_releaseDate').value, upc: document.getElementById('r_upc').value, comment: document.getElementById('r_comment').value, status: 'Черновик', date: new Date().toLocaleDateString(), coverFile: draftRelease.coverFile, tracks: draftRelease.tracks, isDeleted: false, adminIsrc: '' };
+        const existingIdx = appState.releases.findIndex(r => r.id === releaseData.id); if(existingIdx >= 0) appState.releases[existingIdx] = releaseData; else appState.releases.push(releaseData); 
+        saveDB(appState);
+    }
+
+    function startNewRelease() {
+        draftRelease = { coverFile: null, tracks: [] }; currentDraftId = null; isDraftDirty = false; document.querySelectorAll('.error-field').forEach(el => el.classList.remove('error-field'));
+        ['r_type','r_title','r_artist','r_genre','r_upc','r_releaseDate','r_comment'].forEach(id => document.getElementById(id).value = id === 'r_artist' ? currentUser.login : '');
+        document.getElementById('coverPreview').src = ''; document.getElementById('coverPreview').classList.add('hidden'); document.getElementById('coverHint').classList.remove('hidden'); document.getElementById('submitReleaseBtn').innerText = "Отправить релиз на модерацию";
+        renderDraftTracks(); toggleReleaseType(); nav('newRelease', true);
+    }
+
+    function editDraft(id) {
+        const r = appState.releases.find(x => x.id === id); currentDraftId = id; isDraftDirty = false; document.querySelectorAll('.error-field').forEach(el => el.classList.remove('error-field'));
+        draftRelease.coverFile = r.coverFile; draftRelease.tracks = r.tracks || [];
+        ['type','title','artist','genre','year','upc','releaseDate','comment'].forEach(key => { document.getElementById('r_'+key).value = (key==='title' && r.title==='Без названия') ? '' : (r[key] || ''); });
+        if(r.coverFile) { document.getElementById('coverPreview').src = r.coverFile; document.getElementById('coverPreview').classList.remove('hidden'); document.getElementById('coverHint').classList.add('hidden'); } else { document.getElementById('coverPreview').classList.add('hidden'); document.getElementById('coverHint').classList.remove('hidden'); }
+        document.getElementById('submitReleaseBtn').innerText = currentUser.id === 'admin' ? "Сохранить изменения" : "Отправить релиз на модерацию";
+        renderDraftTracks(); toggleReleaseType(); nav('newRelease', true);
+    }
+
+    function deleteDraft(id) { UI.confirm("Удалить этот черновик навсегда?", () => { appState.releases = appState.releases.filter(r => r.id !== id); saveDB(appState); renderYourMusic(); }); }
+
+    function handleCoverUpload(input) {
+        const file = input.files[0]; if(!file) return; const img = new Image(); img.src = URL.createObjectURL(file);
+        img.onload = () => { 
+            if((img.width === 1400 || img.width === 3000) && img.width === img.height) { 
+                const reader = new FileReader(); reader.readAsDataURL(file);
+                reader.onload = () => { document.getElementById('r_cover_box').classList.remove('error-field'); draftRelease.coverFile = reader.result; isDraftDirty = true; document.getElementById('coverPreview').src = reader.result; document.getElementById('coverPreview').classList.remove('hidden'); document.getElementById('coverHint').classList.add('hidden'); };
+            } else { UI.alert("Ошибка", "Размер 1400x1400 или 3000x3000 px"); input.value = ""; } 
+        };
+    }
+
+    function toggleReleaseType() { const type = document.getElementById('r_type').value; if(type) document.getElementById('tracklistArea').classList.remove('hidden'); else document.getElementById('tracklistArea').classList.add('hidden'); }
+
+    function addTracks(input) {
+        const files = Array.from(input.files); if(!files.length) return;
+        files.forEach(file => { 
+            if(file.size > 5*1024*1024) return UI.alert("Ошибка", `Файл ${file.name} > 5МБ.`); 
+            const reader = new FileReader(); reader.readAsDataURL(file);
+            reader.onload = () => { isDraftDirty = true; draftRelease.tracks.push({ id: Date.now()+Math.random(), filename: file.name, audioFile: reader.result, title: file.name.replace(/\.[^/.]+$/, ""), artist: document.getElementById('r_artist').value || '', version: '', author: '', comp: '', type: 'Original', lang: '', lyrics: '', explicit: 'Нет', isrc: '', isFilled: false }); renderDraftTracks(); };
+        });
+        input.value = ""; 
+    }
+
+    function renderDraftTracks() {
+        document.getElementById('draftTracksList').innerHTML = draftRelease.tracks.map((t, idx) => {
+            const statusLabel = t.isFilled ? '<span style="color:var(--success); font-size: 11px;">✓ Заполнено</span>' : '<span style="color:var(--danger); font-size: 11px; font-weight:bold;">! Требует заполнения</span>';
+            return `<div class="track-list-item" style="${!t.isFilled ? 'border-color: var(--danger);' : ''}"><div><div style="font-weight: 500; font-size: 15px;">${idx+1}. ${t.title}</div><div class="text-sm" style="margin-top:4px;">${t.filename} &nbsp;|&nbsp; ${statusLabel}</div></div><div style="display: flex; gap: 8px;"><button class="btn-outline" style="padding: 6px 12px; font-size: 12px;" onclick="openTrackEdit(${t.id})">Редактировать</button><button class="btn-danger" style="padding: 6px 12px; font-size: 12px;" onclick="removeDraftTrack(${t.id})">Удалить</button></div></div>`
+        }).join('');
+    }
+
+    function removeDraftTrack(id) { draftRelease.tracks = draftRelease.tracks.filter(t => t.id !== id); isDraftDirty = true; renderDraftTracks(); }
+
+    function openTrackEdit(id) {
+        const t = draftRelease.tracks.find(x => x.id === id); editTrackId = id; document.querySelectorAll('.error-field').forEach(el => el.classList.remove('error-field'));
+        ['title','artist','version','author','comp','type','lang','lyrics','explicit','isrc'].forEach(k => document.getElementById('t_'+k).value = t[k] || ''); document.getElementById('te_filename').innerText = t.filename;
+        document.getElementById('sec-newRelease').classList.add('hidden'); document.getElementById('sec-trackEdit').classList.remove('hidden');
+    }
+
+    function saveTrackEdit() {
+        const t1 = document.getElementById('t_title'), t2 = document.getElementById('t_artist');
+        if(!t1.value || !t2.value) { if(!t1.value) t1.classList.add('error-field'); if(!t2.value) t2.classList.add('error-field'); return UI.alert("Ошибка", "Заполните Название и Артиста."); }
+        const t = draftRelease.tracks.find(x => x.id === editTrackId);
+        ['title','artist','version','author','comp','type','lang','lyrics','explicit','isrc'].forEach(k => t[k] = document.getElementById('t_'+k).value); t.isFilled = true; isDraftDirty = true;
+        cancelTrackEdit(); renderDraftTracks();
+    }
+    function cancelTrackEdit() { document.getElementById('sec-trackEdit').classList.add('hidden'); document.getElementById('sec-newRelease').classList.remove('hidden'); editTrackId = null; }
+
+    function submitFinalRelease() {
+        document.querySelectorAll('.error-field').forEach(el => el.classList.remove('error-field')); let hasError = false;
+        ['r_type', 'r_title', 'r_artist', 'r_genre', 'r_year', 'r_releaseDate'].forEach(id => { const el = document.getElementById(id); if(!el.value) { el.classList.add('error-field'); hasError = true; }});
+        if(!draftRelease.coverFile) { document.getElementById('r_cover_box').classList.add('error-field'); hasError = true; }
+        if(hasError) return UI.alert("Ошибка", "Заполните обязательные поля релиза.");
+        const type = document.getElementById('r_type').value; if(draftRelease.tracks.length === 0) return UI.alert("Ошибка", "Добавьте трек");
+        for(let i=0; i < draftRelease.tracks.length; i++) { if(!draftRelease.tracks[i].isFilled) return UI.alert("Ошибка", `Заполните инфо о треке №${i+1}`); }
+        const existingRelease = appState.releases.find(r => r.id === currentDraftId);
+        const releaseData = { id: currentDraftId || Date.now().toString(), userId: (existingRelease && currentUser.id === 'admin') ? existingRelease.userId : currentUser.id, userEmail: (existingRelease && currentUser.id === 'admin') ? existingRelease.userEmail : currentUser.email, type, title: document.getElementById('r_title').value, artist: document.getElementById('r_artist').value, genre: document.getElementById('r_genre').value, year: document.getElementById('r_year').value, releaseDate: document.getElementById('r_releaseDate').value, comment: document.getElementById('r_comment').value, status: (existingRelease && currentUser.id === 'admin') ? existingRelease.status : 'Модерация', date: existingRelease ? existingRelease.date : new Date().toLocaleDateString(), coverFile: draftRelease.coverFile, tracks: draftRelease.tracks, isDeleted: false, upc: document.getElementById('r_upc').value, adminIsrc: existingRelease ? existingRelease.adminIsrc : '' };
+        const existingIdx = appState.releases.findIndex(r => r.id === releaseData.id); if(existingIdx >= 0) appState.releases[existingIdx] = releaseData; else appState.releases.push(releaseData);
+        saveDB(appState); isDraftDirty = false; 
+        if(currentUser.id !== 'admin') { UI.alert("Успешно!", "Релиз отправлен."); nav('yourMusic', true); } else { UI.alert("Сохранено!", "Изменения применены."); nav('adminReleases', true); }
+    }
+
+    function renderCard(r, isAdmin) {
+        let status = ''; if(r.status === 'Черновик') status = '<span class="badge badge-draft">Черновик</span>'; else if(r.status === 'Модерация') status = '<span class="badge badge-mod">Модерация</span>'; else if(r.status === 'Одобрен') status = '<span class="badge badge-ok">Одобрен</span>'; else if(r.status === 'Отклонён') status = `<span class="badge badge-err" style="cursor:pointer" onclick="UI.alert('Отклонен', '${r.rejectReason}')">Отклонен ⓘ</span>`; if(r.isDeleted) status = '<span class="badge badge-err">Удален</span>';
+        const coverSrc = r.coverFile || ''; let actions = '';
+        if(isAdmin && !r.isDeleted) { actions = `<button class="btn-outline" style="padding: 6px 10px; font-size: 12px; margin-right: 8px;" onclick="viewReleaseAdmin('${r.id}')">Подробнее</button><button class="btn-outline" style="padding: 6px 10px; font-size: 12px; margin-right: 8px;" onclick="editDraft('${r.id}')">Изменить</button><button class="btn-outline" style="padding: 6px 10px; font-size: 12px; border-color: var(--warning); color: var(--warning); margin-right: 8px;" onclick="admRevoke('${r.id}')">Отозвать</button>${r.status === 'Модерация' ? `<button class="btn-outline" style="padding: 6px; border-color: var(--success); color: var(--success);" onclick="admApprove('${r.id}')">✓</button><button class="btn-outline" style="padding: 6px; border-color: var(--danger); color: var(--danger);" onclick="admReject('${r.id}')">✗</button>` : ''}<button class="btn-danger" style="padding: 6px 10px; font-size: 12px; margin-left: 8px;" onclick="admDelete('${r.id}')">Удалить</button>`; } 
+        else if (isAdmin && r.isDeleted) { actions = `<button class="btn-outline" style="padding: 6px 10px; font-size: 12px; margin-right: 8px;" onclick="viewReleaseAdmin('${r.id}')">Просмотр</button><button class="btn-success" style="padding: 6px 10px; font-size: 12px;" onclick="admRestore('${r.id}')">Восстановить</button>`; } 
+        else if (!isAdmin) { 
+            actions = `<button class="btn-outline" style="padding: 6px 10px; font-size: 12px; margin-right: 8px;" onclick="viewReleaseAdmin('${r.id}')">Информация</button>`; 
+            if (r.status === 'Черновик') { actions += `<button class="btn-outline" style="padding: 6px 10px; font-size: 12px; margin-right: 8px;" onclick="editDraft('${r.id}')">Изменить</button><button class="btn-danger" style="padding: 6px 10px; font-size: 12px;" onclick="deleteDraft('${r.id}')">Удалить</button>`; } 
+            else if (r.status === 'Модерация') { actions += `<button class="btn-outline" style="padding: 6px 10px; font-size: 12px; border-color: var(--warning); color: var(--warning);" onclick="userRevoke('${r.id}')">Отозвать</button>`; }
+        }
+        return `<div class="card"><div style="display: flex; align-items: center; flex: 1;"><img src="${coverSrc}" class="card-cover"><div><div class="card-title">${r.title} <span style="font-weight: normal; color: var(--text-muted); font-size: 15px;">— ${r.type || 'Не выбран'}</span></div><div class="card-artist">${r.artist} • ${r.tracks ? r.tracks.length : 0} трек(ов) ${isAdmin ? `• От: ${r.userEmail}` : ''}</div>${r.upc ? `<div class="text-sm" style="color: var(--success); margin-top: 4px;">UPC: ${r.upc}</div>` : ''}</div></div><div style="display: flex; align-items: center;">${status}${actions ? `<div style="margin-left: 20px; border-left: 1px solid var(--border); padding-left: 20px; display:flex;">${actions}</div>` : ''}</div></div>`;
+    }
+
+    function renderYourMusic() {
+        const searchQuery = document.getElementById('searchReleases').value.toLowerCase();
+        const list = appState.releases.filter(r => { if (r.userEmail !== currentUser.email || r.isDeleted) return false; if (!searchQuery) return true; return `${r.title} ${r.artist} ${r.upc || ''}`.toLowerCase().includes(searchQuery); });
+        const container = document.getElementById('userReleasesList');
+        if (list.length === 0 && !searchQuery) { container.innerHTML = `<div class="empty-state"><h2>Нет релизов</h2><button class="btn-primary" style="padding: 16px 24px; font-size: 16px; margin-top: 20px;" onclick="startNewRelease()">Создать релиз</button></div>`; } 
+        else { container.innerHTML = list.map(r => renderCard(r, false)).reverse().join(''); }
+    }
+
+    function renderAdminReleases(showDeleted) {
+        const list = appState.releases.filter(r => r.isDeleted === showDeleted && r.status !== 'Черновик');
+        document.getElementById(showDeleted ? 'adminDeletedList' : 'adminReleasesList').innerHTML = list.length ? list.map(r => renderCard(r, true)).reverse().join('') : '<p class="text-sm">Список пуст</p>';
+    }
+
+    function userRevoke(id) { UI.confirm("Отозвать релиз с модерации? Он станет черновиком.", () => { const r = appState.releases.find(x => x.id === id); if(r) r.status = 'Черновик'; saveDB(appState); renderYourMusic(); }); }
+    function admApprove(id) { UI.prompt("Принять релиз", [{id:'upc', placeholder:'UPC'}, {id:'isrc', placeholder:'ISRC'}], (res) => { const r = appState.releases.find(x => x.id === id); r.status = 'Одобрен'; if(res.upc) r.upc = res.upc; if(res.isrc) r.adminIsrc = res.isrc; saveDB(appState); renderAdminReleases(false); }); }
+    function admReject(id) { UI.prompt("Отклонить релиз", [{id:'reason', placeholder:'Причина'}], (res) => { const r = appState.releases.find(x => x.id === id); r.status = 'Отклонён'; r.rejectReason = res.reason || 'Не соответствует требованиям'; saveDB(appState); renderAdminReleases(false); }); }
+    function admDelete(id) { UI.confirm("Перенести в удаленные?", () => { appState.releases.find(x => x.id === id).isDeleted = true; saveDB(appState); renderAdminReleases(false); }); }
+    function admRestore(id) { const r = appState.releases.find(x => x.id === id); r.isDeleted = false; saveDB(appState); renderAdminReleases(true); }
+    function admRevoke(id) { UI.confirm("Отозвать артисту?", () => { const r = appState.releases.find(x => x.id === id); r.status = 'Черновик'; saveDB(appState); renderAdminReleases(false); }); }
+
+    function viewReleaseAdmin(id) {
+        const r = appState.releases.find(x => x.id === id); const coverUrl = r.coverFile || '';
+        document.getElementById('admRelCover').src = coverUrl; document.getElementById('admCoverDl').onclick = () => { const a = document.createElement('a'); a.href = coverUrl; a.download = `${r.artist}-${r.title}.jpg`; a.click(); };
+        document.getElementById('admRelInfo').innerHTML = `<div style="font-size: 28px; font-weight: bold; margin-bottom: 4px;">${r.title}</div><div style="color: var(--text-muted); margin-bottom: 24px; font-size: 16px;">Артист: <span style="color:#fff;">${r.artist}</span></div><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 14px; background: rgba(255,255,255,0.02); padding: 20px; border-radius: 12px; border: 1px solid var(--border);"><div><b>Формат:</b> ${r.type}</div><div><b>Жанр:</b> ${r.genre}</div><div><b>Год:</b> ${r.year}</div><div><b>Дата:</b> ${r.releaseDate}</div><div><b>UPC:</b> ${r.upc || '-'}</div><div><b>ISRC:</b> ${r.adminIsrc || '-'}</div></div>`;
+        document.getElementById('admRelTracks').innerHTML = r.tracks.map((t, i) => `<div style="background: var(--bg-glass); border: 1px solid var(--border); padding: 16px; border-radius: 12px; margin-bottom: 10px;"><div style="font-weight: 600;">${i+1}. ${t.title}</div><audio controls src="${t.audioFile}" style="width: 100%; margin: 10px 0;"></audio><div class="text-sm">Артист: ${t.artist} | ISRC: ${t.isrc || '-'}</div></div>`).join('');
+        document.getElementById('adminReleaseModal').classList.remove('hidden');
+    }
 </script>
 </body>
 </html>
