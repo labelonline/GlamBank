@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>GlamBank | Лейбл переходник</title>
-    <!-- Google Fonts & modern reset -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -14,18 +12,16 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: system-ui, 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #0A0C12;
             color: #EFF3F8;
         }
 
-        /* тёмно-синяя гамма */
         .app-container {
             display: flex;
             min-height: 100vh;
         }
 
-        /* sidebar */
         .sidebar {
             width: 280px;
             background: #0F1219;
@@ -36,14 +32,9 @@
             gap: 40px;
         }
 
-        .logo-area {
-            margin-bottom: 8px;
-        }
-
         .logo {
             font-size: 28px;
             font-weight: 700;
-            letter-spacing: -0.5px;
             background: linear-gradient(135deg, #FFFFFF 0%, #94A3F8 100%);
             -webkit-background-clip: text;
             background-clip: text;
@@ -54,7 +45,6 @@
             font-size: 11px;
             color: #5B6B8C;
             margin-top: 4px;
-            letter-spacing: 0.3px;
             background: rgba(59, 130, 246, 0.12);
             display: inline-block;
             padding: 2px 8px;
@@ -99,13 +89,6 @@
             font-weight: 600;
             margin-top: 8px;
             text-align: center;
-            justify-content: center;
-        }
-
-        .new-release-btn:hover {
-            background: #1E3A8A !important;
-            border-color: #60A5FA !important;
-            color: white !important;
         }
 
         .user-profile-side {
@@ -117,11 +100,6 @@
             align-items: center;
             gap: 12px;
             cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .user-profile-side:hover {
-            background: #151E2C;
         }
 
         .user-avatar-placeholder {
@@ -135,14 +113,12 @@
             font-weight: bold;
         }
 
-        /* main content */
         .main-content {
             flex: 1;
             padding: 32px 40px;
             overflow-y: auto;
         }
 
-        /* cards & таблицы */
         .card {
             background: #11161F;
             border-radius: 24px;
@@ -162,13 +138,6 @@
             border-radius: 20px;
             padding: 20px;
             border-left: 4px solid #2D3E6E;
-            transition: 0.1s;
-        }
-
-        .release-header {
-            display: flex;
-            gap: 18px;
-            flex-wrap: wrap;
         }
 
         .cover-thumb {
@@ -217,6 +186,7 @@
             padding: 4px 12px;
             font-size: 12px;
             font-weight: 500;
+            width: fit-content;
         }
 
         .button-icon {
@@ -229,12 +199,12 @@
             font-size: 12px;
         }
 
-        /* формы */
         .two-column-form {
             display: flex;
             gap: 32px;
             flex-wrap: wrap;
         }
+
         .cover-square {
             width: 220px;
             height: 220px;
@@ -248,13 +218,16 @@
             cursor: pointer;
             overflow: hidden;
         }
+
         .form-fields {
             flex: 1;
             min-width: 280px;
         }
+
         .form-field {
             margin-bottom: 18px;
         }
+
         label {
             display: block;
             font-size: 13px;
@@ -262,6 +235,7 @@
             margin-bottom: 6px;
             color: #B9C7E4;
         }
+
         input, select, textarea {
             width: 100%;
             background: #0B0F17;
@@ -272,9 +246,7 @@
             font-family: inherit;
             font-size: 14px;
         }
-        button {
-            cursor: pointer;
-        }
+
         .btn-primary {
             background: #1E3A8A;
             border: none;
@@ -283,8 +255,9 @@
             font-weight: 600;
             color: white;
             font-size: 15px;
-            transition: 0.2s;
+            cursor: pointer;
         }
+
         .modal-overlay {
             position: fixed;
             top:0;left:0;width:100%;height:100%;
@@ -294,6 +267,7 @@
             justify-content: center;
             z-index: 1000;
         }
+
         .modal-card {
             background: #0F172A;
             border-radius: 32px;
@@ -302,36 +276,29 @@
             max-width: 90%;
             border: 1px solid #334155;
         }
-        hr {
-            border-color: #1E2A3A;
-        }
-        .admin-tabs {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 24px;
-        }
-        .admin-tab {
-            background: #1E293B;
-            padding: 10px 20px;
-            border-radius: 40px;
-            border: none;
-            color: white;
-        }
-        .admin-tab.active {
-            background: #3B82F6;
-        }
+
         .error-msg {
             color: #F87171;
             font-size: 12px;
             margin-top: 5px;
         }
-        @media (max-width: 700px) {
-            .sidebar { width: 100px; padding: 20px 12px; }
-            .nav-item span:not(.first-letter) { display: none; }
-            .main-content { padding: 20px; }
+
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .flex-between { display: flex; justify-content: space-between; align-items: center; }
-        .info-icon { cursor: help; margin-left: 6px; background: #2D3748; border-radius: 50%; width: 18px; display: inline-block; text-align: center; font-size: 12px; }
+
+        .info-icon {
+            cursor: help;
+            margin-left: 6px;
+            background: #2D3748;
+            border-radius: 50%;
+            width: 18px;
+            display: inline-block;
+            text-align: center;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
@@ -339,22 +306,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.development.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.development.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/react-router-dom@6.14.2/umd/react-router-dom.development.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/babel-standalone@6.26.0/babel.min.js"></script>
 <script type="text/babel">
-    // ---- UTILS & CONSTANTS ----
-    const { useState, useEffect } = React;
-    const { createRoot } = ReactDOM;
-    const { BrowserRouter, Routes, Route, Link, useNavigate, Navigate } = ReactRouterDOM;
-
-    // Жанры (большой массив)
-    const GENRES = ["Pop","Rock","Hip Hop/Rap","Electronic","Dance","R&B","Soul","Jazz","Classical","Country","Folk","Metal","Punk","Reggae","Blues","Latin","K-pop","Indie","Alternative","House","Techno","Trance","Drum and Bass","Ambient","Soundtrack","Trap","Grime","Afrobeat","Funk","Disco"];
-
-    const YEARS = Array.from({ length: 2026-2000+1 }, (_, i) => 2026 - i);
-    const TRACK_TYPES = ["Original","Cover","Cover by cover band","Karaoke","Medley","Remix"];
-    const EXPLICIT_OPTS = ["Да","Нет"];
-
-    // инициализация localStorage
+    // ----- ИНИЦИАЛИЗАЦИЯ STORAGE -----
     const initStorage = () => {
         if(!localStorage.getItem("glambank_users")){
             const admin = {
@@ -380,19 +334,32 @@
     const saveReleases = (rels) => localStorage.setItem("glambank_releases", JSON.stringify(rels));
     const getEmailReqs = () => JSON.parse(localStorage.getItem("glambank_email_requests")) || [];
     const saveEmailReqs = (reqs) => localStorage.setItem("glambank_email_requests", JSON.stringify(reqs));
+    const isRealEmail = (email) => /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(email);
 
-    // проверка существования email (базовая + уникальность)
-    const isRealEmail = (email) => {
-        const re = /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/;
-        return re.test(email);
-    };
+    // ----- ЖАНРЫ И ГОДА -----
+    const GENRES = ["Pop","Rock","Hip Hop/Rap","Electronic","Dance","R&B","Soul","Jazz","Classical","Country","Folk","Metal","Punk","Reggae","Blues","Latin","K-pop","Indie","Alternative","House","Techno","Trance","Drum and Bass","Ambient","Soundtrack","Trap","Grime","Afrobeat","Funk","Disco"];
+    const YEARS = Array.from({ length: 2026-2000+1 }, (_, i) => 2026 - i);
+    const TRACK_TYPES = ["Original","Cover","Cover by cover band","Karaoke","Medley","Remix"];
+    const EXPLICIT_OPTS = ["Да","Нет"];
 
-    // ---- Компоненты ----
-    const LoginRegister = ({ setAuthUser }) => {
+    const { useState, useEffect } = React;
+    const { createRoot } = ReactDOM;
+
+    // ----- КОМПОНЕНТ МОДАЛКИ -----
+    const Modal = ({ children, onClose }) => (
+        <div className="modal-overlay" onClick={onClose}>
+            <div className="modal-card" onClick={e => e.stopPropagation()}>
+                {children}
+                <button className="button-icon" onClick={onClose} style={{marginTop:16}}>Закрыть</button>
+            </div>
+        </div>
+    );
+
+    // ----- ЛОГИН / РЕГИСТРАЦИЯ -----
+    const LoginRegister = ({ onAuth }) => {
         const [isLogin, setIsLogin] = useState(true);
         const [form, setForm] = useState({ email: "", login: "", password: "" });
         const [error, setError] = useState("");
-        const navigate = useNavigate();
 
         const handleSubmit = (e) => {
             e.preventDefault();
@@ -403,12 +370,11 @@
                 if(!user) setError("Неверная почта или пароль");
                 else if(user.isBanned) setError(`Ваш кабинет заблокирован. Причина: ${user.banReason || "обратитесь в поддержку"}`);
                 else {
-                    localStorage.setItem("glambank_current_user", JSON.stringify({ id: user.id, email: user.email, login: user.login, role: user.role || "user", isBanned: false }));
-                    setAuthUser(user);
-                    navigate("/");
+                    localStorage.setItem("glambank_current_user", JSON.stringify({ id: user.id, email: user.email, login: user.login, role: user.role || "user" }));
+                    onAuth(user);
                 }
             } else {
-                if(!isRealEmail(form.email)) return setError("Введите реально существующий email (проверка формата)");
+                if(!isRealEmail(form.email)) return setError("Введите реальный email (проверка формата)");
                 const users = getUsers();
                 if(users.find(u => u.email === form.email)) return setError("Пользователь с таким email уже существует");
                 if(!form.login.trim() || !form.password.trim()) return setError("Заполните логин и пароль");
@@ -416,8 +382,7 @@
                 users.push(newUser);
                 saveUsers(users);
                 localStorage.setItem("glambank_current_user", JSON.stringify({ id: newUser.id, email: newUser.email, login: newUser.login, role: "user" }));
-                setAuthUser(newUser);
-                navigate("/");
+                onAuth(newUser);
             }
         };
 
@@ -434,115 +399,56 @@
                         <div className="form-field"><label>Пароль</label><input type="password" value={form.password} onChange={e=>setForm({...form, password:e.target.value})} required /></div>
                         {error && <div className="error-msg">{error}</div>}
                         <button type="submit" className="btn-primary" style={{ width: "100%", marginTop: "12px" }}>{isLogin ? "Войти" : "Зарегистрироваться"}</button>
-                        <p style={{ marginTop: "16px", fontSize: "14px", textAlign: "center" }}><span style={{cursor:"pointer", color:"#60A5FA"}} onClick={()=>{setIsLogin(!isLogin); setError("");}}>{isLogin ? "Создать кабинет" : "Уже есть аккаунт? Войти"}</span></p>
+                        <p style={{ marginTop: "16px", fontSize: "14px", textAlign: "center" }}>
+                            <span style={{cursor:"pointer", color:"#60A5FA"}} onClick={()=>{setIsLogin(!isLogin); setError("");}}>
+                                {isLogin ? "Создать кабинет" : "Уже есть аккаунт? Войти"}
+                            </span>
+                        </p>
                     </form>
                 </div>
             </div>
         );
     };
 
-    // контекст для текущего юзера
-    const AppRoutes = () => {
-        const [authUser, setAuthUser] = useState(null);
-        const [loading, setLoading] = useState(true);
-        useEffect(()=>{
-            const stored = localStorage.getItem("glambank_current_user");
-            if(stored){
-                const userData = JSON.parse(stored);
-                const fullUser = getUsers().find(u=>u.id === userData.id);
-                if(fullUser && !fullUser.isBanned) setAuthUser(fullUser);
-                else if(fullUser?.isBanned) { localStorage.removeItem("glambank_current_user"); setAuthUser(null); }
-                else setAuthUser(null);
-            }
-            setLoading(false);
-        },[]);
-
-        if(loading) return <div style={{padding:"2rem"}}>Загрузка...</div>;
-        if(!authUser) return <LoginRegister setAuthUser={setAuthUser} />;
-        const isAdmin = authUser.email === "denisbiletskiy0@gmail.com" && authUser.password === "Retro!22848.lol";
-        return <MainApp user={authUser} setAuthUser={setAuthUser} isAdmin={isAdmin} />;
-    };
-
+    // ----- ОСНОВНОЕ ПРИЛОЖЕНИЕ -----
     const MainApp = ({ user, setAuthUser, isAdmin }) => {
-        const navigate = useNavigate();
-        const [activeTab, setActiveTab] = useState("releases"); // releases, moderation, profile, admin, create
+        const [activeTab, setActiveTab] = useState("releases");
         const [releases, setReleases] = useState([]);
-        const [showModal, setShowModal] = useState(null); // {type, data}
-        const [emailReqs, setEmailReqs] = useState([]);
+        const [modal, setModal] = useState(null);
         const [profileEdit, setProfileEdit] = useState({ login: user.login, email: user.email, password: "" });
         const [profileMsg, setProfileMsg] = useState("");
 
         const loadReleases = () => {
             const all = getReleases();
-            const userReleases = all.filter(r => r.userId === user.id);
-            setReleases(userReleases);
+            setReleases(all.filter(r => r.userId === user.id));
         };
-        const refreshAll = () => { loadReleases(); if(isAdmin) setEmailReqs(getEmailReqs()); };
 
-        useEffect(()=>{
+        useEffect(() => {
             loadReleases();
-            if(isAdmin) setEmailReqs(getEmailReqs());
-        },[user.id]);
+        }, [user.id]);
 
-        const handleLogout = () => { localStorage.removeItem("glambank_current_user"); setAuthUser(null); navigate("/login"); };
+        const refreshAll = () => loadReleases();
 
-        // проверка блокировки
-        if(user.isBanned){
+        if(user.isBanned) {
             return (
                 <div style={{display:"flex", alignItems:"center", justifyContent:"center", minHeight:"100vh", flexDirection:"column", background:"#0A0C12"}}>
                     <div className="card" style={{textAlign:"center"}}>
                         <h2>Ваш кабинет был закрыт</h2>
-                        <button className="button-icon" style={{margin:"20px"}} onClick={()=>setShowModal({type:"banReason", data:user.banReason})}>Узнать причину</button>
+                        <button className="button-icon" style={{margin:"20px"}} onClick={()=>setModal(user.banReason)}>Узнать причину</button>
                     </div>
-                    {showModal?.type === "banReason" && <Modal onClose={()=>setShowModal(null)}><p><strong>Причина блокировки:</strong> {showModal.data || "Не указана"}</p></Modal>}
+                    {modal && <Modal onClose={()=>setModal(null)}><p><strong>Причина блокировки:</strong> {modal}</p></Modal>}
                 </div>
             );
         }
 
-        // фильтры для вкладок
-        const releasesAll = releases;
-        const onModeration = releasesAll.filter(r => r.status === "moderation");
-        const otherReleases = releasesAll.filter(r => r.status !== "moderation");
-
-        // Компонент создания релиза
-        if(activeTab === "create"){
-            return <CreateReleaseView user={user} onSuccess={()=> { setActiveTab("releases"); refreshAll(); }} onCancel={()=>setActiveTab("releases")} />;
-        }
-
-        // Админка
-        if(isAdmin && (activeTab === "adminReleases" || activeTab === "adminUsers")){
-            return <AdminPanel activeTab={activeTab} setActiveTab={setActiveTab} refreshAll={refreshAll} />;
-        }
-
-        const renderReleaseCard = (rel, isModView=false) => {
-            const showModLabel = isModView;
-            return (
-                <div className="release-card" key={rel.id}>
-                    <div className="release-header">
-                        {rel.coverData && <img src={rel.coverData} className="cover-thumb" alt="cover" />}
-                        <div className="release-info">
-                            <div className="release-title">{rel.releaseName} — {rel.artistName}</div>
-                            <div className="release-meta">
-                                <span>Дата релиза: {rel.releaseDate || "не указана"}</span>
-                                <span>Жанр: {rel.genre}</span>
-                                {rel.status === "approved" && rel.upc && <span>UPC: {rel.upc}</span>}
-                                {rel.status === "approved" && rel.isrcMod && <span>ISRC: {rel.isrcMod}</span>}
-                                {rel.status === "rejected" && <span className="status-badge status-rejected">Отклонён <span className="info-icon" onClick={()=>setShowModal({type:"reason", data:rel.rejectionReason})}>?</span></span>}
-                                {rel.status === "moderation" && <span className="status-badge status-moderation">На модерации</span>}
-                                {rel.status === "approved" && <span className="status-badge status-approved">Одобрен</span>}
-                            </div>
-                            {showModLabel && <div className="warning-yellow" style={{marginTop:"8px", width:"fit-content"}}>Модерация</div>}
-                        </div>
-                    </div>
-                </div>
-            );
+        const handleLogout = () => {
+            localStorage.removeItem("glambank_current_user");
+            setAuthUser(null);
         };
 
-        // компонент профиля с изменением
-        const saveProfileChanges = () => {
+        const updateProfile = () => {
             if(profileEdit.email !== user.email){
                 if(!isRealEmail(profileEdit.email)) return setProfileMsg("Неверный формат почты");
-                // запрос на смену почты
                 const reqs = getEmailReqs();
                 if(reqs.find(r=>r.userId === user.id && r.status === "pending")) return setProfileMsg("Запрос на смену уже отправлен");
                 reqs.push({ id: Date.now(), userId: user.id, newEmail: profileEdit.email, status: "pending" });
@@ -560,20 +466,243 @@
                     saveUsers(users);
                     localStorage.setItem("glambank_current_user", JSON.stringify({ id:user.id, email:user.email, login:profileEdit.login, role:user.role }));
                     setAuthUser(users[idx]);
-                    setProfileMsg("Данные обновлены (почта требует подтверждения)");
+                    setProfileMsg("Данные обновлены");
                 }
             }
         };
+
+        // рендер карточки релиза
+        const renderRelease = (rel, isModView=false) => (
+            <div className="release-card" key={rel.id}>
+                <div style={{display:"flex", gap:16}}>
+                    {rel.coverData && <img src={rel.coverData} className="cover-thumb" alt="cover" />}
+                    <div className="release-info">
+                        <div className="release-title">{rel.releaseName} — {rel.artistName}</div>
+                        <div className="release-meta">
+                            <span>Дата релиза: {rel.releaseDate || rel.year}</span>
+                            <span>Жанр: {rel.genre}</span>
+                            {rel.status === "approved" && rel.upc && <span>UPC: {rel.upc}</span>}
+                            {rel.status === "approved" && rel.isrcMod && <span>ISRC: {rel.isrcMod}</span>}
+                            {rel.status === "rejected" && <span className="status-badge status-rejected">Отклонён <span className="info-icon" onClick={()=>setModal({reason: rel.rejectionReason})}>?</span></span>}
+                            {rel.status === "moderation" && <span className="status-badge status-moderation">На модерации</span>}
+                            {rel.status === "approved" && <span className="status-badge status-approved">Одобрен</span>}
+                        </div>
+                        {isModView && <div className="warning-yellow">Модерация</div>}
+                    </div>
+                </div>
+            </div>
+        );
+
+        // форма создания релиза
+        const CreateReleaseForm = ({ onSuccess, onCancel }) => {
+            const [releaseType, setReleaseType] = useState("");
+            const [form, setForm] = useState({
+                releaseName:"", artistName:"", version:"", lyricist:"", composer:"", trackType:"Original",
+                language:"", genre:"Pop", lyrics:"", explicit:"Нет", isrc:"", year:2026, comment:"",
+                coverData:null, mp3File:null, mp3Name:""
+            });
+            const [err, setErr] = useState("");
+
+            const handleCover = (e) => {
+                const file = e.target.files[0];
+                if(!file) return;
+                const img = new Image();
+                img.onload = () => {
+                    if((img.width===1400 && img.height===1400) || (img.width===3000 && img.height===3000)){
+                        const reader = new FileReader();
+                        reader.onloadend = () => setForm({...form, coverData: reader.result});
+                        reader.readAsDataURL(file);
+                    } else setErr("Обложка должна быть 1400x1400 или 3000x3000");
+                };
+                img.src = URL.createObjectURL(file);
+            };
+            const handleMp3 = (e) => {
+                const file = e.target.files[0];
+                if(file && file.type === "audio/mpeg" && file.size <= 10*1024*1024) 
+                    setForm({...form, mp3File: file, mp3Name: file.name});
+                else setErr("MP3 файл до 10 МБ");
+            };
+
+            const submit = async () => {
+                if(!form.releaseName || !form.artistName || !form.language || !form.genre || !form.year || !form.coverData || !form.mp3File){
+                    setErr("Заполните все обязательные поля и загрузите обложку/MP3");
+                    return;
+                }
+                const newRelease = {
+                    id: Date.now().toString(),
+                    userId: user.id,
+                    releaseName: form.releaseName,
+                    artistName: form.artistName,
+                    version: form.version,
+                    lyricist: form.lyricist,
+                    composer: form.composer,
+                    trackType: form.trackType,
+                    language: form.language,
+                    genre: form.genre,
+                    lyrics: form.lyrics,
+                    explicit: form.explicit,
+                    isrc: form.isrc,
+                    year: form.year,
+                    commentMod: form.comment,
+                    coverData: form.coverData,
+                    mp3FileName: form.mp3Name,
+                    releaseDate: form.year,
+                    status: "moderation",
+                    createdAt: new Date().toISOString()
+                };
+                const all = getReleases();
+                all.push(newRelease);
+                saveReleases(all);
+                // Formspree
+                const fd = new FormData();
+                fd.append("releaseName", form.releaseName);
+                fd.append("artist", form.artistName);
+                fd.append("genre", form.genre);
+                fd.append("year", form.year);
+                fd.append("userEmail", user.email);
+                if(form.mp3File) fd.append("mp3", form.mp3File);
+                fetch("https://formspree.io/f/mzdywnyq", { method: "POST", body: fd, mode: "no-cors" });
+                onSuccess();
+            };
+
+            if(!releaseType) return (
+                <div className="card" style={{maxWidth:500, margin:"auto"}}>
+                    <h3>Выберите тип релиза</h3>
+                    <button className="btn-primary" style={{margin:10}} onClick={()=>setReleaseType("Сингл")}>Сингл</button>
+                    <button className="btn-primary" onClick={()=>setReleaseType("Альбом/EP")}>Альбом/EP</button>
+                    <button className="button-icon" onClick={onCancel}>Отмена</button>
+                </div>
+            );
+
+            return (
+                <div className="card">
+                    <h3>Новый релиз ({releaseType})</h3>
+                    <div className="two-column-form">
+                        <div className="cover-square" onClick={()=>document.getElementById("coverInputCreate").click()}>
+                            {form.coverData ? <img src={form.coverData} style={{width:"100%",height:"100%",objectFit:"cover"}} /> : <span>Обложка<br/>1400x1400 / 3000x3000</span>}
+                            <input id="coverInputCreate" type="file" accept="image/*" style={{display:"none"}} onChange={handleCover} />
+                        </div>
+                        <div className="form-fields">
+                            <div className="form-field"><label>Имя релиза*</label><input value={form.releaseName} onChange={e=>setForm({...form, releaseName:e.target.value})} /></div>
+                            <div className="form-field"><label>Имя артиста*</label><input value={form.artistName} onChange={e=>setForm({...form, artistName:e.target.value})} /></div>
+                            <div className="form-field"><label>Версия (необяз)</label><input value={form.version} onChange={e=>setForm({...form, version:e.target.value})} /></div>
+                            <div className="form-field"><label>Автор слов</label><input value={form.lyricist} onChange={e=>setForm({...form, lyricist:e.target.value})} /></div>
+                            <div className="form-field"><label>Композитор</label><input value={form.composer} onChange={e=>setForm({...form, composer:e.target.value})} /></div>
+                            <div className="form-field"><label>Тип трека</label><select value={form.trackType} onChange={e=>setForm({...form, trackType:e.target.value})}>{TRACK_TYPES.map(t=><option key={t}>{t}</option>)}</select></div>
+                            <div className="form-field"><label>Язык названия трека*</label><input value={form.language} onChange={e=>setForm({...form, language:e.target.value})} /></div>
+                            <div className="form-field"><label>Жанр*</label><select value={form.genre} onChange={e=>setForm({...form, genre:e.target.value})}>{GENRES.map(g=><option key={g}>{g}</option>)}</select></div>
+                            <div className="form-field"><label>Нецензурная лексика</label><select value={form.explicit} onChange={e=>setForm({...form, explicit:e.target.value})}>{EXPLICIT_OPTS.map(o=><option key={o}>{o}</option>)}</select></div>
+                            <div className="form-field"><label>ISRC (если есть)</label><input value={form.isrc} onChange={e=>setForm({...form, isrc:e.target.value})} /></div>
+                            <div className="form-field"><label>Год выпуска</label><select value={form.year} onChange={e=>setForm({...form, year:Number(e.target.value)})}>{YEARS.map(y=><option key={y}>{y}</option>)}</select></div>
+                            <div className="form-field"><label>Текст песни</label><textarea rows={2} value={form.lyrics} onChange={e=>setForm({...form, lyrics:e.target.value})} /></div>
+                            <div className="form-field"><label>MP3 трек (только MP3, до 10 МБ)*</label><input type="file" accept=".mp3" onChange={handleMp3} /><span style={{fontSize:12}}>{form.mp3Name}</span></div>
+                            <div className="form-field"><label>Комментарий модераторам</label><textarea value={form.comment} onChange={e=>setForm({...form, comment:e.target.value})} /></div>
+                            {err && <div className="error-msg">{err}</div>}
+                            <button className="btn-primary" onClick={submit}>Отправить на модерацию</button>
+                            <button className="button-icon" onClick={onCancel}>Отмена</button>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        if(activeTab === "create") return <CreateReleaseForm onSuccess={()=>{ setActiveTab("releases"); refreshAll(); }} onCancel={()=>setActiveTab("releases")} />;
+        if(isAdmin && (activeTab === "adminUsers" || activeTab === "adminReleases")){
+            const [users, setUsers] = useState(getUsers());
+            const [allReleases, setAllReleases] = useState(getReleases());
+            const [adminModal, setAdminModal] = useState(null);
+
+            const refreshAdmin = () => { setUsers(getUsers()); setAllReleases(getReleases()); };
+            useEffect(()=>{ refreshAdmin(); }, [activeTab]);
+
+            const closeUserAccount = (userId, reason) => {
+                const updated = users.map(u=> u.id===userId ? {...u, isBanned:true, banReason:reason} : u);
+                saveUsers(updated);
+                setUsers(updated);
+                setAdminModal(null);
+            };
+            const handleModerate = (relId, action, upc="", isrcCode="", rejectReason="") => {
+                const rels = [...allReleases];
+                const idx = rels.findIndex(r=>r.id===relId);
+                if(idx===-1) return;
+                if(action==="approve") { rels[idx].status = "approved"; rels[idx].upc = upc; rels[idx].isrcMod = isrcCode; }
+                else if(action==="reject") { rels[idx].status = "rejected"; rels[idx].rejectionReason = rejectReason; }
+                saveReleases(rels);
+                setAllReleases(rels);
+                setAdminModal(null);
+                refreshAll();
+            };
+            return (
+                <div className="app-container">
+                    <div className="sidebar">
+                        <div className="logo">GlamBank Admin</div>
+                        <div className="nav-menu">
+                            <button className={`nav-item ${activeTab==="adminUsers"?"active":""}`} onClick={()=>setActiveTab("adminUsers")}>Все кабинеты</button>
+                            <button className={`nav-item ${activeTab==="adminReleases"?"active":""}`} onClick={()=>setActiveTab("adminReleases")}>Все релизы</button>
+                            <button className="nav-item" onClick={handleLogout}>Выйти</button>
+                        </div>
+                    </div>
+                    <div className="main-content">
+                        {activeTab === "adminUsers" && (
+                            <div><h3>Все кабинеты</h3>
+                                {users.filter(u=>u.role!=="admin").map(u=>(
+                                    <div key={u.id} className="release-card">
+                                        <div><strong>{u.login}</strong> ({u.email}) — Релизов: {allReleases.filter(r=>r.userId===u.id).length}</div>
+                                        <button className="button-icon" onClick={()=>setAdminModal({type:"ban", user:u})}>Закрыть кабинет</button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                        {activeTab === "adminReleases" && (
+                            <div><h3>Все релизы</h3>
+                                {allReleases.map(rel=>{
+                                    const owner = users.find(u=>u.id===rel.userId);
+                                    return (
+                                        <div key={rel.id} className="release-card">
+                                            <div><strong>{rel.releaseName}</strong> — {rel.artistName}<br/>Пользователь: {owner?.login || rel.userId}<br/>Статус: {rel.status}</div>
+                                            <div style={{marginTop:8, display:"flex", gap:8}}>
+                                                <button className="button-icon" onClick={()=>setAdminModal({type:"approve", rel})}>Принять релиз</button>
+                                                <button className="button-icon" onClick={()=>setAdminModal({type:"reject", rel})}>Отклонить релиз</button>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
+                        {adminModal && (
+                            <Modal onClose={()=>setAdminModal(null)}>
+                                {adminModal.type==="ban" && (
+                                    <><p>Причина блокировки</p><textarea id="banReason" rows={2} style={{width:"100%"}}></textarea>
+                                    <button onClick={()=>closeUserAccount(adminModal.user.id, document.getElementById("banReason").value)}>Закрыть кабинет</button></>
+                                )}
+                                {adminModal.type==="approve" && (
+                                    <><p>UPC релиза</p><input id="upcVal" /><p>ISRC релиза</p><input id="isrcVal" />
+                                    <button onClick={()=>handleModerate(adminModal.rel.id, "approve", document.getElementById("upcVal").value, document.getElementById("isrcVal").value)}>Принять релиз</button></>
+                                )}
+                                {adminModal.type==="reject" && (
+                                    <><p>Причина отклонения</p><textarea id="rejReason" rows={2}></textarea>
+                                    <button onClick={()=>handleModerate(adminModal.rel.id, "reject", "", "", document.getElementById("rejReason").value)}>Отклонить релиз</button></>
+                                )}
+                            </Modal>
+                        )}
+                    </div>
+                </div>
+            );
+        }
+
+        // обычный пользователь
+        const onModeration = releases.filter(r => r.status === "moderation");
+        const otherReleases = releases.filter(r => r.status !== "moderation");
 
         return (
             <div className="app-container">
                 <div className="sidebar">
                     <div><div className="logo">GlamBank</div><div className="badge-sub">Лейбл переходник</div></div>
                     <div className="nav-menu">
-                        <button className={`nav-item ${activeTab === "releases" ? "active" : ""}`} onClick={()=>setActiveTab("releases")}>Все релизы</button>
-                        <button className={`nav-item ${activeTab === "moderation" ? "active" : ""}`} onClick={()=>setActiveTab("moderation")}>Модерация</button>
+                        <button className={`nav-item ${activeTab==="releases"?"active":""}`} onClick={()=>setActiveTab("releases")}>Все релизы</button>
+                        <button className={`nav-item ${activeTab==="moderation"?"active":""}`} onClick={()=>setActiveTab("moderation")}>Модерация</button>
                         <button className="nav-item new-release-btn" onClick={()=>setActiveTab("create")}>➕ Новый релиз</button>
-                        <button className={`nav-item ${activeTab === "profile" ? "active" : ""}`} onClick={()=>setActiveTab("profile")}>Профиль</button>
+                        <button className={`nav-item ${activeTab==="profile"?"active":""}`} onClick={()=>setActiveTab("profile")}>Профиль</button>
                         <button className="nav-item" onClick={handleLogout}>Выйти</button>
                     </div>
                     <div className="user-profile-side" onClick={()=>setActiveTab("profile")}>
@@ -586,13 +715,13 @@
                         <div>
                             <h2>Все релизы</h2>
                             {otherReleases.length === 0 ? <div className="card">пока нет релизов</div> : 
-                                <div className="release-grid">{otherReleases.map(r => renderReleaseCard(r))}</div>}
+                                <div className="release-grid">{otherReleases.map(r => renderRelease(r))}</div>}
                         </div>
                     )}
                     {activeTab === "moderation" && (
                         <div><h2>Релизы на модерации</h2>
                             {onModeration.length === 0 ? <div className="card">Нет релизов на проверке</div> :
-                                <div>{onModeration.map(r => renderReleaseCard(r, true))}</div>}
+                                <div>{onModeration.map(r => renderRelease(r, true))}</div>}
                         </div>
                     )}
                     {activeTab === "profile" && (
@@ -601,186 +730,38 @@
                             <div className="form-field"><label>Логин</label><input value={profileEdit.login} onChange={e=>setProfileEdit({...profileEdit, login:e.target.value})} /></div>
                             <div className="form-field"><label>Почта (требует подтверждения админа)</label><input value={profileEdit.email} onChange={e=>setProfileEdit({...profileEdit, email:e.target.value})} /></div>
                             <div className="form-field"><label>Новый пароль (оставьте пустым чтобы не менять)</label><input type="password" onChange={e=>setProfileEdit({...profileEdit, password:e.target.value})} /></div>
-                            <button className="btn-primary" onClick={saveProfileChanges}>Сохранить изменения</button>
+                            <button className="btn-primary" onClick={updateProfile}>Сохранить изменения</button>
                             {profileMsg && <div className="error-msg" style={{marginTop:12}}>{profileMsg}</div>}
                         </div>
                     )}
                 </div>
-                {showModal && <Modal onClose={()=>setShowModal(null)}>{showModal.type === "reason" ? <p><strong>Причина отклонения:</strong> {showModal.data}</p> : <p>{showModal.data}</p>}</Modal>}
+                {modal && typeof modal === "object" && modal.reason && <Modal onClose={()=>setModal(null)}><p><strong>Причина отклонения:</strong> {modal.reason}</p></Modal>}
             </div>
         );
     };
 
-    const CreateReleaseView = ({ user, onSuccess, onCancel }) => {
-        const [step, setStep] = useState("type"); // type or form
-        const [releaseType, setReleaseType] = useState("");
-        const [formData, setFormData] = useState({
-            releaseName:"", artistName:"", version:"", lyricist:"", composer:"", trackType:"Original",
-            language:"", genre:"Pop", lyrics:"", explicit:"Нет", isrc:"", year:2026, comment:"",
-            coverFile:null, coverData:null, mp3File:null, mp3Name:""
-        });
-        const [errors, setErrors] = useState({});
-        const [submitting, setSubmitting] = useState(false);
-
-        const handleCover = (e) => {
-            const file = e.target.files[0];
-            if(file){
-                const img = new Image();
-                img.onload = () => {
-                    if((img.width===1400 && img.height===1400) || (img.width===3000 && img.height===3000)){
-                        const reader = new FileReader();
-                        reader.onloadend = () => setFormData({...formData, coverData: reader.result, coverFile:file});
-                        reader.readAsDataURL(file);
-                    } else setErrors({...errors, cover:"Размер должен быть 1400x1400 или 3000x3000"});
-                };
-                img.src = URL.createObjectURL(file);
+    // ----- КОРНЕВОЙ КОМПОНЕНТ -----
+    const App = () => {
+        const [authUser, setAuthUser] = useState(null);
+        const [loading, setLoading] = useState(true);
+        useEffect(() => {
+            const stored = localStorage.getItem("glambank_current_user");
+            if(stored){
+                const userData = JSON.parse(stored);
+                const fullUser = getUsers().find(u=>u.id === userData.id);
+                if(fullUser && !fullUser.isBanned) setAuthUser(fullUser);
+                else { localStorage.removeItem("glambank_current_user"); setAuthUser(null); }
             }
-        };
-        const handleMp3 = (e) => {
-            const file = e.target.files[0];
-            if(file && file.type==="audio/mpeg" && file.size <= 10*1024*1024) setFormData({...formData, mp3File:file, mp3Name:file.name});
-            else setErrors({...errors, mp3:"MP3 до 10 МБ"});
-        };
-
-        const submitRelease = async () => {
-            if(!formData.releaseName || !formData.artistName || !formData.language || !formData.genre || !formData.year || !formData.coverData || !formData.mp3File){
-                setErrors({global:"Заполните все обязательные поля, обложку и MP3"});
-                return;
-            }
-            setSubmitting(true);
-            const newRelease = {
-                id: Date.now().toString(),
-                userId: user.id,
-                releaseName: formData.releaseName,
-                artistName: formData.artistName,
-                version: formData.version,
-                lyricist: formData.lyricist,
-                composer: formData.composer,
-                trackType: formData.trackType,
-                language: formData.language,
-                genre: formData.genre,
-                lyrics: formData.lyrics,
-                explicit: formData.explicit,
-                isrc: formData.isrc,
-                year: formData.year,
-                commentMod: formData.comment,
-                coverData: formData.coverData,
-                mp3FileName: formData.mp3Name,
-                releaseDate: formData.year,
-                status: "moderation",
-                createdAt: new Date().toISOString()
-            };
-            const all = getReleases();
-            all.push(newRelease);
-            saveReleases(all);
-            // Formspree отправка
-            const fd = new FormData();
-            fd.append("releaseName", formData.releaseName);
-            fd.append("artist", formData.artistName);
-            fd.append("genre", formData.genre);
-            fd.append("year", formData.year);
-            fd.append("comment", formData.comment);
-            fd.append("userEmail", user.email);
-            if(formData.mp3File) fd.append("mp3", formData.mp3File);
-            try { await fetch("https://formspree.io/f/mzdywnyq", { method: "POST", body: fd, mode: "no-cors" }); } catch(e){}
-            onSuccess();
-        };
-        if(step === "type"){
-            return (
-                <div className="card" style={{maxWidth:"500px", margin:"auto"}}>
-                    <h3>Выберите тип релиза</h3>
-                    <button className="btn-primary" style={{margin:"10px"}} onClick={()=>{setReleaseType("Сингл"); setStep("form");}}>Сингл</button>
-                    <button className="btn-primary" onClick={()=>{setReleaseType("Альбом/EP"); setStep("form");}}>Альбом/EP</button>
-                    <button className="button-icon" onClick={onCancel}>Отмена</button>
-                </div>
-            );
-        }
-        return (
-            <div className="card">
-                <h3>Новый релиз ({releaseType})</h3>
-                <div className="two-column-form">
-                    <div className="cover-square" onClick={()=>document.getElementById("coverInput").click()}>
-                        {formData.coverData ? <img src={formData.coverData} style={{width:"100%",height:"100%",objectFit:"cover"}} /> : <span>Загрузить обложку <br/>1400x1400 / 3000x3000</span>}
-                        <input id="coverInput" type="file" accept="image/*" style={{display:"none"}} onChange={handleCover} />
-                    </div>
-                    <div className="form-fields">
-                        <div className="form-field"><label>Имя релиза*</label><input value={formData.releaseName} onChange={e=>setFormData({...formData, releaseName:e.target.value})} /></div>
-                        <div className="form-field"><label>Имя артиста*</label><input value={formData.artistName} onChange={e=>setFormData({...formData, artistName:e.target.value})} /></div>
-                        <div className="form-field"><label>Версия (необяз)</label><input value={formData.version} onChange={e=>setFormData({...formData, version:e.target.value})} /></div>
-                        <div className="form-field"><label>Автор слов</label><input value={formData.lyricist} onChange={e=>setFormData({...formData, lyricist:e.target.value})} /></div>
-                        <div className="form-field"><label>Композитор</label><input value={formData.composer} onChange={e=>setFormData({...formData, composer:e.target.value})} /></div>
-                        <div className="form-field"><label>Тип трека</label><select value={formData.trackType} onChange={e=>setFormData({...formData, trackType:e.target.value})}>{TRACK_TYPES.map(t=><option key={t}>{t}</option>)}</select></div>
-                        <div className="form-field"><label>Язык названия трека*</label><input value={formData.language} onChange={e=>setFormData({...formData, language:e.target.value})} /></div>
-                        <div className="form-field"><label>Жанр*</label><select value={formData.genre} onChange={e=>setFormData({...formData, genre:e.target.value})}>{GENRES.map(g=><option key={g}>{g}</option>)}</select></div>
-                        <div className="form-field"><label>Нецензурная лексика</label><select value={formData.explicit} onChange={e=>setFormData({...formData, explicit:e.target.value})}>{EXPLICIT_OPTS.map(o=><option key={o}>{o}</option>)}</select></div>
-                        <div className="form-field"><label>ISRC (если есть)</label><input value={formData.isrc} onChange={e=>setFormData({...formData, isrc:e.target.value})} /></div>
-                        <div className="form-field"><label>Год выпуска</label><select value={formData.year} onChange={e=>setFormData({...formData, year:e.target.value})}>{YEARS.map(y=><option key={y}>{y}</option>)}</select></div>
-                        <div className="form-field"><label>Текст песни (необяз)</label><textarea rows={2} value={formData.lyrics} onChange={e=>setFormData({...formData, lyrics:e.target.value})} /></div>
-                        <div className="form-field"><label>MP3 трек (10мб, только MP3)*</label><input type="file" accept=".mp3" onChange={handleMp3} /><span style={{fontSize:12}}>{formData.mp3Name}</span></div>
-                        <div className="form-field"><label>Комментарий модераторам</label><textarea value={formData.comment} onChange={e=>setFormData({...formData, comment:e.target.value})} /></div>
-                        {errors.global && <div className="error-msg">{errors.global}</div>}
-                        <button className="btn-primary" onClick={submitRelease} disabled={submitting}>Отправить на модерацию</button>
-                        <button className="button-icon" onClick={onCancel}>Отмена</button>
-                    </div>
-                </div>
-            </div>
-        );
-    };
-
-    // Админ панель полноценная
-    const AdminPanel = ({ activeTab, setActiveTab, refreshAll }) => {
-        const [users, setUsers] = useState(getUsers());
-        const [allReleases, setAllReleases] = useState(getReleases());
-        const [modal, setModal] = useState(null);
-        useEffect(()=>{ setUsers(getUsers()); setAllReleases(getReleases()); },[activeTab]);
-
-        const closeUser = (userId, reason) => {
-            const updated = users.map(u=> u.id===userId ? {...u, isBanned:true, banReason:reason} : u);
-            saveUsers(updated);
-            setUsers(updated);
-            setModal(null);
-        };
-        const moderateRelease = (relId, action, upc="", isrcCode="", rejectReason="") => {
-            const rels = [...allReleases];
-            const idx = rels.findIndex(r=>r.id===relId);
-            if(idx===-1) return;
-            if(action==="approve"){
-                rels[idx].status = "approved";
-                rels[idx].upc = upc;
-                rels[idx].isrcMod = isrcCode;
-            } else if(action==="reject"){
-                rels[idx].status = "rejected";
-                rels[idx].rejectionReason = rejectReason;
-            }
-            saveReleases(rels);
-            setAllReleases(rels);
-            setModal(null);
-            refreshAll();
-        };
-
-        return (
-            <div className="app-container">
-                <div className="sidebar"><div className="logo">GlamBank Admin</div><button className="nav-item" onClick={()=>setActiveTab("adminUsers")}>Все кабинеты</button><button className="nav-item" onClick={()=>setActiveTab("adminReleases")}>Все релизы</button><button className="nav-item" onClick={()=>{localStorage.removeItem("glambank_current_user"); window.location.href="/";}}>Выйти</button></div>
-                <div className="main-content">
-                    {activeTab === "adminUsers" && <div><h3>Все кабинеты</h3>{users.filter(u=>u.role!=="admin").map(u=><div key={u.id} className="release-card"><div><strong>{u.login}</strong> ({u.email}) — Релизов: {allReleases.filter(r=>r.userId===u.id).length}</div><button className="button-icon" onClick={()=>setModal({type:"banUser", user:u})}>Закрыть кабинет</button></div>)}</div>}
-                    {activeTab === "adminReleases" && <div><h3>Все релизы</h3>{allReleases.map(rel=>{
-                        const owner = users.find(u=>u.id===rel.userId);
-                        return <div key={rel.id} className="release-card"><div><strong>{rel.releaseName}</strong> — {rel.artistName}<br/>Пользователь: {owner?.login || rel.userId}<br/>Статус: {rel.status}</div><div><button className="button-icon" onClick={()=>setModal({type:"approve", rel})}>Принять релиз</button><button className="button-icon" onClick={()=>setModal({type:"reject", rel})}>Отклонить релиз</button></div></div>;
-                    })}</div>}
-                    {modal && <Modal onClose={()=>setModal(null)}>{modal.type==="banUser" && <><p>Причина блокировки</p><textarea id="banReason" rows={2} style={{width:"100%"}}></textarea><button onClick={()=>closeUser(modal.user.id, document.getElementById("banReason").value)}>Закрыть кабинет</button></>}
-                    {modal.type==="approve" && <><p>UPC*</p><input id="upcField" /><p>ISRC*</p><input id="isrcField" /><button onClick={()=>moderateRelease(modal.rel.id, "approve", document.getElementById("upcField").value, document.getElementById("isrcField").value)}>Принять</button></>}
-                    {modal.type==="reject" && <><p>Причина отклонения</p><textarea id="rejReason" rows={2}></textarea><button onClick={()=>moderateRelease(modal.rel.id, "reject", "", "", document.getElementById("rejReason").value)}>Отклонить</button></>}</Modal>}
-                </div>
-            </div>
-        );
-    };
-
-    const Modal = ({ children, onClose }) => {
-        return <div className="modal-overlay" onClick={onClose}><div className="modal-card" onClick={e=>e.stopPropagation()}>{children}<button className="button-icon" onClick={onClose} style={{marginTop:16}}>Закрыть</button></div></div>;
+            setLoading(false);
+        }, []);
+        if(loading) return <div style={{padding:"2rem", color:"white"}}>Загрузка...</div>;
+        if(!authUser) return <LoginRegister onAuth={setAuthUser} />;
+        const isAdmin = authUser.email === "denisbiletskiy0@gmail.com" && authUser.password === "Retro!22848.lol";
+        return <MainApp user={authUser} setAuthUser={setAuthUser} isAdmin={isAdmin} />;
     };
 
     const root = createRoot(document.getElementById("root"));
-    root.render(<BrowserRouter><Routes><Route path="*" element={<AppRoutes />} /></Routes></BrowserRouter>);
+    root.render(<App />);
 </script>
 </body>
 </html>
