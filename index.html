@@ -324,10 +324,17 @@
         }
         if(!localStorage.getItem("glambank_releases")) localStorage.setItem("glambank_releases", JSON.stringify([]));
         if(!localStorage.getItem("glambank_email_requests")) localStorage.setItem("glambank_email_requests", JSON.stringify([]));
-        if(!localStorage.getItem("glambank_current_user")) localStorage.removeItem("glambank_current_user");
+        // принудительно удаляем битый сеанс, если пользователь был забанен
+        const current = localStorage.getItem("glambank_current_user");
+        if(current){
+            try {
+                const userData = JSON.parse(current);
+                const fullUser = getUsers().find(u=>u.id === userData.id);
+                if(fullUser && fullUser.isBanned) localStorage.removeItem("glambank_current_user");
+            } catch(e) { localStorage.removeItem("glambank_current_user"); }
+        }
     };
-    initStorage();
-
+    
     const getUsers = () => JSON.parse(localStorage.getItem("glambank_users"));
     const saveUsers = (users) => localStorage.setItem("glambank_users", JSON.stringify(users));
     const getReleases = () => JSON.parse(localStorage.getItem("glambank_releases"));
@@ -335,6 +342,8 @@
     const getEmailReqs = () => JSON.parse(localStorage.getItem("glambank_email_requests")) || [];
     const saveEmailReqs = (reqs) => localStorage.setItem("glambank_email_requests", JSON.stringify(reqs));
     const isRealEmail = (email) => /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(email);
+    
+    initStorage();
 
     // ----- ЖАНРЫ И ГОДА -----
     const GENRES = ["Pop","Rock","Hip Hop/Rap","Electronic","Dance","R&B","Soul","Jazz","Classical","Country","Folk","Metal","Punk","Reggae","Blues","Latin","K-pop","Indie","Alternative","House","Techno","Trance","Drum and Bass","Ambient","Soundtrack","Trap","Grime","Afrobeat","Funk","Disco"];
@@ -471,7 +480,6 @@
             }
         };
 
-        // рендер карточки релиза
         const renderRelease = (rel, isModView=false) => (
             <div className="release-card" key={rel.id}>
                 <div style={{display:"flex", gap:16}}>
@@ -493,7 +501,6 @@
             </div>
         );
 
-        // форма создания релиза
         const CreateReleaseForm = ({ onSuccess, onCancel }) => {
             const [releaseType, setReleaseType] = useState("");
             const [form, setForm] = useState({
@@ -553,7 +560,6 @@
                 const all = getReleases();
                 all.push(newRelease);
                 saveReleases(all);
-                // Formspree
                 const fd = new FormData();
                 fd.append("releaseName", form.releaseName);
                 fd.append("artist", form.artistName);
@@ -620,6 +626,7 @@
                 saveUsers(updated);
                 setUsers(updated);
                 setAdminModal(null);
+                refreshAll();
             };
             const handleModerate = (relId, action, upc="", isrcCode="", rejectReason="") => {
                 const rels = [...allReleases];
@@ -643,7 +650,7 @@
                         </div>
                     </div>
                     <div className="main-content">
-                        {activeTab === "adminUsers" && (
+                        {activeTab === "adminUsers"" && (
                             <div><h3>Все кабинеты</h3>
                                 {users.filter(u=>u.role!=="admin").map(u=>(
                                     <div key={u.id} className="release-card">
@@ -690,7 +697,6 @@
             );
         }
 
-        // обычный пользователь
         const onModeration = releases.filter(r => r.status === "moderation");
         const otherReleases = releases.filter(r => r.status !== "moderation");
 
@@ -744,24 +750,41 @@
     const App = () => {
         const [authUser, setAuthUser] = useState(null);
         const [loading, setLoading] = useState(true);
+        
         useEffect(() => {
+            // Эмуляция загрузки и проверки сессии
             const stored = localStorage.getItem("glambank_current_user");
             if(stored){
-                const userData = JSON.parse(stored);
-                const fullUser = getUsers().find(u=>u.id === userData.id);
-                if(fullUser && !fullUser.isBanned) setAuthUser(fullUser);
-                else { localStorage.removeItem("glambank_current_user"); setAuthUser(null); }
+                try {
+                    const userData = JSON.parse(stored);
+                    const fullUser = getUsers().find(u=>u.id === userData.id);
+                    if(fullUser && !fullUser.isBanned) {
+                        setAuthUser(fullUser);
+                    } else {
+                        localStorage.removeItem("glambank_current_user");
+                    }
+                } catch(e) {
+                    localStorage.removeItem("glambank_current_user");
+                }
             }
             setLoading(false);
         }, []);
-        if(loading) return <div style={{padding:"2rem", color:"white"}}>Загрузка...</div>;
+        
+        if(loading) return <div style={{padding:"2rem", color:"white", textAlign:"center"}}>Загрузка платформы GlamBank...</div>;
         if(!authUser) return <LoginRegister onAuth={setAuthUser} />;
+        
         const isAdmin = authUser.email === "denisbiletskiy0@gmail.com" && authUser.password === "Retro!22848.lol";
         return <MainApp user={authUser} setAuthUser={setAuthUser} isAdmin={isAdmin} />;
     };
 
-    const root = createRoot(document.getElementById("root"));
-    root.render(<App />);
+    // Надёжный рендер после полной загрузки DOM
+    const rootElement = document.getElementById("root");
+    if(rootElement) {
+        const root = createRoot(rootElement);
+        root.render(<App />);
+    } else {
+        console.error("Root element not found");
+    }
 </script>
 </body>
 </html>
