@@ -2,788 +2,609 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GlamBank | Лейбл переходник</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg-dark: #070B14;
+            --bg-panel: #111827;
+            --text-main: #E5E7EB;
+            --text-muted: #9CA3AF;
+            --accent: #2563EB;
+            --accent-hover: #1D4ED8;
+            --border: #1F2937;
+            --danger: #DC2626;
+            --success: #10B981;
+            --warning: #F59E0B;
         }
 
-        body {
-            font-family: system-ui, 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0A0C12;
-            color: #EFF3F8;
-        }
-
-        .app-container {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .sidebar {
-            width: 280px;
-            background: #0F1219;
-            border-right: 1px solid #1E2432;
-            padding: 32px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 40px;
-        }
-
-        .logo {
-            font-size: 28px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #FFFFFF 0%, #94A3F8 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .badge-sub {
-            font-size: 11px;
-            color: #5B6B8C;
-            margin-top: 4px;
-            background: rgba(59, 130, 246, 0.12);
-            display: inline-block;
-            padding: 2px 8px;
-            border-radius: 30px;
-        }
-
-        .nav-menu {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .nav-item {
-            background: transparent;
-            border: none;
-            color: #B4C2E0;
-            font-size: 16px;
-            font-weight: 500;
-            text-align: left;
-            padding: 12px 16px;
-            border-radius: 14px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: inherit;
-        }
-
-        .nav-item:hover {
-            background: #181E2A;
-            color: white;
-        }
-
-        .nav-item.active {
-            background: #1A2538;
-            color: white;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-        }
-
-        .new-release-btn {
-            border: 1.5px solid #3B82F6 !important;
-            background: rgba(59, 130, 246, 0.08) !important;
-            color: #60A5FA !important;
-            font-weight: 600;
-            margin-top: 8px;
-            text-align: center;
-        }
-
-        .user-profile-side {
-            margin-top: auto;
-            background: #0A0D14;
-            border-radius: 24px;
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-        }
-
-        .user-avatar-placeholder {
-            width: 40px;
-            height: 40px;
-            background: #1F2A44;
-            border-radius: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-
-        .main-content {
-            flex: 1;
-            padding: 32px 40px;
-            overflow-y: auto;
-        }
-
-        .card {
-            background: #11161F;
-            border-radius: 24px;
-            padding: 24px;
-            margin-bottom: 24px;
-            border: 1px solid #202836;
-        }
-
-        .release-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .release-card {
-            background: #0E121C;
-            border-radius: 20px;
-            padding: 20px;
-            border-left: 4px solid #2D3E6E;
-        }
-
-        .cover-thumb {
-            width: 80px;
-            height: 80px;
-            background: #1A1F2E;
-            border-radius: 12px;
-            object-fit: cover;
-        }
-
-        .release-info {
-            flex: 1;
-        }
-
-        .release-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-
-        .release-meta {
-            font-size: 13px;
-            color: #8A99B9;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-top: 8px;
-        }
-
-        .status-badge {
-            font-size: 12px;
-            font-weight: 600;
-            padding: 4px 12px;
-            border-radius: 100px;
-            display: inline-block;
-        }
-
-        .status-moderation { background: #b45309; color: #ffedd5; }
-        .status-approved { background: #0f6e3f; color: #d1fae5; }
-        .status-rejected { background: #991b1b; color: #fee2e2; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-main); }
+        .hidden { display: none !important; }
         
-        .warning-yellow {
-            background: #F59E0B20;
-            color: #FBBF24;
-            border-radius: 30px;
-            padding: 4px 12px;
-            font-size: 12px;
-            font-weight: 500;
-            width: fit-content;
-        }
-
-        .button-icon {
-            background: #1E293B;
-            border: none;
-            color: #CBD5E1;
-            padding: 6px 12px;
-            border-radius: 40px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-
-        .two-column-form {
-            display: flex;
-            gap: 32px;
-            flex-wrap: wrap;
-        }
-
-        .cover-square {
-            width: 220px;
-            height: 220px;
-            background: #0F1320;
-            border-radius: 24px;
-            border: 1px dashed #3B82F6;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            overflow: hidden;
-        }
-
-        .form-fields {
-            flex: 1;
-            min-width: 280px;
-        }
-
-        .form-field {
-            margin-bottom: 18px;
-        }
-
-        label {
-            display: block;
-            font-size: 13px;
-            font-weight: 500;
-            margin-bottom: 6px;
-            color: #B9C7E4;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            background: #0B0F17;
-            border: 1px solid #26304A;
-            border-radius: 14px;
-            padding: 12px 14px;
-            color: white;
-            font-family: inherit;
-            font-size: 14px;
-        }
-
-        .btn-primary {
-            background: #1E3A8A;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 40px;
-            font-weight: 600;
-            color: white;
-            font-size: 15px;
-            cursor: pointer;
-        }
-
-        .modal-overlay {
-            position: fixed;
-            top:0;left:0;width:100%;height:100%;
-            background: rgba(0,0,0,0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-
-        .modal-card {
-            background: #0F172A;
-            border-radius: 32px;
-            padding: 28px;
-            width: 450px;
-            max-width: 90%;
-            border: 1px solid #334155;
-        }
-
-        .error-msg {
-            color: #F87171;
-            font-size: 12px;
-            margin-top: 5px;
-        }
-
-        .flex-between {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .info-icon {
-            cursor: help;
-            margin-left: 6px;
-            background: #2D3748;
-            border-radius: 50%;
-            width: 18px;
-            display: inline-block;
-            text-align: center;
-            font-size: 12px;
-        }
+        /* Typography */
+        h1, h2, h3 { margin-bottom: 15px; }
+        .subtitle { font-size: 12px; color: var(--text-muted); opacity: 0.7; }
+        
+        /* Layouts */
+        .auth-container, .ban-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
+        .ban-screen { background-color: rgba(0,0,0,0.9); position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; }
+        
+        .dashboard { display: flex; height: 100vh; }
+        .sidebar { width: 250px; background-color: var(--bg-panel); border-right: 1px solid var(--border); padding: 20px; display: flex; flex-direction: column; }
+        .main-content { flex: 1; padding: 30px; overflow-y: auto; }
+        .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+        
+        /* UI Elements */
+        input, select, textarea { width: 100%; padding: 10px; margin-bottom: 15px; background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-main); border-radius: 5px; }
+        button { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .btn-primary { background-color: var(--accent); color: white; }
+        .btn-primary:hover { background-color: var(--accent-hover); }
+        .btn-danger { background-color: var(--danger); color: white; }
+        .btn-outline { background-color: transparent; border: 1px solid var(--accent); color: var(--accent); }
+        .btn-highlight { background-color: transparent; border: 2px solid var(--accent); color: white; box-shadow: 0 0 10px rgba(37, 99, 235, 0.3); margin-bottom: 10px; text-transform: uppercase;}
+        
+        /* Specific elements */
+        .release-card { background: var(--bg-panel); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .status-badge { padding: 5px 10px; border-radius: 15px; font-size: 12px; }
+        .status-mod { background: var(--warning); color: black; }
+        .status-app { background: var(--success); color: white; }
+        .status-rej { background: var(--danger); color: white; cursor: help; }
+        
+        .form-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+        .cover-upload { width: 100%; aspect-ratio: 1/1; border: 2px dashed var(--border); display: flex; align-items: center; justify-content: center; text-align: center; padding: 20px; cursor: pointer; }
+        
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 500; }
+        .modal-content { background: var(--bg-panel); padding: 30px; border-radius: 8px; width: 400px; }
     </style>
 </head>
 <body>
-<div id="root"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.development.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.development.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/babel-standalone@6.26.0/babel.min.js"></script>
-<script type="text/babel">
-    // ----- ИНИЦИАЛИЗАЦИЯ STORAGE -----
-    const initStorage = () => {
-        if(!localStorage.getItem("glambank_users")){
-            const admin = {
-                id: "admin_main",
-                login: "GlamBankAdmin",
-                email: "denisbiletskiy0@gmail.com",
-                password: "Retro!22848.lol",
-                isBanned: false,
-                banReason: "",
-                role: "admin"
-            };
-            localStorage.setItem("glambank_users", JSON.stringify([admin]));
-        }
-        if(!localStorage.getItem("glambank_releases")) localStorage.setItem("glambank_releases", JSON.stringify([]));
-        if(!localStorage.getItem("glambank_email_requests")) localStorage.setItem("glambank_email_requests", JSON.stringify([]));
-        // принудительно удаляем битый сеанс, если пользователь был забанен
-        const current = localStorage.getItem("glambank_current_user");
-        if(current){
-            try {
-                const userData = JSON.parse(current);
-                const fullUser = getUsers().find(u=>u.id === userData.id);
-                if(fullUser && fullUser.isBanned) localStorage.removeItem("glambank_current_user");
-            } catch(e) { localStorage.removeItem("glambank_current_user"); }
-        }
-    };
-    
-    const getUsers = () => JSON.parse(localStorage.getItem("glambank_users"));
-    const saveUsers = (users) => localStorage.setItem("glambank_users", JSON.stringify(users));
-    const getReleases = () => JSON.parse(localStorage.getItem("glambank_releases"));
-    const saveReleases = (rels) => localStorage.setItem("glambank_releases", JSON.stringify(rels));
-    const getEmailReqs = () => JSON.parse(localStorage.getItem("glambank_email_requests")) || [];
-    const saveEmailReqs = (reqs) => localStorage.setItem("glambank_email_requests", JSON.stringify(reqs));
-    const isRealEmail = (email) => /^[^\s@]+@([^\s@]+\.)+[^\s@]+$/.test(email);
-    
-    initStorage();
+    <div id="banScreen" class="ban-screen hidden">
+        <h2>Ваш кабинет был закрыт.</h2>
+        <button class="btn-primary" onclick="showBanReason()" style="margin-top: 20px;">Узнать причину</button>
+        <p id="banReasonText" class="hidden" style="margin-top: 20px; color: var(--danger);"></p>
+        <button class="btn-outline" onclick="logout()" style="margin-top: 30px;">Выйти</button>
+    </div>
 
-    // ----- ЖАНРЫ И ГОДА -----
-    const GENRES = ["Pop","Rock","Hip Hop/Rap","Electronic","Dance","R&B","Soul","Jazz","Classical","Country","Folk","Metal","Punk","Reggae","Blues","Latin","K-pop","Indie","Alternative","House","Techno","Trance","Drum and Bass","Ambient","Soundtrack","Trap","Grime","Afrobeat","Funk","Disco"];
-    const YEARS = Array.from({ length: 2026-2000+1 }, (_, i) => 2026 - i);
-    const TRACK_TYPES = ["Original","Cover","Cover by cover band","Karaoke","Medley","Remix"];
-    const EXPLICIT_OPTS = ["Да","Нет"];
+    <div id="authView" class="auth-container">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h1>GlamBank</h1>
+            <span class="subtitle">Лейбл переходник</span>
+        </div>
+        <div style="background: var(--bg-panel); padding: 30px; border-radius: 8px; width: 350px;">
+            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                <button class="btn-primary" style="flex:1" onclick="setAuthMode('login')">Войти</button>
+                <button class="btn-outline" style="flex:1" onclick="setAuthMode('register')">Создать</button>
+            </div>
+            
+            <h3 id="authTitle">Вход в кабинет</h3>
+            <input type="text" id="authLogin" placeholder="Логин" class="hidden">
+            <input type="email" id="authEmail" placeholder="Почта">
+            <input type="password" id="authPassword" placeholder="Пароль">
+            <button class="btn-primary" style="width: 100%" onclick="handleAuth()">Подтвердить</button>
+        </div>
+    </div>
 
-    const { useState, useEffect } = React;
-    const { createRoot } = ReactDOM;
-
-    // ----- КОМПОНЕНТ МОДАЛКИ -----
-    const Modal = ({ children, onClose }) => (
-        <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-card" onClick={e => e.stopPropagation()}>
-                {children}
-                <button className="button-icon" onClick={onClose} style={{marginTop:16}}>Закрыть</button>
+    <div id="dashboardView" class="dashboard hidden">
+        <div class="sidebar">
+            <div style="margin-bottom: 30px;">
+                <h2>GlamBank</h2>
+                <span class="subtitle">Лейбл переходник</span>
+            </div>
+            
+            <button class="btn-highlight" onclick="showView('newReleaseView')" id="btnNewRelease">Новый релиз</button>
+            <button class="btn-outline" style="margin-bottom: 10px; border:none; text-align: left;" onclick="showView('userReleasesView')" id="btnOverview">Обзор</button>
+            <button class="btn-outline" style="margin-bottom: 10px; border:none; text-align: left;" onclick="showView('userReleasesView')" id="btnYourMusic">Ваша музыка</button>
+            
+            <div id="adminMenu" class="hidden" style="margin-top: 30px; border-top: 1px solid var(--border); padding-top: 20px;">
+                <h3 style="color: var(--accent)">Админка</h3>
+                <button class="btn-outline" style="margin-bottom: 10px; width: 100%; border:none; text-align: left;" onclick="showView('adminUsersView')">Все кабинеты</button>
+                <button class="btn-outline" style="margin-bottom: 10px; width: 100%; border:none; text-align: left;" onclick="showView('adminReleasesView')">Все релизы</button>
+            </div>
+            
+            <div style="margin-top: auto;">
+                <button class="btn-danger" style="width: 100%;" onclick="logout()">Выход</button>
             </div>
         </div>
-    );
 
-    // ----- ЛОГИН / РЕГИСТРАЦИЯ -----
-    const LoginRegister = ({ onAuth }) => {
-        const [isLogin, setIsLogin] = useState(true);
-        const [form, setForm] = useState({ email: "", login: "", password: "" });
-        const [error, setError] = useState("");
-
-        const handleSubmit = (e) => {
-            e.preventDefault();
-            setError("");
-            if(isLogin){
-                const users = getUsers();
-                const user = users.find(u => u.email === form.email && u.password === form.password);
-                if(!user) setError("Неверная почта или пароль");
-                else if(user.isBanned) setError(`Ваш кабинет заблокирован. Причина: ${user.banReason || "обратитесь в поддержку"}`);
-                else {
-                    localStorage.setItem("glambank_current_user", JSON.stringify({ id: user.id, email: user.email, login: user.login, role: user.role || "user" }));
-                    onAuth(user);
-                }
-            } else {
-                if(!isRealEmail(form.email)) return setError("Введите реальный email (проверка формата)");
-                const users = getUsers();
-                if(users.find(u => u.email === form.email)) return setError("Пользователь с таким email уже существует");
-                if(!form.login.trim() || !form.password.trim()) return setError("Заполните логин и пароль");
-                const newUser = { id: Date.now().toString(), login: form.login, email: form.email, password: form.password, isBanned: false, banReason: "", role: "user" };
-                users.push(newUser);
-                saveUsers(users);
-                localStorage.setItem("glambank_current_user", JSON.stringify({ id: newUser.id, email: newUser.email, login: newUser.login, role: "user" }));
-                onAuth(newUser);
-            }
-        };
-
-        return (
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh", background: "#0A0C12" }}>
-                <div className="card" style={{ width: "420px" }}>
-                    <h2 style={{ marginBottom: "20px" }}>{isLogin ? "Войти в кабинет" : "Создать кабинет"}</h2>
-                    <form onSubmit={handleSubmit}>
-                        <div className="form-field">
-                            <label>Почта</label>
-                            <input type="email" value={form.email} onChange={e=>setForm({...form, email:e.target.value})} required />
-                        </div>
-                        {!isLogin && <div className="form-field"><label>Логин</label><input value={form.login} onChange={e=>setForm({...form, login:e.target.value})} required /></div>}
-                        <div className="form-field"><label>Пароль</label><input type="password" value={form.password} onChange={e=>setForm({...form, password:e.target.value})} required /></div>
-                        {error && <div className="error-msg">{error}</div>}
-                        <button type="submit" className="btn-primary" style={{ width: "100%", marginTop: "12px" }}>{isLogin ? "Войти" : "Зарегистрироваться"}</button>
-                        <p style={{ marginTop: "16px", fontSize: "14px", textAlign: "center" }}>
-                            <span style={{cursor:"pointer", color:"#60A5FA"}} onClick={()=>{setIsLogin(!isLogin); setError("");}}>
-                                {isLogin ? "Создать кабинет" : "Уже есть аккаунт? Войти"}
-                            </span>
-                        </p>
-                    </form>
+        <div class="main-content">
+            <div class="topbar">
+                <h2 id="pageTitle">Обзор</h2>
+                <div id="userProfileBtn" style="cursor: pointer;" onclick="openProfileModal()">
+                    <span id="topbarUsername">Профиль</span>
                 </div>
             </div>
-        );
-    };
 
-    // ----- ОСНОВНОЕ ПРИЛОЖЕНИЕ -----
-    const MainApp = ({ user, setAuthUser, isAdmin }) => {
-        const [activeTab, setActiveTab] = useState("releases");
-        const [releases, setReleases] = useState([]);
-        const [modal, setModal] = useState(null);
-        const [profileEdit, setProfileEdit] = useState({ login: user.login, email: user.email, password: "" });
-        const [profileMsg, setProfileMsg] = useState("");
-
-        const loadReleases = () => {
-            const all = getReleases();
-            setReleases(all.filter(r => r.userId === user.id));
-        };
-
-        useEffect(() => {
-            loadReleases();
-        }, [user.id]);
-
-        const refreshAll = () => loadReleases();
-
-        if(user.isBanned) {
-            return (
-                <div style={{display:"flex", alignItems:"center", justifyContent:"center", minHeight:"100vh", flexDirection:"column", background:"#0A0C12"}}>
-                    <div className="card" style={{textAlign:"center"}}>
-                        <h2>Ваш кабинет был закрыт</h2>
-                        <button className="button-icon" style={{margin:"20px"}} onClick={()=>setModal(user.banReason)}>Узнать причину</button>
-                    </div>
-                    {modal && <Modal onClose={()=>setModal(null)}><p><strong>Причина блокировки:</strong> {modal}</p></Modal>}
-                </div>
-            );
-        }
-
-        const handleLogout = () => {
-            localStorage.removeItem("glambank_current_user");
-            setAuthUser(null);
-        };
-
-        const updateProfile = () => {
-            if(profileEdit.email !== user.email){
-                if(!isRealEmail(profileEdit.email)) return setProfileMsg("Неверный формат почты");
-                const reqs = getEmailReqs();
-                if(reqs.find(r=>r.userId === user.id && r.status === "pending")) return setProfileMsg("Запрос на смену уже отправлен");
-                reqs.push({ id: Date.now(), userId: user.id, newEmail: profileEdit.email, status: "pending" });
-                saveEmailReqs(reqs);
-                setProfileMsg("Запрос на смену почты отправлен модератору");
-                setProfileEdit({...profileEdit, email: user.email});
-                return;
-            }
-            if(profileEdit.login !== user.login || profileEdit.password){
-                const users = getUsers();
-                const idx = users.findIndex(u=>u.id===user.id);
-                if(idx!==-1){
-                    users[idx].login = profileEdit.login;
-                    if(profileEdit.password) users[idx].password = profileEdit.password;
-                    saveUsers(users);
-                    localStorage.setItem("glambank_current_user", JSON.stringify({ id:user.id, email:user.email, login:profileEdit.login, role:user.role }));
-                    setAuthUser(users[idx]);
-                    setProfileMsg("Данные обновлены");
-                }
-            }
-        };
-
-        const renderRelease = (rel, isModView=false) => (
-            <div className="release-card" key={rel.id}>
-                <div style={{display:"flex", gap:16}}>
-                    {rel.coverData && <img src={rel.coverData} className="cover-thumb" alt="cover" />}
-                    <div className="release-info">
-                        <div className="release-title">{rel.releaseName} — {rel.artistName}</div>
-                        <div className="release-meta">
-                            <span>Дата релиза: {rel.releaseDate || rel.year}</span>
-                            <span>Жанр: {rel.genre}</span>
-                            {rel.status === "approved" && rel.upc && <span>UPC: {rel.upc}</span>}
-                            {rel.status === "approved" && rel.isrcMod && <span>ISRC: {rel.isrcMod}</span>}
-                            {rel.status === "rejected" && <span className="status-badge status-rejected">Отклонён <span className="info-icon" onClick={()=>setModal({reason: rel.rejectionReason})}>?</span></span>}
-                            {rel.status === "moderation" && <span className="status-badge status-moderation">На модерации</span>}
-                            {rel.status === "approved" && <span className="status-badge status-approved">Одобрен</span>}
-                        </div>
-                        {isModView && <div className="warning-yellow">Модерация</div>}
-                    </div>
-                </div>
+            <div id="userReleasesView" class="view-section">
+                <h3>Ваши релизы</h3>
+                <div id="userReleasesList"></div>
             </div>
-        );
 
-        const CreateReleaseForm = ({ onSuccess, onCancel }) => {
-            const [releaseType, setReleaseType] = useState("");
-            const [form, setForm] = useState({
-                releaseName:"", artistName:"", version:"", lyricist:"", composer:"", trackType:"Original",
-                language:"", genre:"Pop", lyrics:"", explicit:"Нет", isrc:"", year:2026, comment:"",
-                coverData:null, mp3File:null, mp3Name:""
-            });
-            const [err, setErr] = useState("");
-
-            const handleCover = (e) => {
-                const file = e.target.files[0];
-                if(!file) return;
-                const img = new Image();
-                img.onload = () => {
-                    if((img.width===1400 && img.height===1400) || (img.width===3000 && img.height===3000)){
-                        const reader = new FileReader();
-                        reader.onloadend = () => setForm({...form, coverData: reader.result});
-                        reader.readAsDataURL(file);
-                    } else setErr("Обложка должна быть 1400x1400 или 3000x3000");
-                };
-                img.src = URL.createObjectURL(file);
-            };
-            const handleMp3 = (e) => {
-                const file = e.target.files[0];
-                if(file && file.type === "audio/mpeg" && file.size <= 10*1024*1024) 
-                    setForm({...form, mp3File: file, mp3Name: file.name});
-                else setErr("MP3 файл до 10 МБ");
-            };
-
-            const submit = async () => {
-                if(!form.releaseName || !form.artistName || !form.language || !form.genre || !form.year || !form.coverData || !form.mp3File){
-                    setErr("Заполните все обязательные поля и загрузите обложку/MP3");
-                    return;
-                }
-                const newRelease = {
-                    id: Date.now().toString(),
-                    userId: user.id,
-                    releaseName: form.releaseName,
-                    artistName: form.artistName,
-                    version: form.version,
-                    lyricist: form.lyricist,
-                    composer: form.composer,
-                    trackType: form.trackType,
-                    language: form.language,
-                    genre: form.genre,
-                    lyrics: form.lyrics,
-                    explicit: form.explicit,
-                    isrc: form.isrc,
-                    year: form.year,
-                    commentMod: form.comment,
-                    coverData: form.coverData,
-                    mp3FileName: form.mp3Name,
-                    releaseDate: form.year,
-                    status: "moderation",
-                    createdAt: new Date().toISOString()
-                };
-                const all = getReleases();
-                all.push(newRelease);
-                saveReleases(all);
-                const fd = new FormData();
-                fd.append("releaseName", form.releaseName);
-                fd.append("artist", form.artistName);
-                fd.append("genre", form.genre);
-                fd.append("year", form.year);
-                fd.append("userEmail", user.email);
-                if(form.mp3File) fd.append("mp3", form.mp3File);
-                fetch("https://formspree.io/f/mzdywnyq", { method: "POST", body: fd, mode: "no-cors" });
-                onSuccess();
-            };
-
-            if(!releaseType) return (
-                <div className="card" style={{maxWidth:500, margin:"auto"}}>
-                    <h3>Выберите тип релиза</h3>
-                    <button className="btn-primary" style={{margin:10}} onClick={()=>setReleaseType("Сингл")}>Сингл</button>
-                    <button className="btn-primary" onClick={()=>setReleaseType("Альбом/EP")}>Альбом/EP</button>
-                    <button className="button-icon" onClick={onCancel}>Отмена</button>
-                </div>
-            );
-
-            return (
-                <div className="card">
-                    <h3>Новый релиз ({releaseType})</h3>
-                    <div className="two-column-form">
-                        <div className="cover-square" onClick={()=>document.getElementById("coverInputCreate").click()}>
-                            {form.coverData ? <img src={form.coverData} style={{width:"100%",height:"100%",objectFit:"cover"}} /> : <span>Обложка<br/>1400x1400 / 3000x3000</span>}
-                            <input id="coverInputCreate" type="file" accept="image/*" style={{display:"none"}} onChange={handleCover} />
-                        </div>
-                        <div className="form-fields">
-                            <div className="form-field"><label>Имя релиза*</label><input value={form.releaseName} onChange={e=>setForm({...form, releaseName:e.target.value})} /></div>
-                            <div className="form-field"><label>Имя артиста*</label><input value={form.artistName} onChange={e=>setForm({...form, artistName:e.target.value})} /></div>
-                            <div className="form-field"><label>Версия (необяз)</label><input value={form.version} onChange={e=>setForm({...form, version:e.target.value})} /></div>
-                            <div className="form-field"><label>Автор слов</label><input value={form.lyricist} onChange={e=>setForm({...form, lyricist:e.target.value})} /></div>
-                            <div className="form-field"><label>Композитор</label><input value={form.composer} onChange={e=>setForm({...form, composer:e.target.value})} /></div>
-                            <div className="form-field"><label>Тип трека</label><select value={form.trackType} onChange={e=>setForm({...form, trackType:e.target.value})}>{TRACK_TYPES.map(t=><option key={t}>{t}</option>)}</select></div>
-                            <div className="form-field"><label>Язык названия трека*</label><input value={form.language} onChange={e=>setForm({...form, language:e.target.value})} /></div>
-                            <div className="form-field"><label>Жанр*</label><select value={form.genre} onChange={e=>setForm({...form, genre:e.target.value})}>{GENRES.map(g=><option key={g}>{g}</option>)}</select></div>
-                            <div className="form-field"><label>Нецензурная лексика</label><select value={form.explicit} onChange={e=>setForm({...form, explicit:e.target.value})}>{EXPLICIT_OPTS.map(o=><option key={o}>{o}</option>)}</select></div>
-                            <div className="form-field"><label>ISRC (если есть)</label><input value={form.isrc} onChange={e=>setForm({...form, isrc:e.target.value})} /></div>
-                            <div className="form-field"><label>Год выпуска</label><select value={form.year} onChange={e=>setForm({...form, year:Number(e.target.value)})}>{YEARS.map(y=><option key={y}>{y}</option>)}</select></div>
-                            <div className="form-field"><label>Текст песни</label><textarea rows={2} value={form.lyrics} onChange={e=>setForm({...form, lyrics:e.target.value})} /></div>
-                            <div className="form-field"><label>MP3 трек (только MP3, до 10 МБ)*</label><input type="file" accept=".mp3" onChange={handleMp3} /><span style={{fontSize:12}}>{form.mp3Name}</span></div>
-                            <div className="form-field"><label>Комментарий модераторам</label><textarea value={form.comment} onChange={e=>setForm({...form, comment:e.target.value})} /></div>
-                            {err && <div className="error-msg">{err}</div>}
-                            <button className="btn-primary" onClick={submit}>Отправить на модерацию</button>
-                            <button className="button-icon" onClick={onCancel}>Отмена</button>
-                        </div>
-                    </div>
-                </div>
-            );
-        };
-
-        if(activeTab === "create") return <CreateReleaseForm onSuccess={()=>{ setActiveTab("releases"); refreshAll(); }} onCancel={()=>setActiveTab("releases")} />;
-        if(isAdmin && (activeTab === "adminUsers" || activeTab === "adminReleases")){
-            const [users, setUsers] = useState(getUsers());
-            const [allReleases, setAllReleases] = useState(getReleases());
-            const [adminModal, setAdminModal] = useState(null);
-
-            const refreshAdmin = () => { setUsers(getUsers()); setAllReleases(getReleases()); };
-            useEffect(()=>{ refreshAdmin(); }, [activeTab]);
-
-            const closeUserAccount = (userId, reason) => {
-                const updated = users.map(u=> u.id===userId ? {...u, isBanned:true, banReason:reason} : u);
-                saveUsers(updated);
-                setUsers(updated);
-                setAdminModal(null);
-                refreshAll();
-            };
-            const handleModerate = (relId, action, upc="", isrcCode="", rejectReason="") => {
-                const rels = [...allReleases];
-                const idx = rels.findIndex(r=>r.id===relId);
-                if(idx===-1) return;
-                if(action==="approve") { rels[idx].status = "approved"; rels[idx].upc = upc; rels[idx].isrcMod = isrcCode; }
-                else if(action==="reject") { rels[idx].status = "rejected"; rels[idx].rejectionReason = rejectReason; }
-                saveReleases(rels);
-                setAllReleases(rels);
-                setAdminModal(null);
-                refreshAll();
-            };
-            return (
-                <div className="app-container">
-                    <div className="sidebar">
-                        <div className="logo">GlamBank Admin</div>
-                        <div className="nav-menu">
-                            <button className={`nav-item ${activeTab==="adminUsers"?"active":""}`} onClick={()=>setActiveTab("adminUsers")}>Все кабинеты</button>
-                            <button className={`nav-item ${activeTab==="adminReleases"?"active":""}`} onClick={()=>setActiveTab("adminReleases")}>Все релизы</button>
-                            <button className="nav-item" onClick={handleLogout}>Выйти</button>
-                        </div>
-                    </div>
-                    <div className="main-content">
-                        {activeTab === "adminUsers"" && (
-                            <div><h3>Все кабинеты</h3>
-                                {users.filter(u=>u.role!=="admin").map(u=>(
-                                    <div key={u.id} className="release-card">
-                                        <div><strong>{u.login}</strong> ({u.email}) — Релизов: {allReleases.filter(r=>r.userId===u.id).length}</div>
-                                        <button className="button-icon" onClick={()=>setAdminModal({type:"ban", user:u})}>Закрыть кабинет</button>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                        {activeTab === "adminReleases" && (
-                            <div><h3>Все релизы</h3>
-                                {allReleases.map(rel=>{
-                                    const owner = users.find(u=>u.id===rel.userId);
-                                    return (
-                                        <div key={rel.id} className="release-card">
-                                            <div><strong>{rel.releaseName}</strong> — {rel.artistName}<br/>Пользователь: {owner?.login || rel.userId}<br/>Статус: {rel.status}</div>
-                                            <div style={{marginTop:8, display:"flex", gap:8}}>
-                                                <button className="button-icon" onClick={()=>setAdminModal({type:"approve", rel})}>Принять релиз</button>
-                                                <button className="button-icon" onClick={()=>setAdminModal({type:"reject", rel})}>Отклонить релиз</button>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        )}
-                        {adminModal && (
-                            <Modal onClose={()=>setAdminModal(null)}>
-                                {adminModal.type==="ban" && (
-                                    <><p>Причина блокировки</p><textarea id="banReason" rows={2} style={{width:"100%"}}></textarea>
-                                    <button onClick={()=>closeUserAccount(adminModal.user.id, document.getElementById("banReason").value)}>Закрыть кабинет</button></>
-                                )}
-                                {adminModal.type==="approve" && (
-                                    <><p>UPC релиза</p><input id="upcVal" /><p>ISRC релиза</p><input id="isrcVal" />
-                                    <button onClick={()=>handleModerate(adminModal.rel.id, "approve", document.getElementById("upcVal").value, document.getElementById("isrcVal").value)}>Принять релиз</button></>
-                                )}
-                                {adminModal.type==="reject" && (
-                                    <><p>Причина отклонения</p><textarea id="rejReason" rows={2}></textarea>
-                                    <button onClick={()=>handleModerate(adminModal.rel.id, "reject", "", "", document.getElementById("rejReason").value)}>Отклонить релиз</button></>
-                                )}
-                            </Modal>
-                        )}
-                    </div>
-                </div>
-            );
-        }
-
-        const onModeration = releases.filter(r => r.status === "moderation");
-        const otherReleases = releases.filter(r => r.status !== "moderation");
-
-        return (
-            <div className="app-container">
-                <div className="sidebar">
-                    <div><div className="logo">GlamBank</div><div className="badge-sub">Лейбл переходник</div></div>
-                    <div className="nav-menu">
-                        <button className={`nav-item ${activeTab==="releases"?"active":""}`} onClick={()=>setActiveTab("releases")}>Все релизы</button>
-                        <button className={`nav-item ${activeTab==="moderation"?"active":""}`} onClick={()=>setActiveTab("moderation")}>Модерация</button>
-                        <button className="nav-item new-release-btn" onClick={()=>setActiveTab("create")}>➕ Новый релиз</button>
-                        <button className={`nav-item ${activeTab==="profile"?"active":""}`} onClick={()=>setActiveTab("profile")}>Профиль</button>
-                        <button className="nav-item" onClick={handleLogout}>Выйти</button>
-                    </div>
-                    <div className="user-profile-side" onClick={()=>setActiveTab("profile")}>
-                        <div className="user-avatar-placeholder">{user.login?.charAt(0) || "U"}</div>
-                        <div><strong>{user.login}</strong><br/><span style={{fontSize:"12px"}}>{user.email}</span></div>
-                    </div>
-                </div>
-                <div className="main-content">
-                    {activeTab === "releases" && (
+            <div id="newReleaseView" class="view-section hidden">
+                <select id="releaseTypeSelect" style="max-width: 200px;">
+                    <option value="">Выберите тип...</option>
+                    <option value="Сингл">Сингл</option>
+                    <option value="Альбом/EP">Альбом/EP</option>
+                </select>
+                
+                <div id="releaseFormArea" class="hidden" style="margin-top: 20px;">
+                    <div class="form-grid">
                         <div>
-                            <h2>Все релизы</h2>
-                            {otherReleases.length === 0 ? <div className="card">пока нет релизов</div> : 
-                                <div className="release-grid">{otherReleases.map(r => renderRelease(r))}</div>}
+                            <div class="cover-upload" id="coverDropZone">
+                                Нажмите или перетащите обложку<br>(1400x1400 или 3000x3000px)
+                                <input type="file" id="coverInput" accept="image/*" class="hidden">
+                            </div>
+                            <p id="coverError" class="hidden" style="color: var(--danger); font-size: 12px; margin-top: 5px;"></p>
                         </div>
-                    )}
-                    {activeTab === "moderation" && (
-                        <div><h2>Релизы на модерации</h2>
-                            {onModeration.length === 0 ? <div className="card">Нет релизов на проверке</div> :
-                                <div>{onModeration.map(r => renderRelease(r, true))}</div>}
+                        <div>
+                            <input type="text" id="r_name" placeholder="Имя релиза">
+                            <input type="text" id="r_artist" placeholder="Имя артиста">
+                            <input type="text" id="r_version" placeholder="Версия (необязательно)">
+                            <input type="text" id="r_lyricist" placeholder="Автор слов">
+                            <input type="text" id="r_composer" placeholder="Композитор">
+                            
+                            <select id="r_trackType">
+                                <option value="">Тип трека...</option>
+                                <option value="Original">Original</option>
+                                <option value="Cover">Cover</option>
+                                <option value="Cover by cover band">Cover by cover band</option>
+                                <option value="Karaoke">Karaoke</option>
+                                <option value="Medley">Medley</option>
+                                <option value="Remix">Remix</option>
+                            </select>
+                            
+                            <input type="text" id="r_lang" placeholder="Язык названия трека">
+                            
+                            <select id="r_genre">
+                                <option value="">Жанр...</option>
+                                <option value="Hip Hop/Rap">Hip Hop/Rap</option>
+                                <option value="Pop">Pop</option>
+                                <option value="Rock">Rock</option>
+                                <option value="Electronic">Electronic</option>
+                                <option value="R&B">R&B</option>
+                            </select>
+                            
+                            <textarea id="r_lyrics" placeholder="Текст песни (необязательно)"></textarea>
+                            
+                            <select id="r_explicit">
+                                <option value="">Присутствие нецензурной лексики...</option>
+                                <option value="Да">Да</option>
+                                <option value="Нет">Нет</option>
+                            </select>
+                            
+                            <input type="text" id="r_isrc" placeholder="ISRC (если есть) (необязательно)">
+                            <select id="r_year"></select>
+                            
+                            <div style="border: 1px solid var(--border); padding: 15px; border-radius: 5px; margin-bottom: 15px;">
+                                <label>Файл трека (только MP3, до 10мб):</label><br>
+                                <input type="file" id="r_audio" accept=".mp3" style="margin-top: 10px;">
+                            </div>
+                            
+                            <textarea id="r_comment" placeholder="Комментарий модераторам"></textarea>
+                            
+                            <button class="btn-primary" onclick="submitRelease()">Отправить на модерацию</button>
                         </div>
-                    )}
-                    {activeTab === "profile" && (
-                        <div className="card">
-                            <h3>Редактирование профиля</h3>
-                            <div className="form-field"><label>Логин</label><input value={profileEdit.login} onChange={e=>setProfileEdit({...profileEdit, login:e.target.value})} /></div>
-                            <div className="form-field"><label>Почта (требует подтверждения админа)</label><input value={profileEdit.email} onChange={e=>setProfileEdit({...profileEdit, email:e.target.value})} /></div>
-                            <div className="form-field"><label>Новый пароль (оставьте пустым чтобы не менять)</label><input type="password" onChange={e=>setProfileEdit({...profileEdit, password:e.target.value})} /></div>
-                            <button className="btn-primary" onClick={updateProfile}>Сохранить изменения</button>
-                            {profileMsg && <div className="error-msg" style={{marginTop:12}}>{profileMsg}</div>}
-                        </div>
-                    )}
+                    </div>
                 </div>
-                {modal && typeof modal === "object" && modal.reason && <Modal onClose={()=>setModal(null)}><p><strong>Причина отклонения:</strong> {modal.reason}</p></Modal>}
             </div>
-        );
-    };
 
-    // ----- КОРНЕВОЙ КОМПОНЕНТ -----
-    const App = () => {
-        const [authUser, setAuthUser] = useState(null);
-        const [loading, setLoading] = useState(true);
-        
-        useEffect(() => {
-            // Эмуляция загрузки и проверки сессии
-            const stored = localStorage.getItem("glambank_current_user");
-            if(stored){
-                try {
-                    const userData = JSON.parse(stored);
-                    const fullUser = getUsers().find(u=>u.id === userData.id);
-                    if(fullUser && !fullUser.isBanned) {
-                        setAuthUser(fullUser);
-                    } else {
-                        localStorage.removeItem("glambank_current_user");
-                    }
-                } catch(e) {
-                    localStorage.removeItem("glambank_current_user");
+            <div id="adminUsersView" class="view-section hidden">
+                <h3>Все кабинеты</h3>
+                <div id="adminUsersList"></div>
+            </div>
+
+            <div id="adminReleasesView" class="view-section hidden">
+                <h3>Все релизы на модерации</h3>
+                <div id="adminReleasesList"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="profileModal" class="modal hidden">
+        <div class="modal-content">
+            <h3>Профиль кабинета</h3>
+            <label class="subtitle">Логин</label>
+            <input type="text" id="profLogin">
+            <label class="subtitle">Почта (Смена требует модерации)</label>
+            <input type="email" id="profEmail">
+            <label class="subtitle">Пароль</label>
+            <input type="password" id="profPassword">
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <button class="btn-primary" onclick="saveProfile()">Сохранить</button>
+                <button class="btn-outline" onclick="document.getElementById('profileModal').classList.add('hidden')">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="actionModal" class="modal hidden">
+        <div class="modal-content">
+            <h3 id="actionModalTitle">Действие</h3>
+            <div id="actionModalInputs"></div>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button id="actionModalBtn" class="btn-primary">Подтвердить</button>
+                <button class="btn-outline" onclick="closeActionModal()">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // --- ИНИЦИАЛИЗАЦИЯ ДАННЫХ ---
+    const ADMIN_EMAIL = 'denisbiletskiy0@gmail.com';
+    const ADMIN_PASS = 'Retro!22848.lol';
+    const FORMSPREE_URL = 'https://formspree.io/f/mzdywnyq';
+
+    // Загрузка "Базы данных" из LocalStorage
+    let db = JSON.parse(localStorage.getItem('glambank_db')) || {
+        users: [],
+        releases: []
+    };
+    let currentUser = null;
+    let authMode = 'login';
+
+    function saveDB() {
+        localStorage.setItem('glambank_db', JSON.stringify(db));
+    }
+
+    // --- АВТОРИЗАЦИЯ И РЕГИСТРАЦИЯ ---
+    function setAuthMode(mode) {
+        authMode = mode;
+        document.getElementById('authTitle').innerText = mode === 'login' ? 'Вход в кабинет' : 'Создать кабинет';
+        document.getElementById('authLogin').classList.toggle('hidden', mode === 'login');
+    }
+
+    function handleAuth() {
+        const email = document.getElementById('authEmail').value.trim();
+        const pass = document.getElementById('authPassword').value.trim();
+        const login = document.getElementById('authLogin').value.trim();
+
+        if(!email || !pass) return alert("Заполните почту и пароль");
+
+        // Проверка формата почты
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) return alert("Такой почты не существует. Введите корректный адрес.");
+
+        if (authMode === 'login') {
+            if (email === ADMIN_EMAIL && pass === ADMIN_PASS) {
+                currentUser = { id: 'admin', role: 'admin', email: ADMIN_EMAIL, login: 'Admin' };
+                loginSuccess();
+            } else {
+                const user = db.users.find(u => u.email === email && u.password === pass);
+                if (user) {
+                    currentUser = user;
+                    loginSuccess();
+                } else {
+                    alert("Неверная почта или пароль");
                 }
             }
-            setLoading(false);
-        }, []);
-        
-        if(loading) return <div style={{padding:"2rem", color:"white", textAlign:"center"}}>Загрузка платформы GlamBank...</div>;
-        if(!authUser) return <LoginRegister onAuth={setAuthUser} />;
-        
-        const isAdmin = authUser.email === "denisbiletskiy0@gmail.com" && authUser.password === "Retro!22848.lol";
-        return <MainApp user={authUser} setAuthUser={setAuthUser} isAdmin={isAdmin} />;
-    };
+        } else {
+            if(!login) return alert("Введите логин");
+            if (db.users.find(u => u.email === email)) return alert("Почта уже зарегистрирована");
+            
+            const newUser = { id: Date.now().toString(), role: 'user', login, email, password: pass, isBanned: false, banReason: '' };
+            db.users.push(newUser);
+            saveDB();
+            currentUser = newUser;
+            loginSuccess();
+        }
+    }
 
-    // Надёжный рендер после полной загрузки DOM
-    const rootElement = document.getElementById("root");
-    if(rootElement) {
-        const root = createRoot(rootElement);
-        root.render(<App />);
-    } else {
-        console.error("Root element not found");
+    function loginSuccess() {
+        document.getElementById('authView').classList.add('hidden');
+        
+        if (currentUser.isBanned) {
+            document.getElementById('banScreen').classList.remove('hidden');
+            return;
+        }
+
+        document.getElementById('dashboardView').classList.remove('hidden');
+        document.getElementById('topbarUsername').innerText = currentUser.login;
+
+        if (currentUser.role === 'admin') {
+            document.getElementById('adminMenu').classList.remove('hidden');
+            document.getElementById('btnNewRelease').classList.add('hidden');
+            document.getElementById('btnOverview').classList.add('hidden');
+            document.getElementById('btnYourMusic').classList.add('hidden');
+            showView('adminReleasesView');
+        } else {
+            showView('userReleasesView');
+        }
+    }
+
+    function logout() {
+        currentUser = null;
+        document.getElementById('dashboardView').classList.add('hidden');
+        document.getElementById('banScreen').classList.add('hidden');
+        document.getElementById('authView').classList.remove('hidden');
+        document.getElementById('authEmail').value = '';
+        document.getElementById('authPassword').value = '';
+    }
+
+    function showBanReason() {
+        const p = document.getElementById('banReasonText');
+        p.innerText = currentUser.banReason;
+        p.classList.remove('hidden');
+    }
+
+    // --- НАВИГАЦИЯ ---
+    function showView(viewId) {
+        if(currentUser.isBanned) {
+            alert("Упс! Кажется ваш кабинет заблокирован. Приносим наши извинения за данные неудобства. Но вы не имеете право ничего изменять на данном кабинете. Спасибо за сотрудничество!");
+            return;
+        }
+
+        document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+        document.getElementById(viewId).classList.remove('hidden');
+
+        if(viewId === 'userReleasesView') renderUserReleases();
+        if(viewId === 'adminUsersView') renderAdminUsers();
+        if(viewId === 'adminReleasesView') renderAdminReleases();
+    }
+
+    // --- ПРОФИЛЬ ---
+    function openProfileModal() {
+        if(currentUser.isBanned) return alert("Упс! Кажется ваш кабинет заблокирован...");
+        if(currentUser.role === 'admin') return alert("Профиль админа не редактируется");
+        
+        document.getElementById('profLogin').value = currentUser.login;
+        document.getElementById('profEmail').value = currentUser.email;
+        document.getElementById('profPassword').value = currentUser.password;
+        document.getElementById('profileModal').classList.remove('hidden');
+    }
+
+    function saveProfile() {
+        currentUser.login = document.getElementById('profLogin').value;
+        currentUser.password = document.getElementById('profPassword').value;
+        
+        const newEmail = document.getElementById('profEmail').value;
+        if(newEmail !== currentUser.email) {
+            alert("Заявка на смену почты отправлена модератору. Пока используется старая.");
+            // В реальном приложении тут был бы статус pending
+        }
+        
+        const userIndex = db.users.findIndex(u => u.id === currentUser.id);
+        db.users[userIndex] = currentUser;
+        saveDB();
+        document.getElementById('topbarUsername').innerText = currentUser.login;
+        document.getElementById('profileModal').classList.add('hidden');
+    }
+
+    // --- ЛОГИКА ПОЛЬЗОВАТЕЛЯ: РЕЛИЗЫ ---
+    function renderUserReleases() {
+        const container = document.getElementById('userReleasesList');
+        const userReleases = db.releases.filter(r => r.userId === currentUser.id);
+
+        if (userReleases.length === 0) {
+            container.innerHTML = '<p style="color: var(--text-muted); margin-top: 20px;">пока нет релизов</p>';
+            return;
+        }
+
+        container.innerHTML = userReleases.map(r => `
+            <div class="release-card">
+                <div>
+                    <h4>${r.name} - ${r.artist}</h4>
+                    <p class="subtitle">Дата релиза: ${r.date} | Жанр: ${r.genre}</p>
+                    ${r.status === 'Одобрен' ? `<p class="subtitle" style="color:var(--success); margin-top:5px;">UPC: ${r.upc} | ISRC: ${r.isrc_admin}</p>` : ''}
+                </div>
+                <div>
+                    ${getStatusBadge(r)}
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function getStatusBadge(release) {
+        if(release.status === 'Модерация') return `<span class="status-badge status-mod">Модерация</span>`;
+        if(release.status === 'Одобрен') return `<span class="status-badge status-app">Одобрен</span>`;
+        if(release.status === 'Отклонён') return `<span class="status-badge status-rej" title="${release.rejectReason}">! Отклонён</span>`;
+        return '';
+    }
+
+    // Заполнение годов
+    const yearSelect = document.getElementById('r_year');
+    for(let y = 2026; y >= 2000; y--) {
+        yearSelect.innerHTML += `<option value="${y}">${y}</option>`;
+    }
+
+    document.getElementById('releaseTypeSelect').addEventListener('change', (e) => {
+        if(e.target.value) {
+            document.getElementById('releaseFormArea').classList.remove('hidden');
+        } else {
+            document.getElementById('releaseFormArea').classList.add('hidden');
+        }
+    });
+
+    // Валидация обложки
+    const coverInput = document.getElementById('coverInput');
+    const coverDropZone = document.getElementById('coverDropZone');
+    let validImage = false;
+
+    coverDropZone.addEventListener('click', () => coverInput.click());
+    coverInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if(!file) return;
+        
+        const img = new Image();
+        img.src = URL.createObjectURL(file);
+        img.onload = function() {
+            if ((this.width === 1400 && this.height === 1400) || (this.width === 3000 && this.height === 3000)) {
+                validImage = true;
+                coverDropZone.innerHTML = `<img src="${this.src}" style="max-width:100%; max-height:100%; object-fit:cover;">`;
+                document.getElementById('coverError').classList.add('hidden');
+            } else {
+                validImage = false;
+                document.getElementById('coverError').innerText = "Ошибка: Размер должен быть ровно 1400x1400 или 3000x3000 пикселей.";
+                document.getElementById('coverError').classList.remove('hidden');
+                coverDropZone.innerHTML = "Нажмите или перетащите обложку<br>(1400x1400 или 3000x3000px)";
+            }
+        }
+    });
+
+    // Отправка релиза
+    function submitRelease() {
+        if(currentUser.isBanned) return;
+
+        const name = document.getElementById('r_name').value;
+        const artist = document.getElementById('r_artist').value;
+        const genre = document.getElementById('r_genre').value;
+        const audioFile = document.getElementById('r_audio').files[0];
+
+        if(!name || !artist || !genre) return alert("Заполните обязательные поля (Имя, Артист, Жанр)");
+        if(!validImage) return alert("Загрузите корректную обложку");
+        if(!audioFile) return alert("Загрузите MP3 файл");
+        if(audioFile.size > 10 * 1024 * 1024) return alert("Размер MP3 файла превышает 10мб");
+
+        const releaseData = {
+            id: Date.now().toString(),
+            userId: currentUser.id,
+            userEmail: currentUser.email,
+            type: document.getElementById('releaseTypeSelect').value,
+            name, artist, genre,
+            version: document.getElementById('r_version').value,
+            lyricist: document.getElementById('r_lyricist').value,
+            composer: document.getElementById('r_composer').value,
+            trackType: document.getElementById('r_trackType').value,
+            lang: document.getElementById('r_lang').value,
+            lyrics: document.getElementById('r_lyrics').value,
+            explicit: document.getElementById('r_explicit').value,
+            isrc_user: document.getElementById('r_isrc').value,
+            year: document.getElementById('r_year').value,
+            comment: document.getElementById('r_comment').value,
+            date: new Date().toISOString().split('T')[0],
+            status: 'Модерация'
+        };
+
+        // Сохраняем в локальную БД
+        db.releases.push(releaseData);
+        saveDB();
+
+        // Отправка на Formspree
+        const formData = new FormData();
+        Object.keys(releaseData).forEach(key => formData.append(key, releaseData[key]));
+        
+        fetch(FORMSPREE_URL, {
+            method: 'POST',
+            body: formData,
+            headers: { 'Accept': 'application/json' }
+        }).then(response => {
+            alert("Релиз успешно отправлен на модерацию!");
+            showView('userReleasesView');
+            // Очистка формы
+            document.getElementById('r_name').value = '';
+            document.getElementById('r_artist').value = '';
+            coverDropZone.innerHTML = "Нажмите или перетащите обложку<br>(1400x1400 или 3000x3000px)";
+            validImage = false;
+        }).catch(error => {
+            alert("Релиз сохранен локально, но произошла ошибка при отправке на почту.");
+        });
+    }
+
+    // --- ЛОГИКА АДМИНА ---
+    function renderAdminUsers() {
+        const container = document.getElementById('adminUsersList');
+        container.innerHTML = db.users.map(u => {
+            const releaseCount = db.releases.filter(r => r.userId === u.id).length;
+            return `
+                <div class="release-card">
+                    <div>
+                        <h4>${u.login} (${u.email})</h4>
+                        <p class="subtitle">Релизов: ${releaseCount}</p>
+                        ${u.isBanned ? '<span class="status-badge status-rej" style="margin-top:5px; display:inline-block;">Заблокирован</span>' : ''}
+                    </div>
+                    <div>
+                        ${!u.isBanned ? `<button class="btn-danger" onclick="openBanModal('${u.id}')">Закрыть кабинет</button>` : ''}
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function renderAdminReleases() {
+        const container = document.getElementById('adminReleasesList');
+        const pending = db.releases.filter(r => r.status === 'Модерация');
+        
+        if (pending.length === 0) {
+            container.innerHTML = '<p class="subtitle">Нет релизов на модерации.</p>';
+            return;
+        }
+
+        container.innerHTML = pending.map(r => `
+            <div class="release-card" style="flex-direction: column; align-items: flex-start; gap: 15px;">
+                <div style="width: 100%;">
+                    <h4>${r.name} - ${r.artist} (от ${r.userEmail})</h4>
+                    <p class="subtitle">Жанр: ${r.genre} | Год: ${r.year} | Тип: ${r.type}</p>
+                    <p class="subtitle" style="margin-top: 5px;">Комментарий: ${r.comment || 'Нет'}</p>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn-primary" onclick="openApproveModal('${r.id}')">Принять релиз</button>
+                    <button class="btn-danger" onclick="openRejectModal('${r.id}')">Отклонить релиз</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Управление модалкой действий (бан/одобрение/отклонение)
+    function closeActionModal() {
+        document.getElementById('actionModal').classList.add('hidden');
+    }
+
+    function openBanModal(userId) {
+        document.getElementById('actionModalTitle').innerText = "Почему закрывают кабинет:";
+        document.getElementById('actionModalInputs').innerHTML = `<input type="text" id="actionReason" placeholder="Причина">`;
+        const btn = document.getElementById('actionModalBtn');
+        btn.innerText = "Закрыть кабинет";
+        btn.className = "btn-danger";
+        btn.onclick = () => {
+            const reason = document.getElementById('actionReason').value;
+            const user = db.users.find(u => u.id === userId);
+            user.isBanned = true;
+            user.banReason = reason;
+            saveDB();
+            closeActionModal();
+            renderAdminUsers();
+        };
+        document.getElementById('actionModal').classList.remove('hidden');
+    }
+
+    function openApproveModal(releaseId) {
+        document.getElementById('actionModalTitle').innerText = "Принять релиз";
+        document.getElementById('actionModalInputs').innerHTML = `
+            <input type="text" id="actionUPC" placeholder="Вставьте UPC">
+            <input type="text" id="actionISRC" placeholder="Вставьте ISRC">
+        `;
+        const btn = document.getElementById('actionModalBtn');
+        btn.innerText = "Принять релиз";
+        btn.className = "btn-primary";
+        btn.onclick = () => {
+            const upc = document.getElementById('actionUPC').value;
+            const isrc = document.getElementById('actionISRC').value;
+            const release = db.releases.find(r => r.id === releaseId);
+            release.status = 'Одобрен';
+            release.upc = upc;
+            release.isrc_admin = isrc;
+            saveDB();
+            closeActionModal();
+            renderAdminReleases();
+        };
+        document.getElementById('actionModal').classList.remove('hidden');
+    }
+
+    function openRejectModal(releaseId) {
+        document.getElementById('actionModalTitle').innerText = "Причина отклонения релиза";
+        document.getElementById('actionModalInputs').innerHTML = `<input type="text" id="actionReason" placeholder="Причина">`;
+        const btn = document.getElementById('actionModalBtn');
+        btn.innerText = "Отклонить релиз";
+        btn.className = "btn-danger";
+        btn.onclick = () => {
+            const reason = document.getElementById('actionReason').value;
+            const release = db.releases.find(r => r.id === releaseId);
+            release.status = 'Отклонён';
+            release.rejectReason = reason;
+            saveDB();
+            closeActionModal();
+            renderAdminReleases();
+        };
+        document.getElementById('actionModal').classList.remove('hidden');
     }
 </script>
 </body>
