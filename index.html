@@ -166,7 +166,7 @@
         </div>
     </div>
 
-    <div id="banView" class="overlay hidden" style="background: var(--bg-body); z-index: 9999;"><div style="text-align: center;"><h1 style="font-size: 32px; color: var(--danger);">Ваш кабинет был закрыт</h1><button class="btn-outline" onclick="UI.alert('Причина блокировки', currentUser.banReason)" style="margin: 20px 10px;">Узнать причину</button><button class="btn-primary" onclick="logout()" style="margin: 20px 10px;">Выйти</button></div></div>
+    <div id="banView" class="overlay hidden" style="background: var(--bg-body); z-index: 9999;"><div style="text-align: center;"><h1 id="banTitleText" style="font-size: 32px; color: var(--danger);">Ваш кабинет был закрыт</h1><button class="btn-outline" onclick="UI.alert('Причина блокировки', currentUser.banReason)" style="margin: 20px 10px;">Узнать причину</button><button class="btn-primary" onclick="logout()" style="margin: 20px 10px;">Выйти</button></div></div>
 
     <div id="authView" class="overlay" style="background: var(--bg-body); z-index: 9999;">
         <div class="dialog" style="border: none; background: transparent; max-width: 360px;">
@@ -349,7 +349,15 @@
                 currentUser = updatedUser;
                 document.getElementById('userAvatar').src = currentUser.avatar || 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
             }
-            if(currentUser.isBanned) { document.getElementById('banView').classList.remove('hidden'); document.getElementById('appView').classList.add('hidden'); document.getElementById('mobHeader').classList.add('hidden'); return; }
+            if(currentUser.isBanned) { 
+                document.getElementById('banView').classList.remove('hidden'); 
+                if(currentUser.isDeletedCabinet) {
+                    document.getElementById('banTitleText').innerText = "Ваш кабинет удален";
+                }
+                document.getElementById('appView').classList.add('hidden'); 
+                document.getElementById('mobHeader').classList.add('hidden'); 
+                return; 
+            }
             refreshUI();
             checkNotifications();
         }
@@ -396,13 +404,20 @@
             else { const u = appState.users.find(x => x.email === email && x.pass === pass); if(u) { currentUser = u; recordDevice(currentUser); startApp(); } else UI.alert("Ошибка", "Неверная почта или пароль"); } 
         } else { 
             if(!login) return UI.alert("Ошибка", "Укажите логин"); if(appState.users.find(x => x.email === email)) return UI.alert("Ошибка", "Почта занята"); 
-            const newUser = { id: Date.now().toString(), email, pass, login, isBanned: false, banReason: '', devices: [getDeviceInfo()], notifications: [], unreadAdminMsg: false, avatar: '' }; 
+            const newUser = { id: Date.now().toString(), email, pass, login, isBanned: false, banReason: '', devices: [getDeviceInfo()], notifications: [], unreadAdminMsg: false, avatar: '', isDeletedCabinet: false }; 
             appState.users.push(newUser); saveUserDB(newUser); currentUser = newUser; startApp();
         }
     }
 
     function startApp() {
-        if(currentUser.isBanned) { document.getElementById('banView').classList.remove('hidden'); document.getElementById('authView').classList.add('hidden'); return; }
+        if(currentUser.isBanned) { 
+            document.getElementById('banView').classList.remove('hidden'); 
+            if(currentUser.isDeletedCabinet) {
+                document.getElementById('banTitleText').innerText = "Ваш кабинет удален";
+            }
+            document.getElementById('authView').classList.add('hidden'); 
+            return; 
+        }
         document.getElementById('authView').classList.add('hidden'); document.getElementById('appView').classList.remove('hidden'); document.getElementById('userNameDisplay').innerText = currentUser.login;
         if(window.innerWidth <= 768) document.getElementById('mobHeader').classList.remove('hidden');
         if(currentUser.id === 'admin') { document.getElementById('adminPanel').classList.remove('hidden'); document.getElementById('userSupportBtn').classList.add('hidden'); } 
@@ -528,7 +543,7 @@
 
     function renderAdminChatList() {
         const list = document.getElementById('adminChatUserList'); const searchVal = document.getElementById('adminChatSearch').value.toLowerCase();
-        let artists = appState.users.filter(u => u.id !== 'admin');
+        let artists = appState.users.filter(u => u.id !== 'admin' && !u.isDeletedCabinet); // Скрываем удаленные кабинеты из чата
         if (searchVal) artists = artists.filter(u => u.login.toLowerCase().includes(searchVal) || u.email.toLowerCase().includes(searchVal));
         list.innerHTML = artists.map(u => { const msgs = getChat(u.email); const lastMsg = msgs.length ? msgs[msgs.length-1].text : 'Нет сообщений'; return `<div class="admin-chat-user ${activeAdminChatUser === u.email ? 'active' : ''}" onclick="selectAdminChat('${u.email}')"><div style="font-weight: 600; margin-bottom:4px;">${u.login}</div><div class="text-sm" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: ${msgs.length ? '#fff' : 'var(--text-muted)'};">${lastMsg}</div></div>`; }).join('');
         if (activeAdminChatUser) {
@@ -551,13 +566,41 @@
     }
 
     function renderAdminUsers() {
-        document.getElementById('adminUsersList').innerHTML = appState.users.filter(u => u.id !== 'admin').map(u => `<div class="card"><div><div style="font-weight: 600; font-size: 16px;">${u.login} <span style="font-weight: normal; color: var(--text-muted); font-size: 14px;">(${u.email})</span></div><div class="text-sm" style="margin-top:4px;">Браузеры входа: <span style="color:var(--success)">${u.devices ? u.devices.join(', ') : 'Нет данных'}</span></div></div><div style="display:flex; gap:8px;"><button class="btn-outline" style="padding: 6px 10px; font-size: 12px; color: ${u.isBanned?'var(--success)':'var(--danger)'}" onclick="toggleBan('${u.id}')">${u.isBanned?'Разбанить':'Бан'}</button></div></div>`).join('');
+        // Скрываем полностью удаленные кабинеты
+        document.getElementById('adminUsersList').innerHTML = appState.users.filter(u => u.id !== 'admin' && !u.isDeletedCabinet).map(u => {
+            let buttons = `<button class="btn-outline" style="padding: 6px 10px; font-size: 12px; color: ${u.isBanned?'var(--success)':'var(--danger)'}" onclick="toggleBan('${u.id}')">${u.isBanned?'Разбанить':'Бан'}</button>`;
+            if(u.isBanned) {
+                buttons += `<button class="btn-danger" style="padding: 6px 10px; font-size: 12px; margin-left: 8px;" onclick="deleteCabinet('${u.id}')">Удалить</button>`;
+            }
+            return `<div class="card"><div><div style="font-weight: 600; font-size: 16px;">${u.login} <span style="font-weight: normal; color: var(--text-muted); font-size: 14px;">(${u.email})</span></div><div class="text-sm" style="margin-top:4px;">Браузеры входа: <span style="color:var(--success)">${u.devices ? u.devices.join(', ') : 'Нет данных'}</span></div></div><div style="display:flex; align-items:center; gap:8px;">${buttons}</div></div>`;
+        }).join('');
     }
 
     function toggleBan(id) {
         const u = appState.users.find(x => x.id === id);
         if(u.isBanned) { u.isBanned = false; u.banReason = ''; saveUserDB(u); renderAdminUsers(); } 
         else { UI.prompt("Блокировка", [{id: 'r', placeholder: 'Причина закрытия'}], (res) => { u.isBanned = true; u.banReason = res.r || 'Нарушение правил'; saveUserDB(u); renderAdminUsers(); }); }
+    }
+
+    function deleteCabinet(id) {
+        UI.confirm("Полностью удалить этот кабинет? Он исчезнет из списка навсегда, а пользователь никогда больше не сможет войти.", () => {
+            const u = appState.users.find(x => x.id === id);
+            if(u) {
+                u.isDeletedCabinet = true;
+                u.isBanned = true;
+                u.banReason = "Ваш кабинет был навсегда удален администрацией.";
+                saveUserDB(u);
+                
+                if (activeAdminChatUser === u.email) {
+                    activeAdminChatUser = null;
+                    document.getElementById('adminChatInputArea').classList.add('hidden');
+                    document.getElementById('adminChatBox').innerHTML = `<div class="empty-state"><h2>Выберите диалог</h2><p class="text-sm">Выберите артиста слева, чтобы начать общение</p></div>`;
+                }
+                
+                renderAdminUsers();
+                renderAdminChatList();
+            }
+        });
     }
 
     function saveDraftAsIs(showSuccess = false) {
