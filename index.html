@@ -1663,7 +1663,7 @@
         UI.confirm("Удалить этот черновик навсегда?", () => { 
             const idx = appState.releases.findIndex(r => r.id === id); 
             if(idx >= 0){ 
-                appState.releases.splice(idx,1); 
+                appState.releases.splice(idx, 1); 
                 db.ref('releases/' + id).remove(); 
             } 
             renderYourMusic(); 
@@ -1710,6 +1710,10 @@
         const files = Array.from(input.files); 
         if(!files.length) return;
         
+        const rType = document.getElementById('r_type').value;
+        const rTitle = document.getElementById('r_title').value.trim();
+        const rArtist = document.getElementById('r_artist').value.trim();
+        
         files.forEach(file => { 
             if(file.size > 50*1024*1024) {
                 return UI.alert("Ошибка", `Файл ${file.name} больше 50 МБ.`); 
@@ -1720,12 +1724,20 @@
             
             reader.onload = () => { 
                 isDraftDirty = true; 
+                
+                // Если выбран формат "Сингл" и поле Название релиза заполнено, 
+                // то берем его. Иначе - название загруженного файла (без расширения).
+                let trackTitle = file.name.replace(/\.[^/.]+$/, "");
+                if (rType === 'Сингл' && rTitle) {
+                    trackTitle = rTitle;
+                }
+                
                 draftRelease.tracks.push({ 
                     id: Date.now() + Math.random(), 
                     filename: file.name, 
                     audioFile: reader.result, 
-                    title: file.name.replace(/\.[^/.]+$/, ""), 
-                    artist: document.getElementById('r_artist').value || '', 
+                    title: trackTitle, 
+                    artist: rArtist, 
                     version: '', 
                     author: '', 
                     comp: '', 
